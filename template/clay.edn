@@ -1,0 +1,3 @@
+{:remote-repo {:git-url "https://github.com/scicloj/noj-v2-getting-started"
+               :branch  "main"}
+ :quarto      {:title "Noj v2 Getting Started"}}
