@@ -1,0 +1,46 @@
+module_name := "{{module_name}}"
+
+# list commands
+default:
+  @just --list
+
+# setup for development
+setup: install git-setup
+
+# install the packages
+install:
+  {% raw %}{{if path_exists("uv.lock") != "true" {"uv sync --all-groups --all-extras --inexact"} else {"uv sync --all-groups --all-extras --locked --inexact"} }}{% endraw %}
+
+# ensure code quality before git commit via pre-commit and nbwipers
+git-setup: install
+  uv run nbwipers install local
+  uv run pre-commit install --install-hooks
+
+# run test coverage and create
+test-cov:
+  uv run pytest --cov {% raw %}{{module_name}}{% endraw %} --cov-report=lcov:lcov.info --cov-report=term-missing --cov-report html --cov-report xml
+
+# format and sort imports
+format:
+  uv run ruff check --fix --select=I001 .
+  uv run ruff format .
+
+# autofix with ruff
+autofix:
+  uv run ruff --fix --show-fixes .
+
+# lint with ruff
+lint:
+  uv run ruff check --output-format=full .
+
+# update packages and uv lock file
+update:
+  uv sync -U --all-groups --all-extras --inexact
+
+# update pre-commit file
+pc-update:
+  uvx pre-commit-update
+
+# check for typos
+typos:
+  uv run typos .

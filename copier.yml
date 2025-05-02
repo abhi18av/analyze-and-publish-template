@@ -1,0 +1,19 @@
+_subdirectory: template
+project_name:
+  type: str
+  help: What is your project name?
+
+module_name:
+  type: str
+  help: What is your Python module name?
+  default: "{{ project_name|lower|replace('-', '_') }}"
+
+python_version:
+  type: str
+  help: what is your python version?
+  default: 3.12
+
+github_actions:
+  type: bool
+  help: Add github actions
+  default: false
