@@ -6,7 +6,7 @@ prefixes:
   personinfo: https://w3id.org/linkml/examples/personinfo
 imports:
   - linkml:types
-default_range: string
+  default_range: string
 default_prefix: personinfo
 
 classes:
