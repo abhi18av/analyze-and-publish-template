@@ -1,3 +1,4 @@
+# BIOLINK ONTOLOGY https://github.com/biolink/biolink-model
 id: https://w3id.org/linkml/examples/personinfo
 name: personinfo
 prefixes:

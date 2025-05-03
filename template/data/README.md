@@ -1,3 +1,12 @@
+
+# Data dictionary and metadata (codebook)
+
+- https://docs.open-metadata.org/latest/quick-start/sandbox
+- https://github.com/biolink/biolink-model
+- https://datahub.com/
+
+https://ddialliance.org/create-a-codebook
+
 # Data structure
 
 layered data-engineering convention
