@@ -24,27 +24,8 @@
 
 # Finally is recommended to have a script that orchestrates the execution of the pipelines. This script should could be run in a cron job or a workflow orchestrator like Airflow, Prefect, Dagster, etc.
 
-stages:
-  data-extraction:
-    cmd: source src/cleanup.sh
-    deps:
-      - src/cleanup.sh
-      - data/raw
-    outs:
-      - data/clean.csv
-  # data-processing:
-  # data-transformation:
-  # data-save:
-  # data-export:
 
-  # model-training:
-  # model-evaluation:
-  # model-validation:
-  # model-save:
-  # model-export:
-  # model-monitoring:
-
-  # pipeline-feature-1:
-  # pipeline-feature-2:
-  # pipeline-training-1:
-  # pipeline-inference-1:
+data
+inference
+model
+pipelines

@@ -6,7 +6,7 @@ project_name:
 
 short_name:
   type: str
-  help: What is your project name?
+  help: What is your projects short name?
 
 github_actions:
   type: bool
