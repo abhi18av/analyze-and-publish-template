@@ -1,8 +1,13 @@
+import 'writeup/writeup.just'
+
 module_name := "{{module_name}}"
 
 # list commands
 default:
-  @just --list
+    @just --list
+
+
+
 
 # setup for development
 setup: install git-setup
