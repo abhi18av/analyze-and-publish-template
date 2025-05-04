@@ -56,3 +56,7 @@ Thumbs.db
 # R
 renv
 .Rprofile
+
+
+# Clojure
+.cpcache

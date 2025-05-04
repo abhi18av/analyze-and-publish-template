@@ -12,18 +12,18 @@
 
 
 (comment
-  (clay/make! {:source-path ["notebooks/claybook.clj"]
+  (clay/make! {:source-path ["notebooks/src/claybook.clj"]
                :live-reload true})
+
+  (clay/make! {:format      [:quarto :html]
+               :source-path "notebooks/src/claybook.clj"
+               :base-target-path "notebooks/output/"
+               :clean-up-target-dir true
+               :quarto      {:highlight-style :nord
+                             :format          {:html {:theme :journal}}}})
+
   '())
 
-
-
-
-(comment
-  (clay/make! {:format      [:quarto :html]
-               :source-path "notebooks/claybook.clj"
-               :quarto      {:highlight-style :nord
-                             :format          {:html {:theme :journal}}}}))
 
 
 
