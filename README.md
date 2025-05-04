@@ -10,7 +10,7 @@ This is a template built with [Copier](https://github.com/copier-org/copier) to 
 Get started with the following command:
 
 ```shell
-copier copy gh:abhi18av/analyzer-and-publish-template path/to/destination
+copier copy gh:abhi18av/template-analyze-and-publish path/to/destination
 ```
 
 ## Features
