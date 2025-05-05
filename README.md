@@ -5,6 +5,7 @@ TODO @abhi18av:
 - opentofu for infra
 - Add deps from `scratch-clj`, clerk
 - git-submodules for various sun templates
+- mlflow
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-orange.json)](https://github.com/copier-org/copier)
