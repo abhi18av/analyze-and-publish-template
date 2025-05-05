@@ -1,1 +1,13 @@
 * TODO CLICKUP project integration
+
+* PROJECT {{project_name}}
+
+#+transclude: [[file:misc/meetings-{{short_name}}.org]]
+
+#+transclude: [[file:data/data-{{short_name}}.org]]
+
+#+transclude: [[file:notebooks/experiments-{{short_name}}.org]]
+
+#+transclude: [[file:writeup/writeup-{{short_name}}.org]]
+
+#+transclude: [[file:scripts/scripts-{{short_name}}.org]]

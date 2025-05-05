@@ -22,6 +22,7 @@ __pycache__
 .RDataTmp
 .Renviron
 *.Rproj
+*.Rproj*
 ## Temporary files created by R markdown
 *.utf8.md
 *.knit.md
@@ -60,3 +61,6 @@ renv
 
 # Clojure
 .cpcache
+
+# Apple pages
+*pages
