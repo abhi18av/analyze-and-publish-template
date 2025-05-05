@@ -1,7 +1,12 @@
 # Python Copier Template for Data Science
 
- [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+TODO @abhi18av:
+- Add dagger for infra
+- opentofu for infra
+- Add deps from `scratch-clj`, clerk
+- git-submodules for various sun templates
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-orange.json)](https://github.com/copier-org/copier)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
@@ -34,34 +39,6 @@ In fact, you can use `just` to run all the setup commands listed below:
 just setup
 ```
 
-### [uv](https://github.com/astral-sh/uv)
-
-The repository is set up to use [uv](https://github.com/astral-sh/uv) for package or project management.
-You may set up your python environment with
-
-```shell
-uv sync --all-groups --all-extras
-```
-
-### [Ruff](https://github.com/astral-sh/ruff)
-
-The repository is configured to use [Ruff](https://github.com/astral-sh/ruff) for linting and formatting.
-By default, all lints are enabled except
-
-- [`COM`](https://docs.astral.sh/ruff/rules/#flake8-commas-com) Enforces trailing commas
-- [`ERA`](https://docs.astral.sh/ruff/rules/#eradicate-era) Disallows commented-out code
-- [`ISC001`](https://docs.astral.sh/ruff/rules/single-line-implicit-string-concatenation/#flake8-executable-exe) (conflicts with the formatter).
-
-In addition, the following rules are only enforced for module code as they are inappropriate or too strict for unit tests and notebooks:
-
-- [`D`](https://docs.astral.sh/ruff/rules/#pydocstyle-d) Requires docstrings on functions, classes and modules
-- [`ANN`](https://docs.astral.sh/ruff/rules/#flake8-annotations-ann) Requires type annotations on functions and methods
-- [`S101`](https://docs.astral.sh/ruff/rules/assert/) Disallows use of `assert`
-- [`PLR2004`](https://docs.astral.sh/ruff/rules/magic-value-comparison/) Disallows "magic" values in comparisons
-- [`T20`](https://docs.astral.sh/ruff/rules/#flake8-print-t20) Disallows print statements
-
-The target line length is 120 and the docstring convention is google.
-
 ### [pre-commit](https://github.com/pre-commit/pre-commit)
 
 pre-commit is a tool that runs checks on your files before you commit them with git, thereby helping ensure code quality.
@@ -72,21 +49,6 @@ pre-commit install --install-hooks
 ```
 
 The configuration is stored in `.pre-commit-config.yaml`.
-
-### [nbwipers](https://github.com/felixgwilliams/nbwipers)
-
-`nbwipers` is a tool written in rust to ensure Jupyter notebooks are clean.
-Committing notebooks that are not clean makes diffs more confusing, can degrade performance and increases the risk of leaking sensitive information.
-You can set it up as a git filter with the following command.
-
-```shell
-nbwipers install local
-```
-
-### [pytest](https://docs.pytest.org/en/stable/)
-
-The repository comes configured to use `pytest` for unit testing the module code.
-Feel free to ignore it if you do not write module code.
 
 ### Github Actions
 
