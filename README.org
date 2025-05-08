@@ -20,54 +20,65 @@ copier copy gh:abhi18av/template-analysis-and-writeup path/to/destination
 
 ### Core ideas
 
+Data and Code
 Analysis and Writeup
 Clojure and Quarto
+Emacs and VSCode
+Users and Engineers
 
 ### Tools used in this template
 
 1. Task runner - `just`
-2. Programming languages and libraries
+2. Data folders
+   1. data dictionaries
+   2. raw
+   3. processed
+3. Programming languages and libraries
    1. R
    2. Python
    3. Clojure(Script)
    4. babashka/nbb
-   5. Java
+   5. Java(jshell)
    6. Nushell
    7. Bash
    8. Wolfram
    9. OCaml
-3. Notebooks
+4. Notebooks
    1. Quarto (R, Python, ObservableJS)
    2. Mathematica
-4. Dashboards
+5. Dashboards
    1. Quarto (R, Python, ObservableJS)
-5. Pipeline runner - `nextflow`
-6. Package and environment management
+6. Pipeline runner - `nextflow`
+7. Package and environment management
    1. Pixi
    2. Renv
    3. Pip
    4. Clojure-CLI
-7. Code and data version management
+   5. NPM
+8. Code and data version management
    1. Git
    2. Fossil
    3. Data Version Control
-8. Data transfer and backup
+9. Data transfer and backup
    1. Rclone
    2. Restic
    3. ArtiVC
-9. Writeup management (Manuscript, Report, Presentation)
-   1. Quarto
-   2. Typst
-   3. Org-mode
-10. Infrastructure management
+10. Writeup management (Manuscript, Report, Presentation)
+    1. Quarto
+    2. Typst
+    3. Org-mode
+11. Infrastructure management (MINIO)
     1. Terraform
     2. Dagger
     3. Nomad cluster
-11. Utilities for editor, env management config
+12. Project-level bin folder, pbin
+13. Utilities for editor, env management config
     1. .vscode
     2. .editorconfig
     3. .envrc
-12. Project-level bin folder, pbin
+    4. pre-commit hooks
+14. Project management
+    1. ORG files (meetings, experiments)
 
 ### Project structure
 
