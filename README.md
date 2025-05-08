@@ -1,4 +1,4 @@
-# Python Copier Template for Data Science
+# Copier Template for Data Analysis and Writeup
 
 TODO @abhi18av:
 - git-submodules for various sun templates
@@ -13,7 +13,7 @@ This is a template built with [Copier](https://github.com/copier-org/copier) to 
 Get started with the following command:
 
 ```shell
-copier copy gh:abhi18av/template-analyze-and-publish path/to/destination
+copier copy gh:abhi18av/template-analysis-and-writeup path/to/destination
 ```
 
 ## Features
