@@ -1,9 +1,6 @@
 # Python Copier Template for Data Science
 
 TODO @abhi18av:
-- Add dagger for infra
-- opentofu for infra
-- Add deps from `scratch-clj`, clerk
 - git-submodules for various sun templates
 - mlflow
 
