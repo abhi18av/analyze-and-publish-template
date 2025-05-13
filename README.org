@@ -5,6 +5,15 @@ TODO @abhi18av:
 - https://github.com/MarquezProject/marquez
 
 - mlflow
+- deon https://deon.drivendata.org/#background-and-perspective
+
+- Public datasets
+  https://www.re3data.org/browse/by-country/
+  https://github.com/awesomedata/awesome-public-datasets
+  https://github.com/public-apis/public-apis
+  https://free-apis.github.io/#/
+
+
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-orange.json)](https://github.com/copier-org/copier)
