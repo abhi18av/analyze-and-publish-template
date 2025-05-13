@@ -13,6 +13,8 @@ TODO @abhi18av:
   https://github.com/public-apis/public-apis
   https://free-apis.github.io/#/
 
+- TODO: Create a utility to prune all folders which are empty, from a given list
+  of folders.
 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
