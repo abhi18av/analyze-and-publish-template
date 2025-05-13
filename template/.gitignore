@@ -59,11 +59,17 @@ renv
 .Rprofile
 
 
-# Clojure
-.cpcache
-
 # Apple pages
 *pages
 
 # PDF
 *pdf
+
+# Generated assets
+writeup/assets-results/
+notebooks/quarto/output
+
+
+# CLOJURE
+.clerk
+.cpcache
