@@ -84,6 +84,8 @@ Users and Engineers
     1. Terraform
     2. Dagger
     3. Nomad cluster
+    4. MicroK8s
+    5. Juju
 12. Project-level bin folder, pbin
 13. Utilities for editor, env management config
     1. .vscode
