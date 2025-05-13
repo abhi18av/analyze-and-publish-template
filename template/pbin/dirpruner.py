@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+
+"""
+USAGE: ./pbin/dirpruner.py data
+"""
+
+
 import os
 import sys
 from functools import reduce
