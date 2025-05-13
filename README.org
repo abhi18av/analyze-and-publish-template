@@ -1,20 +1,18 @@
 # Copier Template for Data Analysis and Writeup
 
-TODO @abhi18av:
-- git-submodules for various sun templates
-- https://github.com/MarquezProject/marquez
-
-- mlflow
-- deon https://deon.drivendata.org/#background-and-perspective
-
-- Public datasets
+* Possible enhancements @abhi18nav
+** git-submodules for various sun templates
+** https://github.com/MarquezProject/marquez
+** mlflow/metaflow etc
+** deon https://deon.drivendata.org/#background-and-perspective
+** Public datasets
   https://www.re3data.org/browse/by-country/
   https://github.com/awesomedata/awesome-public-datasets
   https://github.com/public-apis/public-apis
   https://free-apis.github.io/#/
 
-- TODO: Create a utility to prune all folders which are empty, from a given list
-  of folders.
+** Create a utility to prune all folders which are empty, from a given list of folders.
+** Automations (via pixi + just) for installing baseline tools (Python + Java + Babashka + binaries eget, dust, duf)
 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
