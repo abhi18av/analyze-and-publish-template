@@ -16,6 +16,14 @@ install-has:
     curl -sL https://git.io/_has > ./pbin/has
     chmod +x ./pbin/has
 
+check-pbin-has:
+    ./pbin/has node
+
+
+script-nu-scratch:
+    ./scripts/nushell/scratch.nu
+
+
 # TODO
 #check-system:
 #    use-has tools to check which systems are in path

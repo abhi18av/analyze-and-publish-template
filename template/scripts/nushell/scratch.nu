@@ -1,1 +1,3 @@
-[1 2 3] | $in.1 * $in.2
+#!/usr/bin/env nu
+
+ls | sort-by size | reverse
