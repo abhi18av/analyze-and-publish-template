@@ -9,6 +9,13 @@ default:
 add-license:
   licenseheaders -t .LICENSE.template  --settings .licenseheaders.json
 
+install-eget:
+    eget https://github.com/zyedidia/eget --to ./pbin
+
+install-has:
+    curl -sL https://git.io/_has > ./pbin/has
+    chmod +x ./pbin/has
+
 # TODO
 #check-system:
 #    use-has tools to check which systems are in path
