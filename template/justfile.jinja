@@ -1,10 +1,13 @@
-import 'writeup/writeup.just'
+#import 'writeup/writeup.just'
 
 module_name := "{{module_name}}"
 
 # list commands
 default:
     @just --list
+
+add-license:
+  licenseheaders -t .LICENSE.template  --settings .licenseheaders.json
 
 # TODO
 #check-system:
