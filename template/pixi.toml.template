@@ -3,23 +3,9 @@ channels = ["conda-forge"]
 name = "hello-world"
 platforms = ["linux-64", "osx-arm64", "win-64"]
 
-# [tasks] belong to the default feature
-[feature.tasks]
-start = 'python scripts/python/hello.py'
-
-# [dependencies] belong to the default feature
-[feature.dependencies]
+[dependencies]
 cowpy = "1.1.*"
-
-[feature.py312.dependencies]
 python = "3.12.*"
 
-[feature.py313.dependencies]
-python = "3.13.*"
-
-[environments]
-# Pixi automatically creates a default environment that consists only of the default feature
-default = ["default"]
-# Unless you opt-out with `no-default-feature`, every environment contains the default feature
-py312 = ["default", "py312"]
-py313 = ["default", "py313"]
+[tasks]
+start = "python scripts/python/hello.py"
