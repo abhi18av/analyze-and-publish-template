@@ -1,5 +1,5 @@
 {
     "dependencies": {
-        "puppeteer": "^10.2.0"
+        "bibtex-tidy": "^1.14.0"
     }
 }

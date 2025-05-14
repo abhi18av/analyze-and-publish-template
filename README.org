@@ -14,6 +14,20 @@
 ** Create a utility to prune all folders which are empty, from a given list of folders.
 ** Automations (via pixi + just) for installing baseline tools (Python + Java + Babashka + binaries eget, dust, duf)
 
+* CHECKLISTS
+** Data sharing
+- https://github.com/theodi/data-publish-list
+- https://learn.scds.ca/rdm-best-practices/topics/4-publishing.html
+- https://www.springernature.com/gp/authors/research-data-policy/generalist-repositories/12327166
+- https://ieee-dataport.org/
+** FAIR
+- https://github.com/ScilifelabDataCentre/open-science-checklists
+- https://www.fairdata.fi/en/data-management-checklist/
+- https://github.com/fairdataihub/FAIRshare
+- https://www.go-fair.org/fair-principles/
+- https://au-research.github.io/FAIR-data-101-training/resources/additional
+- https://fair-edna.github.io/next.html
+
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-orange.json)](https://github.com/copier-org/copier)
