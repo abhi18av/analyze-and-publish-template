@@ -1,6 +1,6 @@
 # Copier Template for Data Analysis and Writeup
 
-* Possible enhancements @abhi18nav
+* Possible enhancements @abhi18av
 ** git-submodules for various sun templates
 ** https://github.com/MarquezProject/marquez
 ** mlflow/metaflow etc

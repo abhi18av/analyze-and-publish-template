@@ -1,5 +1,6 @@
 _subdirectory: template
 
+# Basic Project Information
 project_name:
   type: str
   help: What is your project name?
@@ -7,8 +8,111 @@ project_name:
 short_name:
   type: str
   help: What is your projects short name?
+  
+description:
+  type: str
+  help: Brief description of the project
+  default: A data analysis project
 
+# Author Information
+author_name:
+  type: str
+  help: Your name or team name
+  
+author_email:
+  type: str
+  help: Contact email for the project
+  default: ""
+
+# Project Configuration
+programming_language:
+  type: str
+  help: Primary programming language
+  choices:
+    - Python
+    - R
+    - Both
+  default: Python
+
+# Analysis Components
+include_eda_templates:
+  type: bool
+  help: Include exploratory data analysis templates
+  default: true
+
+include_statistical_analysis:
+  type: bool
+  help: Include statistical analysis templates
+  default: true
+
+include_ml_components:
+  type: bool
+  help: Include machine learning workflow templates
+  default: false
+
+# Specialized Components  
+specialized_domain:
+  type: str
+  help: Include specialized domain-specific tools
+  choices:
+    - None
+    - Bioinformatics
+    - Epidemiology
+    - Geospatial
+    - Time Series
+    - Other
+  default: None
+
+# Data Management
+data_versioning:
+  type: bool
+  help: Include DVC setup for data versioning
+  default: false
+  
+data_validation:
+  type: bool
+  help: Include data validation frameworks (Great Expectations)
+  default: false
+
+# Documentation and Reporting  
+documentation_format:
+  type: str
+  help: Primary documentation format
+  choices:
+    - Markdown
+    - Jupyter Notebooks
+    - Quarto
+    - RMarkdown
+  default: Markdown
+
+include_publication_templates:
+  type: bool
+  help: Include academic publication templates
+  default: false
+
+# Experiment Tracking
+experiment_tracking:
+  type: str
+  help: Experiment tracking platform
+  choices:
+    - None
+    - MLflow
+    - Weights & Biases
+  default: None
+
+# CI/CD and Automation
 github_actions:
   type: bool
-  help: Add github actions
+  help: Add GitHub Actions workflows
+  default: false
+
+pre_commit_hooks:
+  type: bool
+  help: Configure pre-commit hooks for code quality
+  default: false
+
+# Deployment Options
+include_deployment_templates:
+  type: bool
+  help: Include deployment templates (Docker, FastAPI, etc.)
   default: false
