@@ -116,3 +116,52 @@ include_deployment_templates:
   type: bool
   help: Include deployment templates (Docker, FastAPI, etc.)
   default: false
+
+
+
+# Multipass VM Support
+use_multipass:
+  type: bool
+  help: Include Multipass VM configuration for isolated environments
+  default: false
+
+multipass_profile:
+  type: str
+  help: Type of Multipass VM profile to include
+  choices:
+    - minimal
+    - data-science
+    - gpu-optimized
+  default: data-science
+  when: "{{ use_multipass }}"
+
+multipass_memory:
+  type: str
+  help: Memory allocation for Multipass VM
+  default: "4G"
+  when: "{{ use_multipass }}"
+
+multipass_cpus:
+  type: str
+  help: CPU cores for Multipass VM
+  default: "2"
+  when: "{{ use_multipass }}"
+
+multipass_disk:
+  type: str
+  help: Disk size for Multipass VM
+  default: "20G"
+  when: "{{ use_multipass }}"
+
+  ssh_public_key:
+  type: str
+  help: Your SSH public key for accessing VMs (optional)
+  default: ""
+  when: "{{ use_multipass }}"
+
+
+ssh_public_key:
+  type: str
+  help: Your SSH public key for accessing VMs (optional)
+  default: ""
+  when: "{{ use_multipass }}"

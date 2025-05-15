@@ -1,5 +1,7 @@
 #import 'writeup/writeup.just'
 
+# {{ project_name }} - Data Science Project Tasks
+
 module_name := "{{module_name}}"
 
 # list commands
@@ -78,3 +80,97 @@ pc-update:
 # check for typos
 typos:
   uv run typos .
+
+
+
+{% if use_multipass %}
+# === Multipass VM Management ===
+
+# Set up Multipass VM for data science
+vm-setup:
+    @bash infrastructure/multipass/setup.sh
+
+# Start the VM
+vm-start:
+    @multipass start {{ project_name|lower|replace(" ", "-") }}
+
+# Stop the VM
+vm-stop:
+    @multipass stop {{ project_name|lower|replace(" ", "-") }}
+
+# Access VM shell
+vm-shell:
+    @multipass shell {{ project_name|lower|replace(" ", "-") }}
+
+# Start Jupyter Lab in VM
+vm-jupyter:
+    @multipass exec {{ project_name|lower|replace(" ", "-") }} -- sudo -H -u datascientist jupyter lab --ip=0.0.0.0 --port=8888 --no-browser
+
+# Mount project files to VM
+vm-mount:
+    @multipass mount . {{ project_name|lower|replace(" ", "-") }}:/home/datascientist/{{ project_name|lower|replace(" ", "-") }}
+
+# Delete VM
+vm-delete:
+    @multipass delete {{ project_name|lower|replace(" ", "-") }}
+    @multipass purge
+{% endif %}
+
+# === Data Management ===
+
+# Run exploratory data analysis
+eda:
+    @echo "Running EDA notebooks..."
+    {% if programming_language == "Python" or programming_language == "Both" %}
+    jupyter nbconvert --execute notebooks/eda/*.ipynb --to html
+    {% endif %}
+    {% if programming_language == "R" or programming_language == "Both" %}
+    Rscript -e "rmarkdown::render('notebooks/eda/eda.Rmd')"
+    {% endif %}
+
+# === Environment Management ===
+
+# Install dependencies
+install:
+    {% if programming_language == "Python" or programming_language == "Both" %}
+    pixi install
+    {% endif %}
+    {% if programming_language == "R" or programming_language == "Both" %}
+    Rscript -e "renv::restore()"
+    {% endif %}
+
+# Create a new notebook
+new-notebook name:
+    @mkdir -p notebooks
+    {% if programming_language == "Python" or programming_language == "Both" %}
+    @echo "Creating Python notebook: {{name}}.ipynb"
+    @cp templates/notebook_templates/python_template.ipynb notebooks/{{name}}.ipynb
+    {% endif %}
+    {% if programming_language == "R" or programming_language == "Both" %}
+    @echo "Creating R notebook: {{name}}.Rmd"
+    @cp templates/notebook_templates/r_template.Rmd notebooks/{{name}}.Rmd
+    {% endif %}
+
+{% if experiment_tracking != "None" %}
+# === Experiment Tracking ===
+
+# Start experiment tracking server
+track-start:
+    {% if experiment_tracking == "MLflow" %}
+    @mlflow ui --port 5000
+    {% elif experiment_tracking == "Weights & Biases" %}
+    @wandb login
+    {% endif %}
+{% endif %}
+
+{% if include_deployment_templates %}
+# === Deployment ===
+
+# Build Docker image
+docker-build:
+    @docker build -t {{ project_name|lower|replace(" ", "-") }} .
+
+# Run Docker container
+docker-run:
+    @docker run -p 8000:8000 {{ project_name|lower|replace(" ", "-") }}
+{% endif %}
