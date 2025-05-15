@@ -11,7 +11,7 @@
   https://github.com/public-apis/public-apis
   https://free-apis.github.io/#/
 
-** Create a utility to prune all folders which are empty, from a given list of folders.
+** REVIEW Create a utility to prune all folders which are empty, from a given list of folders.
 ** Automations (via pixi + just) for installing baseline tools (Python + Java + Babashka + binaries eget, dust, duf)
 
 * CHECKLISTS
