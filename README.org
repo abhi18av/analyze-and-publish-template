@@ -1,6 +1,9 @@
 # Copier Template for Data Analysis and Writeup
 
 * Possible enhancements @abhi18av
+** R has comprehensive bioconductor and https://github.com/erikgahner/awesome-ggplot2 + ggbio
+** TODO https://biomejs.dev/blog/biome-v2-0-beta/
+** https://shiny.posit.co/py/
 ** git-submodules for various sun templates
 ** https://github.com/MarquezProject/marquez
 ** mlflow/metaflow etc
