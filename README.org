@@ -1,6 +1,7 @@
 # Copier Template for Data Analysis and Writeup
 
 * Possible enhancements @abhi18av
+** Learn from https://github.com/cjolowicz/cookiecutter-hypermodern-python
 ** prj tool (projectable) https://github.com/dzfrias/projectable
 ** R has comprehensive bioconductor and https://github.com/erikgahner/awesome-ggplot2 + ggbio
 ** TODO https://biomejs.dev/blog/biome-v2-0-beta/
