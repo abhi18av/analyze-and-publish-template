@@ -1,5 +1,5 @@
+description: Deploy MinIO to MicroK8s for local development.
 series: jammy
-description: Deploy MinIO on local MicroK8s using Juju
 applications:
   minio:
     charm: minio
@@ -11,4 +11,3 @@ applications:
       secret-key: minioadmin
     kubernetes:
       storage: microk8s-hostpath
-machines: {}
