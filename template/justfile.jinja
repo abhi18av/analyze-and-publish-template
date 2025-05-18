@@ -51,6 +51,9 @@ script-java-hello:
 script-go-hello:
     go run scripts/golang/hello.go
 
+server-mlflow:
+    mlflow server --host 127.0.0.1 --port 8080
+
 # TODO
 #check-system:
 #    use-has tools to check which systems are in path
