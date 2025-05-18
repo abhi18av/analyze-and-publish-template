@@ -1,4 +1,5 @@
-#import 'writeup/writeup.just'
+#import 'justfiles/scripts.just'
+
 
 # {{ project_name }} - Data Science Project Tasks
 
@@ -41,21 +42,6 @@ install-has:
 check-pbin-has:
     ./pbin/has node fish java bash
 
-script-nu-scratch:
-    ./scripts/nushell/scratch.nu
-
-script-ocaml-minimo:
-    dune exec ./scripts/ocaml/minimo.exe
-
-
-script-java-hello:
-    jbang scripts/java/helloworld.java
-
-script-go-hello:
-    go run scripts/golang/hello.go
-
-server-mlflow:
-    mlflow server --host 127.0.0.1 --port 8080
 
 # TODO
 #check-system:
