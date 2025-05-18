@@ -1,5 +1,16 @@
-#import 'justfiles/scripts.just'
 
+#import 'misc/utils.just'
+#import 'scripts/scripts.just'
+#import 'app/app.just'
+#import 'dashboards/dashboards.just'
+import 'pipelines/pipelines.just'
+import "data/data.just"
+import "infrastructure/environments.just"
+import "infrastructure/infrastructure.just"
+import "misc/utils.just"
+import "notebooks/notebooks.just"
+import "scripts/scripts.just"
+import "writeup/justfile"
 
 # {{ project_name }} - Data Science Project Tasks
 
@@ -8,45 +19,6 @@ module_name := "{{module_name}}"
 # list commands
 default:
     @just --list
-
-add-license:
-  licenseheaders -t .LICENSE.template  --settings .licenseheaders.json
-
-# Launch and set up LXD environment for data science on macOS via Multipass
-setup-lxd-macos:
-    bash infra/containers/lxd/setup-multipass-lxd.sh
-
-setup-graalvm:
-    bash scripts/bash/setup_java.sh
-
-setup-jbang-java:
-    jbang jdk install 17 `sdk home java 17.0.4.1-tem`
-    jbang jdk java-env
-
-
-start-lakefs:
-    python -m lakefs.quickstart
-
-install-jbang-java:
-    jbang jdk list --available
-    jbang jdk install 17
-    jbang jdk default 17
-
-install-eget:
-    eget https://github.com/zyedidia/eget --to ./pbin
-
-install-has:
-    curl -sL https://git.io/_has > ./pbin/has
-    chmod +x ./pbin/has
-
-check-pbin-has:
-    ./pbin/has node fish java bash
-
-
-# TODO
-#check-system:
-#    use-has tools to check which systems are in path
-
 
 # setup for development
 setup: install git-setup
@@ -64,19 +36,6 @@ git-setup: install
 test-cov:
   uv run pytest --cov {% raw %}{{module_name}}{% endraw %} --cov-report=lcov:lcov.info --cov-report=term-missing --cov-report html --cov-report xml
 
-# format and sort imports
-format:
-  uv run ruff check --fix --select=I001 .
-  uv run ruff format .
-
-# autofix with ruff
-autofix:
-  uv run ruff --fix --show-fixes .
-
-# lint with ruff
-lint:
-  uv run ruff check --output-format=full .
-
 # update packages and uv lock file
 update:
   uv sync -U --all-groups --all-extras --inexact
@@ -85,79 +44,7 @@ update:
 pc-update:
   uvx pre-commit-update
 
-# check for typos
-typos:
-  uv run typos .
-
-
-
-{% if use_multipass %}
-# === Multipass VM Management ===
-
-# Set up Multipass VM for data science
-vm-setup:
-    @bash infrastructure/multipass/setup.sh
-
-# Start the VM
-vm-start:
-    @multipass start {{ project_name|lower|replace(" ", "-") }}
-
-# Stop the VM
-vm-stop:
-    @multipass stop {{ project_name|lower|replace(" ", "-") }}
-
-# Access VM shell
-vm-shell:
-    @multipass shell {{ project_name|lower|replace(" ", "-") }}
-
-# Start Jupyter Lab in VM
-vm-jupyter:
-    @multipass exec {{ project_name|lower|replace(" ", "-") }} -- sudo -H -u datascientist jupyter lab --ip=0.0.0.0 --port=8888 --no-browser
-
-# Mount project files to VM
-vm-mount:
-    @multipass mount . {{ project_name|lower|replace(" ", "-") }}:/home/datascientist/{{ project_name|lower|replace(" ", "-") }}
-
-# Delete VM
-vm-delete:
-    @multipass delete {{ project_name|lower|replace(" ", "-") }}
-    @multipass purge
-{% endif %}
-
 # === Data Management ===
-
-# Run exploratory data analysis
-eda:
-    @echo "Running EDA notebooks..."
-    {% if programming_language == "Python" or programming_language == "Both" %}
-    jupyter nbconvert --execute notebooks/eda/*.ipynb --to html
-    {% endif %}
-    {% if programming_language == "R" or programming_language == "Both" %}
-    Rscript -e "rmarkdown::render('notebooks/eda/eda.Rmd')"
-    {% endif %}
-
-# === Environment Management ===
-
-# Install dependencies
-install:
-    {% if programming_language == "Python" or programming_language == "Both" %}
-    pixi install
-    {% endif %}
-    {% if programming_language == "R" or programming_language == "Both" %}
-    Rscript -e "renv::restore()"
-    {% endif %}
-
-# Create a new notebook
-new-notebook name:
-    @mkdir -p notebooks
-    {% if programming_language == "Python" or programming_language == "Both" %}
-    @echo "Creating Python notebook: {{name}}.ipynb"
-    @cp templates/notebook_templates/python_template.ipynb notebooks/{{name}}.ipynb
-    {% endif %}
-    {% if programming_language == "R" or programming_language == "Both" %}
-    @echo "Creating R notebook: {{name}}.Rmd"
-    @cp templates/notebook_templates/r_template.Rmd notebooks/{{name}}.Rmd
-    {% endif %}
 
 {% if experiment_tracking != "None" %}
 # === Experiment Tracking ===
@@ -184,11 +71,6 @@ docker-run:
 {% endif %}
 
 
-
-# Download raw data
-download-data:
-    python scripts/data/download.py
-
 # Run full pipeline with DVC
 pipeline:
     dvc repro
@@ -196,28 +78,6 @@ pipeline:
 # Visualize pipeline
 pipeline-dag:
     dvc dag
-
-# Data validation
-validate-data:
-    python scripts/data/validate.py
-
-# Train model
-train:
-    python scripts/train.py
-
-# Evaluate model
-evaluate:
-    python scripts/evaluate.py
-
-# Export model artifact
-export-model:
-    python scripts/export_model.py
-
-# Build and push Docker image
-docker-build:
-    docker build -t {{ project_name|lower|replace(" ", "-") }} .
-docker-push:
-    docker push {{ registry_url }}/{{ project_name|lower|replace(" ", "-") }}
 
 # Clean intermediate files
 clean:

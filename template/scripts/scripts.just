@@ -9,3 +9,19 @@ script-java-hello:
 
 script-go-hello:
     go run golang/hello.go
+
+# Data validation
+validate-data:
+    python scripts/data/validate.py
+
+# Train model
+train:
+    python scripts/train.py
+
+# Evaluate model
+evaluate:
+    python scripts/evaluate.py
+
+# Export model artifact
+export-model:
+    python scripts/export_model.py

@@ -1,8 +1,6 @@
 # Copier Template for Data Analysis and Writeup
 
 
-
-
 # # Feature/Training/Inference Pipelines
 
 # File Structure based on:
