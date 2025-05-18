@@ -23,6 +23,9 @@ setup-jbang-java:
     jbang jdk java-env
 
 
+start-lakefs:
+    python -m lakefs.quickstart
+
 install-jbang-java:
     jbang jdk list --available
     jbang jdk install 17
