@@ -11,6 +11,23 @@ default:
 add-license:
   licenseheaders -t .LICENSE.template  --settings .licenseheaders.json
 
+# Launch and set up LXD environment for data science on macOS via Multipass
+setup-lxd-macos:
+    bash infra/containers/lxd/setup-multipass-lxd.sh
+
+setup-graalvm:
+    bash scripts/bash/setup_java.sh
+
+setup-jbang-java:
+    jbang jdk install 17 `sdk home java 17.0.4.1-tem`
+    jbang jdk java-env
+
+
+install-jbang-java:
+    jbang jdk list --available
+    jbang jdk install 17
+    jbang jdk default 17
+
 install-eget:
     eget https://github.com/zyedidia/eget --to ./pbin
 
@@ -19,8 +36,7 @@ install-has:
     chmod +x ./pbin/has
 
 check-pbin-has:
-    ./pbin/has node
-
+    ./pbin/has node fish java bash
 
 script-nu-scratch:
     ./scripts/nushell/scratch.nu
@@ -174,3 +190,44 @@ docker-build:
 docker-run:
     @docker run -p 8000:8000 {{ project_name|lower|replace(" ", "-") }}
 {% endif %}
+
+
+
+# Download raw data
+download-data:
+    python scripts/data/download.py
+
+# Run full pipeline with DVC
+pipeline:
+    dvc repro
+
+# Visualize pipeline
+pipeline-dag:
+    dvc dag
+
+# Data validation
+validate-data:
+    python scripts/data/validate.py
+
+# Train model
+train:
+    python scripts/train.py
+
+# Evaluate model
+evaluate:
+    python scripts/evaluate.py
+
+# Export model artifact
+export-model:
+    python scripts/export_model.py
+
+# Build and push Docker image
+docker-build:
+    docker build -t {{ project_name|lower|replace(" ", "-") }} .
+docker-push:
+    docker push {{ registry_url }}/{{ project_name|lower|replace(" ", "-") }}
+
+# Clean intermediate files
+clean:
+    rm -rf data/processed/*
+    rm -rf outputs/*
