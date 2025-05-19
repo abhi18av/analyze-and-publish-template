@@ -17,3 +17,4 @@ download-data:
     mkdir -p "$OUT_DIR"
     wget -O "$ZIP_FILE" "$DATA_URL"
     unzip -o "$ZIP_FILE" -d "$OUT_DIR"
+    rm "$ZIP_FILE"
