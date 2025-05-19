@@ -21,7 +21,8 @@
 
 
            :nextjournal/clerk {:extra-deps {org.babashka/cli {:mvn/version "0.7.52"}
-                                io.github.nextjournal/clerk {:mvn/version "0.17.1102"}}
+                                            org.scicloj/kind-clerk {:mvn/version "1-alpha9"}
+                                            io.github.nextjournal/clerk {:mvn/version "0.17.1102"}}
                                ;:exec-fn     nextjournal.clerk/build!
                                #_#_:main-opts   ["-m" "babashka.cli.exec"]}}
 
