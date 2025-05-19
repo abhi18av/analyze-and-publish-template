@@ -35,6 +35,7 @@ pipelines
 
 
 * Possible enhancements @abhi18av
+** TODO https://mlcommons.org/working-groups/data/croissant/
 ** Learn from https://github.com/cjolowicz/cookiecutter-hypermodern-python
 ** prj tool (projectable) https://github.com/dzfrias/projectable
 ** R has comprehensive bioconductor and https://github.com/erikgahner/awesome-ggplot2 + ggbio
