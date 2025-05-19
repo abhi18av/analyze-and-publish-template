@@ -9,6 +9,8 @@ setup-jbang-java:
     jbang jdk install 17 `sdk home java 17.0.4.1-tem`
     jbang jdk java-env
 
+install-julia:
+    juliaup add lts
 
 start-lakefs:
     python -m lakefs.quickstart
