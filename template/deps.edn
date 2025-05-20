@@ -5,6 +5,7 @@
         ;;missionary/missionary {:mvn/version "b.44"}
 
         ;; SCICLOJ
+        org.scicloj/kindly {:mvn/version "4-beta16"}
         org.scicloj/noj        {:mvn/version "2-beta16"}
         org.scicloj/wolframite {:mvn/version "1.1.0"}}
 
