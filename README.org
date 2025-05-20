@@ -35,6 +35,7 @@ pipelines
 
 
 * Possible enhancements @abhi18av
+** TODO Truly integrate DSO https://boehringer-ingelheim.github.io/dso/tutorials/getting_started.html
 ** TODO https://mlcommons.org/working-groups/data/croissant/
 ** Learn from https://github.com/cjolowicz/cookiecutter-hypermodern-python
 ** prj tool (projectable) https://github.com/dzfrias/projectable

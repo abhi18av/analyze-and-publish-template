@@ -5,3 +5,13 @@
 *** R
 
 *** Clojure
+
+** Shells
+
+*** Resources
+https://github.com/learnbyexample/learn_perl_oneliners
+https://learnbyexample.github.io/cli-computing/
+https://learnbyexample.github.io/cli_text_processing_coreutils/
+https://learnbyexample.github.io/learn_gnuawk/buy.html
+https://learnbyexample.github.io/learn_gnused/
+https://learnbyexample.github.io/learn_gnugrep_ripgrep/
