@@ -1,0 +1,13 @@
+Project shell
+- fish
+
+Infrastructure automation scripts
+- powershell
+- bash
+- SDKs
+
+
+Data analysis scripts
+- nushell
+- powershell
+- bash
