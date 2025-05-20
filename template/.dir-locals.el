@@ -1,2 +1,2 @@
 ((clojure-mode . ((cider-preferred-build-tool . clojure-cli)
-                  (cider-clojure-cli-global-options . "-A:nextjournal/clerk"))))
+                  (cider-clojure-cli-parameters . "-A:nextjournal/clerk"))))
