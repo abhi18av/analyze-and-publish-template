@@ -6,7 +6,11 @@
 
 *** Clojure
 
-** Shells
+*** Shell - nushell
+
+*** Shell - bash
+
+*** Shell - powershell
 
 *** Resources
 https://github.com/learnbyexample/learn_perl_oneliners

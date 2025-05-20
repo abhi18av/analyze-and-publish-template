@@ -47,13 +47,28 @@ pipelines
 ** mlflow/metaflow etc
 ** deon https://deon.drivendata.org/#background-and-perspective
 ** Public datasets
+  https://github.com/addypy/datagovindia/
   https://www.re3data.org/browse/by-country/
   https://github.com/awesomedata/awesome-public-datasets
   https://github.com/public-apis/public-apis
   https://free-apis.github.io/#/
+  https://github.com/datasets/awesome-data?tab=readme-ov-file
+  https://datacatalogs.org
+  https://dados.gov.br/home
+  https://ckan.org/features
+  https://github.com/GetDKAN/dkan
+  https://queridodiario.ok.org.br
+  https://magda.io
+  https://dev.magda.io/search?page=2
 
 ** REVIEW Create a utility to prune all folders which are empty, from a given list of folders.
 ** Automations (via pixi + just) for installing baseline tools (Python + Java + Babashka + binaries eget, dust, duf)
+** Lineage
+https://github.com/OpenLineage/OpenLineage?tab=readme-ov-file
+https://egeria-project.org/education/
+https://github.com/grai-io/grai-core
+https://www.grai.io
+
 
 * CHECKLISTS
 ** Data sharing
