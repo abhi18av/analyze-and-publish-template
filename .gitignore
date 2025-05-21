@@ -71,10 +71,10 @@ Temporary Items
 
 
 # AnW template
-template/pbin
+template/analysis/pbin
 
 # OCaml
-/template/_build/
+template/analysis/_build/
 
 
 # Bazel

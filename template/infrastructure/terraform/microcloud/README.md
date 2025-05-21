@@ -1,2 +1,0 @@
-https://canonical.com/microcloud
-
