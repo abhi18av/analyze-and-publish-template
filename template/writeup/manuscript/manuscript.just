@@ -2,7 +2,7 @@
 
 # === Setup and Initialization ===
 manuscript-init: # Initialize manuscript structure
-    mkdir -p src assets/{figures,tables,supplementary} output/{pdf,docx,html}/{draft,final} reviews/{feedback,responses,revisions} submissions/{preprint}
+    mkdir -p src assets/{figures,tables,supplementary} _output/{pdf,docx,html}/{draft,final} reviews/{feedback,responses,revisions} submissions/{preprint}
     touch src/{index,abstract,introduction,methods,results,discussion}.qmd
     touch src/references.bib
     touch _quarto.yml
@@ -19,7 +19,7 @@ manuscript-list-sections: # List all section files
 
 # === Rendering and Preview ===
 manuscript-render format="pdf" version="draft": # Render manuscript
-    quarto render src/index.qmd --to {{format}} --output-dir output/{{format}}/{{version}}
+    quarto render src/index.qmd --to {{format}} --_output-dir _output/{{format}}/{{version}}
 
 manuscript-preview: # Preview with live reload
     quarto preview src/index.qmd
@@ -56,7 +56,7 @@ manuscript-prepare-submission journal="preprint": # Prepare submission package
         assets/figures/* \
         assets/tables/* \
         assets/supplementary/* \
-        output/pdf/final/*
+        _output/pdf/final/*
 
 # === Bibliography Management ===
 manuscript-update-bib: # Update bibliography
@@ -82,17 +82,17 @@ manuscript-spell: # Run spell check
 
 # === Export Tasks ===
 manuscript-export-pdf version="draft": # Export to PDF
-    quarto render src/index.qmd --to pdf --output-dir output/pdf/{{version}}
+    quarto render src/index.qmd --to pdf --_output-dir _output/pdf/{{version}}
 
 manuscript-export-docx version="draft": # Export to Word
-    quarto render src/index.qmd --to docx --output-dir output/docx/{{version}}
+    quarto render src/index.qmd --to docx --_output-dir _output/docx/{{version}}
 
 manuscript-export-html version="draft": # Export to HTML
-    quarto render src/index.qmd --to html --output-dir output/html/{{version}}
+    quarto render src/index.qmd --to html --_output-dir _output/html/{{version}}
 
 # === Helper Tasks ===
-manuscript-list-outputs: # List all output files
-    find output -type f
+manuscript-list-_outputs: # List all _output files
+    find _output -type f
 
 manuscript-list-assets: # List all assets
     find assets -type f

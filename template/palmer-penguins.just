@@ -6,7 +6,7 @@ project-fish:
     ./misc/run_fish.sh
 
 #NOTE: Dataset is from https://www.kaggle.com/datasets/samybaladram/palmers-penguin-dataset-extended?select=palmerpenguins_extended.csv
-download-data:
+data-download:
     #!/bin/bash
     set -e
 
