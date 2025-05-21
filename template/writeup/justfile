@@ -1,7 +1,0 @@
-# list commands
-default:
-    @just --list
-
-[working-directory: 'manuscript']
-preprint:
-    zip -r PREPRINT-zip/submission.zip supplemental-data assets compiled-pdf ../figtables/figures ../figtables/tables
