@@ -9,15 +9,7 @@ import "infrastructure/infrastructure.just"
 import "misc/utils.just"
 import "notebooks/notebooks.just"
 import "scripts/scripts.just"
-import "writeup/writeup.just"
 
-# {{ project_name }} - Data Science Project Tasks
-
-module_name := "{{module_name}}"
-
-# list commands
-default:
-    @just --list
 
 # setup for development
 setup: install git-setup
@@ -39,11 +31,7 @@ test-cov:
 update:
   uv sync -U --all-groups --all-extras --inexact
 
-# update pre-commit file
-pc-update:
-  uvx pre-commit-update
 
-# === Data Management ===
 
 {% if experiment_tracking != "None" %}
 # === Experiment Tracking ===
@@ -68,21 +56,3 @@ docker-build:
 docker-run:
     @docker run -p 8000:8000 {{ project_name|lower|replace(" ", "-") }}
 {% endif %}
-
-
-# Run full pipeline with DVC
-pipeline:
-    dvc repro
-
-# Visualize pipeline
-pipeline-dag:
-    dvc dag
-
-# Clean intermediate files
-clean:
-    rm -rf data/processed/*
-    rm -rf outputs/*
-
-project-fish:
-    ./misc/run_fish.sh
-
