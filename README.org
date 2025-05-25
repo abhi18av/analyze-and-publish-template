@@ -34,6 +34,16 @@ model
 pipelines
 
 
+https://blog.bioconductor.org/posts/2022-10-22-awesome-lists/
+
+https://www.bioconductor.org/packages/release/BiocViews.html
+
+https://www.researchobject.org/overview/
+
+https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0309210
+
+https://www.nature.com/articles/533452a
+
 * Possible enhancements @abhi18av
 ** research object
 *** https://www.researchobject.org/ro-crate/background
