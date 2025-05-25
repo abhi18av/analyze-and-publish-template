@@ -35,6 +35,12 @@ pipelines
 
 
 * Possible enhancements @abhi18av
+** research object
+*** https://www.researchobject.org/ro-crate/background
+*** https://github.com/lucmoreau/ProvToolbox
+*** https://github.com/trungdong/prov?tab=readme-ov-file
+*** https://openprovenance.org
+*** https://github.com/ResearchObject/ro-crate-py
 ** TODO Truly integrate DSO https://boehringer-ingelheim.github.io/dso/tutorials/getting_started.html
 ** TODO https://mlcommons.org/working-groups/data/croissant/
 ** Learn from https://github.com/cjolowicz/cookiecutter-hypermodern-python

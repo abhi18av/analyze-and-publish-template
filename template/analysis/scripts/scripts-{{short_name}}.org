@@ -1,18 +1,26 @@
 ** SCRIPTS
 
-*** Python
+** script: <Name>
+  :PROPERTIES:
+  :FILE: <script.py>
+  :LANGUAGE: python
+  :END:
+*** Purpose
+<What does this script do?>
 
-*** R
+*** Usage
+<How to run it?>
 
-*** Clojure
+*** Code
+#+BEGIN_SRC python :tangle script.py
+def main():
+    print("Hello from script!")
 
-*** Shell - nushell
+if __name__ == "__main__":
+    main()
+#+END_SRC
 
-*** Shell - bash
-
-*** Shell - powershell
-
-*** Resources
+** Resources
 https://github.com/learnbyexample/learn_perl_oneliners
 https://learnbyexample.github.io/cli-computing/
 https://learnbyexample.github.io/cli_text_processing_coreutils/

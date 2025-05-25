@@ -20,6 +20,24 @@
 ;;; Code:
 
 
+(setq org-capture-templates
+      '(("e" "Experiment" entry (file "~/org/experiments.org")
+         "* Experiment: %^{Title}
+:PROPERTIES:
+:DATE: %U
+:STATUS: planned
+:END:
+** Objective
+%?
+** Method
+** Code
+#+BEGIN_SRC python :results output
+#+END_SRC
+** Results
+** Analysis
+** Next Steps
+")))
+
 
 (provide 'project-setup)
 ;;; project-setup.el ends here
