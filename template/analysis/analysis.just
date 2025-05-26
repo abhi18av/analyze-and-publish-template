@@ -1,7 +1,4 @@
-#import 'misc/utils.just'
-#import 'scripts/scripts.just'
-#import 'app/app.just'
-#import 'dashboards/dashboards.just'
+# Remove broken imports
 import 'pipelines/pipelines.just'
 import "data/data.just"
 import "infrastructure/environments.just"
@@ -9,7 +6,6 @@ import "infrastructure/infrastructure.just"
 import "misc/utils.just"
 import "notebooks/notebooks.just"
 import "scripts/scripts.just"
-
 
 # setup for development
 setup: install git-setup
@@ -30,8 +26,6 @@ test-cov:
 # update packages and uv lock file
 update:
   uv sync -U --all-groups --all-extras --inexact
-
-
 
 {% if experiment_tracking != "None" %}
 # === Experiment Tracking ===

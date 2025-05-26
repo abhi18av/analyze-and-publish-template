@@ -52,6 +52,7 @@ https://www.nature.com/articles/533452a
 *** https://openprovenance.org
 *** https://github.com/ResearchObject/ro-crate-py
 ** TODO Truly integrate DSO https://boehringer-ingelheim.github.io/dso/tutorials/getting_started.html
+** https://pypi.org/project/datasette/
 ** TODO https://mlcommons.org/working-groups/data/croissant/
 ** Learn from https://github.com/cjolowicz/cookiecutter-hypermodern-python
 ** prj tool (projectable) https://github.com/dzfrias/projectable
@@ -99,7 +100,10 @@ https://www.grai.io
 - https://www.go-fair.org/fair-principles/
 - https://au-research.github.io/FAIR-data-101-training/resources/additional
 - https://fair-edna.github.io/next.html
-
+- https://faircookbook.elixir-europe.org/content/recipes/accessibility/aspera.html
+- https://ena-docs.readthedocs.io/en/latest/retrieval/file-download.html
+  https://programmerall.com/article/8629309388/
+  https://ftp.ncbi.nlm.nih.gov/;9u;9u
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-orange.json)](https://github.com/copier-org/copier)
