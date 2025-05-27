@@ -147,6 +147,7 @@ Users and Engineers
 4. Notebooks
    1. Quarto (R, Python, ObservableJS)
    2. Mathematica
+   3. Matlab
 5. Dashboards
    1. Quarto (R, Python, ObservableJS)
 6. Pipeline runner - `nextflow`
