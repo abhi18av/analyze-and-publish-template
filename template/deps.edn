@@ -1,6 +1,8 @@
 {:deps {;; CORE
         org.clojure/clojure {:mvn/version "1.12.0"}
 
+        io.github.pfeodrippe/wally {:mvn/version "0.0.4"}
+
         ;; parallel computing
         ;;missionary/missionary {:mvn/version "b.44"}
 
