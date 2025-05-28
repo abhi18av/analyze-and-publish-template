@@ -9,6 +9,7 @@ import os
 import sys
 from functools import reduce
 from typing import List, Callable
+import argparse
 
 
 def list_directory_contents(directory: str) -> List[str]:
@@ -50,10 +51,14 @@ def remove_directory(directory: str) -> bool:
         return False
 
 
-def prune_directory(directory: str) -> bool:
-    """Remove .gitkeep file and its containing directory if it should be pruned."""
+def prune_directory(directory: str, dryrun: bool = False) -> bool:
+    """Remove .gitkeep file and its containing directory if it should be pruned. If dryrun, only print and do not delete."""
     if not should_prune(directory):
         return False
+
+    if dryrun:
+        print(f"[DRYRUN] Would prune: {directory}")
+        return True
 
     gitkeep_path = os.path.join(directory, '.gitkeep')
     return remove_file(gitkeep_path) and remove_directory(directory)
@@ -64,8 +69,8 @@ def get_all_subdirectories(base_dir: str) -> List[str]:
     if not is_directory(base_dir):
         return []
 
-    # Get immediate subdirectories
-    subdirs = filter(is_directory, list_directory_contents(base_dir))
+    # Get immediate subdirectories as a list (not a filter object)
+    subdirs = [item for item in list_directory_contents(base_dir) if is_directory(item)]
 
     # Recursively get all subdirectories
     all_subdirs = list(subdirs)
@@ -75,57 +80,51 @@ def get_all_subdirectories(base_dir: str) -> List[str]:
     return all_subdirs
 
 
-def prune_directories(directories: List[str]) -> List[str]:
-    """Prune all eligible subdirectories and return a list of pruned directories."""
-    # Get all subdirectories for all input directories
+def prune_directories(directories: List[str], dryrun: bool = False) -> List[str]:
+    """Prune all eligible subdirectories and return a list of pruned directories. If dryrun, only print."""
     all_subdirs = reduce(
         lambda acc, dir: acc + get_all_subdirectories(dir),
         directories,
         []
     )
-
-    # Sort by depth (longest path first) to handle nested directories properly
     all_subdirs.sort(key=lambda x: x.count(os.sep), reverse=True)
-
-    # Prune eligible directories and collect results
     pruned = filter(
-        lambda subdir: prune_directory(subdir),
+        lambda subdir: prune_directory(subdir, dryrun=dryrun),
         all_subdirs
     )
-
     return list(pruned)
 
 
-def parse_directories() -> List[str]:
-    """Parse directories from command line or use defaults."""
-    # Default directories if none provided
-    default_dirs = [os.getcwd()]
-
-    # Check if directories were provided as command line arguments
-    if len(sys.argv) > 1:
-        dirs = sys.argv[1].split(',')
-        return [dir.strip() for dir in dirs if dir.strip()]
-
-    return default_dirs
+def parse_args():
+    """Parse command line arguments for initial directory, multiple directories, and dryrun flag."""
+    parser = argparse.ArgumentParser(description="Prune empty directories containing only .gitkeep files.")
+    parser.add_argument('-d', '--directory', nargs='?', default=os.getcwd(),
+                        help='Path of the initial directory to scan (default: current directory)')
+    parser.add_argument('-D', '--directories', nargs='+',
+                        help='One or more top-level directories to scan')
+    parser.add_argument('-n', '--dryrun', action='store_true',
+                        help='Only print directories that would be pruned, do not delete')
+    return parser.parse_args()
 
 
 def main():
     """Main function to coordinate the directory pruning."""
-    print("Starting directory pruning...")
-
-    # Get directories to scan
-    directories = parse_directories()
+    args = parse_args()
+    dryrun = args.dryrun
+    if args.directories:
+        directories = args.directories
+    else:
+        directories = [args.directory]
+    print("Starting directory pruning..." + (" (dryrun mode)" if dryrun else ""))
     print(f"Scanning directories: {', '.join(directories)}")
-
-    # Prune directories and collect results
-    pruned_dirs = prune_directories(directories)
-
-    # Report results
-    print(f"Pruned {len(pruned_dirs)} directories containing only .gitkeep files:")
+    pruned_dirs = prune_directories(directories, dryrun=dryrun)
+    if dryrun:
+        print(f"[DRYRUN] {len(pruned_dirs)} directories would be pruned:")
+    else:
+        print(f"Pruned {len(pruned_dirs)} directories containing only .gitkeep files:")
     for dir in pruned_dirs:
         print(f"  - {dir}")
-
-    print("Directory pruning completed.")
+    print("Directory pruning completed." + (" (dryrun mode)" if dryrun else ""))
 
 
 if __name__ == "__main__":
