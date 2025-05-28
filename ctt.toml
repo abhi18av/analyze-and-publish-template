@@ -1,7 +1,9 @@
 [defaults]
-project_name = "ctt-test"
+template_path = "template"
+output_path = "./.ctt/test-defaults"
+answers_file = "ctt-answers.yml"
+cleanup = true
 
-[output.".ctt/defaults"]
-
-[output.".ctt/ga"]
-github_actions = true
+[[test]]
+name = "default"
+answers = { short_name = "demo", author = "Test User" }
