@@ -84,3 +84,11 @@ bazel-template
 bazel-testlogs
 
 MODULE.bazel.lock
+
+template/.cpcache
+
+template/analysis/renv
+
+_output
+
+*swp
