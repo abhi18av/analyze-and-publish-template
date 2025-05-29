@@ -57,6 +57,7 @@ Thumbs.db
 # R
 renv
 .Rprofile
+.Rproj.*
 
 
 # Apple pages
@@ -66,10 +67,12 @@ renv
 *pdf
 
 # Generated assets
-writeup/assets-results/
-notebooks/quarto/output
+analysis/writeup/assets-results/
+analysis/notebooks/quarto/output
 
 
 # CLOJURE
 .clerk
 .cpcache
+'
+
