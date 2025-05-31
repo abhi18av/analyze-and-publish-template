@@ -27,3 +27,43 @@ clean:
 
 project-fish:
     ./.fish/run_fish.sh
+
+# === Version Control Management ===
+init-fossil-repos: # Initialize Fossil repositories for manuscript and analysis
+    # Initialize manuscript repository
+    cd writeup/manuscript && fossil init manuscript.fossil
+    fossil open manuscript.fossil
+    fossil add .
+    fossil commit -m "Initial manuscript commit"
+    cd ../..
+    
+    # Initialize analysis repository
+    cd analysis && fossil init analysis.fossil
+    fossil open analysis.fossil
+    fossil add .
+    fossil commit -m "Initial analysis commit"
+    cd ..
+
+sync-fossil-repos: # Sync Fossil repositories with Git
+    # Sync manuscript
+    cd writeup/manuscript
+    fossil add .
+    fossil commit -m "Sync with Git" || true
+    cd ../..
+    
+    # Sync analysis
+    cd analysis
+    fossil add .
+    fossil commit -m "Sync with Git" || true
+    cd ..
+
+backup-fossil-repos: # Backup Fossil repositories
+    # Backup manuscript
+    cd writeup/manuscript
+    fossil backup manuscript-backup-$(date +%Y%m%d).fossil
+    cd ../..
+    
+    # Backup analysis
+    cd analysis
+    fossil backup analysis-backup-$(date +%Y%m%d).fossil
+    cd ..
