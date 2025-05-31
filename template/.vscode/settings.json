@@ -1,1 +1,10 @@
-../{{cookiecutter.repo_name}}/.vscode/settings.json
+{
+    "files.exclude": {
+      "**/.git": true,
+      "**/node_modules": true,
+      "**/*.log": true,
+      ".*": true,
+    },
+    "explorer.sortOrder": "type",
+    "nextflow.telemetry.enabled": false
+  }
