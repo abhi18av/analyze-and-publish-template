@@ -251,3 +251,66 @@ manuscript-submit-preprint version platform:
     mkdir -p submissions/preprint/{{platform}}/{{version}}
     cp versions/{{version}}/manuscript.pdf submissions/preprint/{{platform}}/{{version}}/
     echo "Preprint prepared for {{platform}} version {{version}}" > submissions/preprint/{{platform}}/{{version}}/README.md
+
+# === Version Logging ===
+# Log and tag each new version in Fossil and append to VERSIONS.md
+manuscript-log-version version:
+    VERSION_DIR="v{{version}}-$(date +%Y-%m-%dT%H-%M-%S)" && \
+    fossil tag add $$VERSION_DIR && \
+    echo "- $$VERSION_DIR | $(date) | $(fossil info current | grep uuid)" >> VERSIONS.md && \
+    echo "Logged version: $$VERSION_DIR"
+
+# === Feedback Management ===
+# List all feedback files for a version
+manuscript-list-feedback version_name:
+    ls versions/{{version_name}}/feedback/
+
+# Summarize all feedback for a version into a single file
+manuscript-summarize-feedback version_name:
+    cat versions/{{version_name}}/feedback/* > versions/{{version_name}}/feedback/summary.txt
+    echo "Feedback summarized to versions/{{version_name}}/feedback/summary.txt"
+
+# === Clean-Up ===
+# Remove empty feedback folders and old temp files
+manuscript-clean-versions:
+    find versions -type d -empty -delete
+    find versions -type f -name '*.tmp' -delete
+    echo "Cleaned empty folders and temp files in versions/"
+
+# === Preflight Check ===
+# Run all checks before versioning or submission
+manuscript-preflight-check:
+    just manuscript-check
+    just manuscript-check-formatting
+    just manuscript-check-references
+    just manuscript-check-figures
+    just manuscript-spell
+    echo "Preflight checks complete."
+
+# === Changelog Management ===
+# Append a major change to CHANGELOG.md
+manuscript-changelog message:
+    echo "- $(date): {{message}}" >> CHANGELOG.md
+    echo "Changelog updated."
+
+# === Archive Submission ===
+# Zip and archive all files for a submission
+manuscript-archive-submission version_name:
+    ZIPFILE="archive-{{version_name}}-$(date +%Y%m%d).zip" && \
+    zip -r $$ZIPFILE versions/{{version_name}} submissions/*/{{version_name}} && \
+    echo "Submission archived as $$ZIPFILE"
+
+# === Documentation ===
+# Print workflow documentation
+manuscript-docs:
+    echo "Manuscript Workflow:\n"
+    echo "1. Compile draft/final: just manuscript-compile stage=draft|final"
+    echo "2. Create version from final: just manuscript-version-from-final version=2"
+    echo "3. Add feedback: just manuscript-add-feedback version_name=... file=..."
+    echo "4. List feedback: just manuscript-list-feedback version_name=..."
+    echo "5. Summarize feedback: just manuscript-summarize-feedback version_name=..."
+    echo "6. Preflight check: just manuscript-preflight-check"
+    echo "7. Archive submission: just manuscript-archive-submission version_name=..."
+    echo "8. Log version: just manuscript-log-version version=..."
+    echo "9. Update changelog: just manuscript-changelog message=..."
+    echo "10. See this help: just manuscript-docs"
