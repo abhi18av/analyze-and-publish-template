@@ -34,3 +34,39 @@ Temporary Items
 
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
+
+# CLOJURE
+.clerk
+
+
+# AnW template
+template/analysis/pbin
+
+# OCaml
+template/analysis/_build/
+
+
+# Bazel
+bazel-bin
+bazel-out
+bazel-template
+bazel-testlogs
+
+MODULE.bazel.lock
+
+template/.cpcache
+
+template/analysis/renv
+
+_output
+
+*swp

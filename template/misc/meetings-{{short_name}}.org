@@ -7,7 +7,7 @@
 #+PROPERTY: PRIORITY all
 #+PROPERTY: TAGS all
 
-* Meeting Notes
+** MEETING NOTES
 :PROPERTIES:
 :MEETING_TYPE: template
 :PARTICIPANTS: all
@@ -16,7 +16,7 @@
 :TAGS: template
 :END:
 
-** Quick Reference
+*** Quick Reference
 :PROPERTIES:
 :MEETING_TYPE: reference
 :PARTICIPANTS: all
@@ -25,27 +25,27 @@
 :TAGS: reference
 :END:
 
-*** Meeting Types
+**** Meeting Types
 - [[#internal][Internal]]
 - [[#external][External]]
 - [[#project][Project]]
 - [[#review][Review]]
 - [[#planning][Planning]]
 
-*** Status Tags
+**** Status Tags
 - TODO
 - IN_PROGRESS
 - DONE
 - CANCELLED
 - DEFERRED
 
-*** Priority Levels
+**** Priority Levels
 - P0 (Critical)
 - P1 (High)
 - P2 (Medium)
 - P3 (Low)
 
-** Meeting Templates
+*** Meeting Templates
 :PROPERTIES:
 :MEETING_TYPE: template
 :PARTICIPANTS: all
@@ -54,7 +54,7 @@
 :TAGS: template
 :END:
 
-*** Internal Meeting
+**** Internal Meeting
 :PROPERTIES:
 :MEETING_TYPE: internal
 :PARTICIPANTS: team
@@ -63,24 +63,24 @@
 :TAGS: internal
 :END:
 
-**** Agenda
+***** Agenda
 - [ ] Item 1
 - [ ] Item 2
 - [ ] Item 3
 
-**** Notes
+***** Notes
 -
 
-**** Action Items
+***** Action Items
 - [ ]
 
-**** Decisions
+***** Decisions
 -
 
-**** Follow-up
+***** Follow-up
 - [ ]
 
-*** External Meeting
+**** External Meeting
 :PROPERTIES:
 :MEETING_TYPE: external
 :PARTICIPANTS: external
@@ -89,24 +89,24 @@
 :TAGS: external
 :END:
 
-**** Agenda
+***** Agenda
 - [ ] Item 1
 - [ ] Item 2
 - [ ] Item 3
 
-**** Notes
+***** Notes
 -
 
-**** Action Items
+***** Action Items
 - [ ]
 
-**** Decisions
+***** Decisions
 -
 
-**** Follow-up
+***** Follow-up
 - [ ]
 
-*** Project Review
+**** Project Review
 :PROPERTIES:
 :MEETING_TYPE: review
 :PARTICIPANTS: project
@@ -115,24 +115,24 @@
 :TAGS: review
 :END:
 
-**** Agenda
+***** Agenda
 - [ ] Progress Review
 - [ ] Blockers
 - [ ] Next Steps
 
-**** Notes
+***** Notes
 -
 
-**** Action Items
+***** Action Items
 - [ ]
 
-**** Decisions
+***** Decisions
 -
 
-**** Follow-up
+***** Follow-up
 - [ ]
 
-** Recent Meetings
+*** Recent Meetings
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -141,7 +141,7 @@
 :TAGS: all
 :END:
 
-*** TODAY
+**** TODAY
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -150,7 +150,7 @@
 :TAGS: all
 :END:
 
-*** YESTERDAY
+**** YESTERDAY
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -159,7 +159,7 @@
 :TAGS: all
 :END:
 
-** Meeting Archive
+*** Meeting Archive
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -168,7 +168,7 @@
 :TAGS: all
 :END:
 
-*** 2024
+**** 2024
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -177,7 +177,7 @@
 :TAGS: all
 :END:
 
-**** Q1
+***** Q1
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -186,7 +186,7 @@
 :TAGS: all
 :END:
 
-***** January
+****** January
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -195,7 +195,7 @@
 :TAGS: all
 :END:
 
-***** February
+****** February
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -204,7 +204,7 @@
 :TAGS: all
 :END:
 
-***** March
+****** March
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -213,7 +213,7 @@
 :TAGS: all
 :END:
 
-**** Q2
+***** Q2
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -222,7 +222,7 @@
 :TAGS: all
 :END:
 
-***** April
+****** April
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -231,7 +231,7 @@
 :TAGS: all
 :END:
 
-***** May
+****** May
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -240,7 +240,7 @@
 :TAGS: all
 :END:
 
-***** June
+****** June
 :PROPERTIES:
 :MEETING_TYPE: all
 :PARTICIPANTS: all
@@ -264,18 +264,18 @@
 :END:
 %U
 
-**** Agenda
+***** Agenda
 - [ ]
 
-**** Notes
+***** Notes
 -
 
-**** Action Items
+***** Action Items
 - [ ]
 
-**** Decisions
+***** Decisions
 -
 
-**** Follow-up
+***** Follow-up
 - [ ] ")))
 #+END_SRC

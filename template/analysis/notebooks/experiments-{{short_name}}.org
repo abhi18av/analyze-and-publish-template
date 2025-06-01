@@ -8,7 +8,7 @@
 #+PROPERTY: CLOCK_INTO_DRAWER t
 #+PROPERTY: LOG_INTO_DRAWER t
 
-* Experiments
+** EXPERIMENTS
 :PROPERTIES:
 :EXPERIMENT_TYPE: all
 :STATUS: active
@@ -16,7 +16,7 @@
 :TAGS: experiments
 :END:
 
-** Quick Reference
+*** Quick Reference
 :PROPERTIES:
 :EXPERIMENT_TYPE: reference
 :STATUS: active
@@ -24,27 +24,27 @@
 :TAGS: reference
 :END:
 
-*** Experiment Types
+**** Experiment Types
 - [[#data-processing][Data Processing]]
 - [[#exploration][Exploration]]
 - [[#analysis][Analysis]]
 - [[#modeling][Modeling]]
 - [[#deployment][Deployment]]
 
-*** Status Tags
+**** Status Tags
 - TODO
 - IN_PROGRESS
 - DONE
 - FAILED
 - ARCHIVED
 
-*** Priority Levels
+**** Priority Levels
 - P0 (Critical)
 - P1 (High)
 - P2 (Medium)
 - P3 (Low)
 
-** Templates
+*** Templates
 :PROPERTIES:
 :EXPERIMENT_TYPE: template
 :STATUS: active
@@ -52,7 +52,7 @@
 :TAGS: templates
 :END:
 
-*** Data Processing Template
+**** Data Processing Template
 :PROPERTIES:
 :EXPERIMENT_TYPE: data
 :STATUS: template
@@ -60,18 +60,18 @@
 :TAGS: data_processing
 :END:
 
-**** Objective
+***** Objective
 - Process and prepare data for analysis
 - Ensure data quality and consistency
 - Create reproducible data pipeline
 
-**** Input Data
+***** Input Data
 - Source:
 - Format:
 - Size:
 - Last Updated:
 
-**** Processing Steps
+***** Processing Steps
 - [ ] Data loading
   - [ ] Source connection
   - [ ] Initial validation
@@ -85,20 +85,20 @@
   - [ ] Encoding
   - [ ] Feature scaling
 
-**** Output
+***** Output
 - Format:
 - Location:
 - Validation:
 
-**** Dependencies
+***** Dependencies
 - Libraries:
 - External Tools:
 - Compute Resources:
 
-**** Notes
+***** Notes
 -
 
-*** Model Training Template
+**** Model Training Template
 :PROPERTIES:
 :EXPERIMENT_TYPE: modeling
 :STATUS: template
@@ -106,17 +106,17 @@
 :TAGS: model_training
 :END:
 
-**** Objective
+***** Objective
 - Train and evaluate model performance
 - Optimize hyperparameters
 - Compare with baseline
 
-**** Model Details
+***** Model Details
 - Algorithm:
 - Version:
 - Framework:
 
-**** Training Configuration
+***** Training Configuration
 - [ ] Data split
   - [ ] Training:
   - [ ] Validation:
@@ -131,7 +131,7 @@
   - [ ] Distributed:
   - [ ] Checkpointing:
 
-**** Evaluation Metrics
+***** Evaluation Metrics
 - [ ] Primary metrics
   - [ ] Metric 1:
   - [ ] Metric 2:
@@ -139,15 +139,15 @@
   - [ ] Metric 1:
   - [ ] Metric 2:
 
-**** Results
+***** Results
 - Training time:
 - Best performance:
 - Comparison with baseline:
 
-**** Notes
+***** Notes
 -
 
-*** Feature Engineering Template
+**** Feature Engineering Template
 :PROPERTIES:
 :EXPERIMENT_TYPE: feature_engineering
 :STATUS: template
@@ -155,17 +155,17 @@
 :TAGS: feature_engineering
 :END:
 
-**** Objective
+***** Objective
 - Create new features
 - Select optimal feature set
 - Improve model performance
 
-**** Input Features
+***** Input Features
 - Original features:
 - Data types:
 - Missing values:
 
-**** Feature Creation
+***** Feature Creation
 - [ ] Domain features
   - [ ] Feature 1:
   - [ ] Feature 2:
@@ -176,7 +176,7 @@
   - [ ] Feature 1:
   - [ ] Feature 2:
 
-**** Feature Selection
+***** Feature Selection
 - [ ] Methods used
   - [ ] Correlation analysis
   - [ ] Importance ranking
@@ -185,15 +185,15 @@
   - [ ] Feature 1:
   - [ ] Feature 2:
 
-**** Impact Analysis
+***** Impact Analysis
 - [ ] Performance improvement:
 - [ ] Feature importance:
 - [ ] Computational cost:
 
-**** Notes
+***** Notes
 -
 
-*** Model Deployment Template
+**** Model Deployment Template
 :PROPERTIES:
 :EXPERIMENT_TYPE: deployment
 :STATUS: template
@@ -201,12 +201,12 @@
 :TAGS: deployment
 :END:
 
-**** Objective
+***** Objective
 - Deploy model to production
 - Ensure scalability and reliability
 - Monitor performance
 
-**** Deployment Configuration
+***** Deployment Configuration
 - [ ] Infrastructure
   - [ ] Cloud provider:
   - [ ] Instance type:
@@ -216,7 +216,7 @@
   - [ ] Containerization:
   - [ ] Load balancing:
 
-**** Monitoring Setup
+***** Monitoring Setup
 - [ ] Metrics
   - [ ] Performance metrics:
   - [ ] System metrics:
@@ -226,7 +226,7 @@
   - [ ] Error rates:
   - [ ] Resource usage:
 
-**** Rollout Plan
+***** Rollout Plan
 - [ ] Phases
   - [ ] Phase 1:
   - [ ] Phase 2:
@@ -235,10 +235,10 @@
   - [ ] Triggers:
   - [ ] Procedures:
 
-**** Notes
+***** Notes
 -
 
-*** A/B Testing Template
+**** A/B Testing Template
 :PROPERTIES:
 :EXPERIMENT_TYPE: analysis
 :STATUS: template
@@ -246,12 +246,12 @@
 :TAGS: ab_testing
 :END:
 
-**** Objective
+***** Objective
 - Compare model versions
 - Measure impact
 - Make data-driven decisions
 
-**** Experiment Design
+***** Experiment Design
 - [ ] Hypothesis
   - [ ] Null hypothesis:
   - [ ] Alternative hypothesis:
@@ -262,7 +262,7 @@
   - [ ] Start date:
   - [ ] End date:
 
-**** Metrics
+***** Metrics
 - [ ] Primary metrics
   - [ ] Metric 1:
   - [ ] Metric 2:
@@ -270,7 +270,7 @@
   - [ ] Metric 1:
   - [ ] Metric 2:
 
-**** Analysis
+***** Analysis
 - [ ] Statistical tests
   - [ ] Test type:
   - [ ] Significance level:
@@ -279,15 +279,15 @@
   - [ ] Effect size:
   - [ ] Confidence intervals:
 
-**** Decision
+***** Decision
 - [ ] Recommendation:
 - [ ] Next steps:
 - [ ] Documentation:
 
-**** Notes
+***** Notes
 -
 
-** Data Processing
+*** Data Processing
 :PROPERTIES:
 :EXPERIMENT_TYPE: data
 :STATUS: active
@@ -295,7 +295,7 @@
 :TAGS: data
 :END:
 
-*** 00-raw
+**** 00-raw
 :PROPERTIES:
 :EXPERIMENT_TYPE: data
 :STATUS: active
@@ -303,21 +303,21 @@
 :TAGS: raw_data
 :END:
 
-**** Data Sources
+***** Data Sources
 - [ ] Source 1
 - [ ] Source 2
 
-**** Data Validation
+***** Data Validation
 - [ ] Schema validation
 - [ ] Quality checks
 - [ ] Missing value analysis
 
-**** Data Cleaning
+***** Data Cleaning
 - [ ] Remove duplicates
 - [ ] Handle missing values
 - [ ] Outlier detection
 
-*** 01-data
+**** 01-data
 :PROPERTIES:
 :EXPERIMENT_TYPE: data
 :STATUS: active
@@ -325,17 +325,17 @@
 :TAGS: processed_data
 :END:
 
-**** Data Transformation
+***** Data Transformation
 - [ ] Normalization
 - [ ] Encoding
 - [ ] Feature scaling
 
-**** Data Storage
+***** Data Storage
 - [ ] Format selection
 - [ ] Storage location
 - [ ] Version control
 
-** Exploration
+*** Exploration
 :PROPERTIES:
 :EXPERIMENT_TYPE: exploration
 :STATUS: active
@@ -343,7 +343,7 @@
 :TAGS: exploration
 :END:
 
-*** 02-exploration
+**** 02-exploration
 :PROPERTIES:
 :EXPERIMENT_TYPE: exploration
 :STATUS: active
@@ -351,17 +351,17 @@
 :TAGS: eda
 :END:
 
-**** Statistical Analysis
+***** Statistical Analysis
 - [ ] Descriptive statistics
 - [ ] Distribution analysis
 - [ ] Correlation analysis
 
-**** Visualization
+***** Visualization
 - [ ] Univariate plots
 - [ ] Bivariate plots
 - [ ] Multivariate plots
 
-** Analysis
+*** Analysis
 :PROPERTIES:
 :EXPERIMENT_TYPE: analysis
 :STATUS: active
@@ -369,7 +369,7 @@
 :TAGS: analysis
 :END:
 
-*** 03-analysis
+**** 03-analysis
 :PROPERTIES:
 :EXPERIMENT_TYPE: analysis
 :STATUS: active
@@ -377,17 +377,17 @@
 :TAGS: statistical_analysis
 :END:
 
-**** Hypothesis Testing
+***** Hypothesis Testing
 - [ ] Test selection
 - [ ] Assumption checking
 - [ ] Results interpretation
 
-**** Advanced Analysis
+***** Advanced Analysis
 - [ ] Time series analysis
 - [ ] Spatial analysis
 - [ ] Network analysis
 
-** Feature Engineering
+*** Feature Engineering
 :PROPERTIES:
 :EXPERIMENT_TYPE: feature_engineering
 :STATUS: active
@@ -395,7 +395,7 @@
 :TAGS: features
 :END:
 
-*** 04-feat_eng
+**** 04-feat_eng
 :PROPERTIES:
 :EXPERIMENT_TYPE: feature_engineering
 :STATUS: active
@@ -403,17 +403,17 @@
 :TAGS: feature_engineering
 :END:
 
-**** Feature Creation
+***** Feature Creation
 - [ ] Domain features
 - [ ] Statistical features
 - [ ] Interaction features
 
-**** Feature Selection
+***** Feature Selection
 - [ ] Correlation analysis
 - [ ] Importance ranking
 - [ ] Dimensionality reduction
 
-** Modeling
+*** Modeling
 :PROPERTIES:
 :EXPERIMENT_TYPE: modeling
 :STATUS: active
@@ -421,7 +421,7 @@
 :TAGS: modeling
 :END:
 
-*** 05-models
+**** 05-models
 :PROPERTIES:
 :EXPERIMENT_TYPE: modeling
 :STATUS: active
@@ -429,17 +429,17 @@
 :TAGS: models
 :END:
 
-**** Model Selection
+***** Model Selection
 - [ ] Algorithm selection
 - [ ] Hyperparameter tuning
 - [ ] Cross-validation
 
-**** Model Training
+***** Model Training
 - [ ] Training setup
 - [ ] Performance metrics
 - [ ] Model comparison
 
-** Interpretation
+*** Interpretation
 :PROPERTIES:
 :EXPERIMENT_TYPE: interpretation
 :STATUS: active
@@ -447,7 +447,7 @@
 :TAGS: interpretation
 :END:
 
-*** 06-interpretation
+**** 06-interpretation
 :PROPERTIES:
 :EXPERIMENT_TYPE: interpretation
 :STATUS: active
@@ -455,17 +455,17 @@
 :TAGS: model_interpretation
 :END:
 
-**** Model Insights
+***** Model Insights
 - [ ] Feature importance
 - [ ] Partial dependence
 - [ ] SHAP values
 
-**** Business Impact
+***** Business Impact
 - [ ] ROI analysis
 - [ ] Risk assessment
 - [ ] Implementation strategy
 
-** Deployment
+*** Deployment
 :PROPERTIES:
 :EXPERIMENT_TYPE: deployment
 :STATUS: active
@@ -473,7 +473,7 @@
 :TAGS: deployment
 :END:
 
-*** 07-deploy
+**** 07-deploy
 :PROPERTIES:
 :EXPERIMENT_TYPE: deployment
 :STATUS: active
@@ -481,17 +481,17 @@
 :TAGS: deployment
 :END:
 
-**** Model Serving
+***** Model Serving
 - [ ] API design
 - [ ] Containerization
 - [ ] Scaling strategy
 
-**** Monitoring
+***** Monitoring
 - [ ] Performance monitoring
 - [ ] Drift detection
 - [ ] Alert system
 
-** Reports
+*** Reports
 :PROPERTIES:
 :EXPERIMENT_TYPE: reporting
 :STATUS: active
@@ -499,7 +499,7 @@
 :TAGS: reports
 :END:
 
-*** 08-reports
+**** 08-reports
 :PROPERTIES:
 :EXPERIMENT_TYPE: reporting
 :STATUS: active
@@ -507,17 +507,17 @@
 :TAGS: documentation
 :END:
 
-**** Technical Documentation
+***** Technical Documentation
 - [ ] Code documentation
 - [ ] API documentation
 - [ ] Architecture diagrams
 
-**** User Documentation
+***** User Documentation
 - [ ] User guides
 - [ ] Tutorials
 - [ ] FAQs
 
-** References
+*** References
 :PROPERTIES:
 :EXPERIMENT_TYPE: reference
 :STATUS: active
@@ -525,12 +525,12 @@
 :TAGS: references
 :END:
 
-*** Documentation
+**** Documentation
 - [[https://github.com/dfeich/org-babel-examples/blob/master/lisp/lisp-babel.org][Org Babel Examples]]
 - [[https://orgmode.org/manual/Working-with-Source-Code.html][Org Mode Source Code]]
 - [[https://orgmode.org/manual/Results-of-Evaluation.html][Org Mode Evaluation]]
 
-*** Tools
+**** Tools
 - [[https://jupyter.org/][Jupyter]]
 - [[https://quarto.org/][Quarto]]
 - [[https://www.r-project.org/][R]]
@@ -552,21 +552,21 @@
 :END:
 %U
 
-**** Objective
+***** Objective
 -
 
-**** Methodology
+***** Methodology
 -
 
-**** Results
+***** Results
 -
 
-**** Conclusions
+***** Conclusions
 -
 
-**** Next Steps
+***** Next Steps
 - [ ]
 
-**** CLOCK:
-**** LOG: ")))
+***** CLOCK:
+***** LOG: ")))
 #+END_SRC
