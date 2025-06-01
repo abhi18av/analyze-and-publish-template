@@ -6,7 +6,7 @@ default:
 
 # === Setup and Initialization ===
 manuscript-init: # Initialize manuscript structure
-    mkdir -p src assets/{figures,tables,supplementary} _output/{pdf,docx,html}/{draft,final} reviews/{feedback,responses,revisions} submissions/{preprint}
+    mkdir -p src assets/{figures,tables,supplementary} _output/{pdf,docx,html}/{draft,final} reviews/{feedback,responses,revisions} submissions/{preprint} versions
     touch src/{index,abstract,introduction,methods,results,discussion}.qmd
     touch src/references.bib
     touch _quarto.yml
@@ -140,20 +140,20 @@ manuscript-list-reviews: # List all review files
 
 # === Collaboration Management ===
 manuscript-new-collaborator name: # Create new collaborator workspace
-    mkdir -p collaborators/{{name}}/{feedback,responses}
+    mkdir -p collaborators/{{name}}/responses
     touch collaborators/{{name}}/README.md
-    echo "# {{name}}'s Workspace\n\n## Feedback History\n\n## Response History" > collaborators/{{name}}/README.md
+    echo "# {{name}}'s Workspace\n\n## Response History" > collaborators/{{name}}/README.md
     fossil branch new collaborator-{{name}} trunk
 
-manuscript-send-to-collaborator name: # Prepare package for collaborator
+manuscript-send-to-collaborator name version_name: # Prepare package for collaborator
     fossil checkout collaborator-{{name}}
     mkdir -p collaborators/{{name}}/packages
     zip -r collaborators/{{name}}/packages/manuscript-$(date +%Y%m%d).zip \
         src/*.qmd \
         assets/figures/* \
         assets/tables/* \
-        _output/pdf/draft/*
-    fossil commit -m "Prepared package for {{name}}"
+        versions/{{version_name}}/manuscript.pdf
+    fossil commit -m "Prepared package for {{name}} for version {{version_name}}"
     fossil checkout trunk
 
 # === Review Process Management ===
@@ -210,3 +210,44 @@ manuscript-build-all: # Build all formats
 
 manuscript-watch: # Watch for changes and rebuild
     fswatch -o src/ assets/ | xargs -n1 -I{} just manuscript-build-all
+
+# Create a new versioned folder with ISO timestamp
+manuscript-new-version version:
+    VERSION_DIR="v{{version}}-$(date +%Y-%m-%dT%H-%M-%S)" && \
+    mkdir -p versions/$$VERSION_DIR/feedback && \
+    echo "Created: versions/$$VERSION_DIR"
+
+# Render draft to the new versioned folder
+manuscript-render-version version:
+    VERSION_DIR="v{{version}}-$(date +%Y-%m-%dT%H-%M-%S)" && \
+    mkdir -p versions/$$VERSION_DIR/feedback && \
+    quarto render src/index.qmd --to pdf --output versions/$$VERSION_DIR/draft.pdf && \
+    echo "Draft rendered to: versions/$$VERSION_DIR/draft.pdf"
+
+# Add feedback to a specific versioned folder (coauthor feedback colocated with version)
+manuscript-add-feedback version_name file:
+    cp {{file}} versions/{{version_name}}/feedback/
+    echo "Feedback {{file}} added to versions/{{version_name}}/feedback/"
+
+# Only keep the latest draft in _output/
+manuscript-export-draft:
+    quarto render src/index.qmd --to pdf --output _output/draft.pdf
+
+manuscript-compile stage="draft":
+    quarto render src/index.qmd --to pdf --output _output/{{stage}}/manuscript.pdf
+
+manuscript-version-from-final version:
+    VERSION_DIR="v{{version}}-$(date +%Y-%m-%dT%H-%M-%S)" && \
+    mkdir -p versions/$$VERSION_DIR/feedback && \
+    cp _output/final/manuscript.pdf versions/$$VERSION_DIR/ && \
+    echo "Version created: versions/$$VERSION_DIR"
+
+manuscript-submit-journal version journal:
+    mkdir -p submissions/{{journal}}/{{version}}
+    cp versions/{{version}}/manuscript.pdf submissions/{{journal}}/{{version}}/
+    echo "Submission prepared for {{journal}} version {{version}}" > submissions/{{journal}}/{{version}}/README.md
+
+manuscript-submit-preprint version platform:
+    mkdir -p submissions/preprint/{{platform}}/{{version}}
+    cp versions/{{version}}/manuscript.pdf submissions/preprint/{{platform}}/{{version}}/
+    echo "Preprint prepared for {{platform}} version {{version}}" > submissions/preprint/{{platform}}/{{version}}/README.md
