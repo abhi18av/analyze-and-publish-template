@@ -1,3 +1,7 @@
+# === Default Task ===
+default:
+    @just --list
+
 # Manuscript Management Tasks
 
 # === Setup and Initialization ===
@@ -48,15 +52,17 @@ manuscript-new-revision: # Create new revision directory
     mkdir -p reviews/revisions/$(date +%Y%m%d)
 
 # === Submission Management ===
-manuscript-prepare-submission journal="preprint": # Prepare submission package
-    mkdir -p submissions/{{journal}}
-    zip -r submissions/{{journal}}/submission-$(date +%Y%m%d).zip \
-        src/*.qmd \
-        src/*.bib \
-        assets/figures/* \
-        assets/tables/* \
-        assets/supplementary/* \
-        _output/pdf/final/*
+manuscript-prepare-journal-submission journal: # Prepare journal submission
+    mkdir -p submissions/{{journal}}/$(date +%Y%m%d)
+    cp _output/pdf/final/* submissions/{{journal}}/$(date +%Y%m%d)/
+    cp _output/docx/final/* submissions/{{journal}}/$(date +%Y%m%d)/
+    echo "Submission prepared for {{journal}} on $(date)" > submissions/{{journal}}/$(date +%Y%m%d)/README.md
+
+manuscript-prepare-preprint platform: # Prepare preprint submission
+    mkdir -p submissions/preprint/{{platform}}/$(date +%Y%m%d)
+    cp _output/pdf/final/* submissions/preprint/{{platform}}/$(date +%Y%m%d)/
+    cp _output/html/final/* submissions/preprint/{{platform}}/$(date +%Y%m%d)/
+    echo "Preprint prepared for {{platform}} on $(date)" > submissions/preprint/{{platform}}/$(date +%Y%m%d)/README.md
 
 # === Bibliography Management ===
 manuscript-update-bib: # Update bibliography
@@ -67,11 +73,43 @@ manuscript-check-bib: # Check bibliography for issues
 
 # === Version Control ===
 manuscript-sync: # Sync with version control
-    git add src assets _quarto.yml
-    git commit -m "Update manuscript" || true
+    fossil add src assets _quarto.yml
+    fossil commit -m "Update manuscript" || true
 
 manuscript-backup: # Create backup
     tar -czf manuscript-backup-$(date +%Y%m%d).tar.gz .
+
+manuscript-track-changes: # Track changes between versions
+    fossil diff --brief | grep -E '\.qmd$|\.bib$' | xargs -I{} echo "Changed: {}"
+
+manuscript-show-history: # Show commit history
+    fossil timeline -n 10
+
+manuscript-create-branch name: # Create new branch
+    fossil branch new {{name}} trunk
+
+manuscript-switch-branch name: # Switch to branch
+    fossil checkout {{name}}
+
+manuscript-merge-branch name: # Merge branch into current
+    fossil merge {{name}}
+
+manuscript-status: # Show repository status
+    fossil status
+
+manuscript-undo: # Undo last commit
+    fossil undo
+
+manuscript-tag-version version: # Tag current version
+    fossil tag add {{version}}
+
+manuscript-list-tags: # List all version tags
+    fossil tag list
+
+manuscript-export-version version: # Export specific version
+    fossil checkout {{version}}
+    just manuscript-build-all
+    fossil checkout trunk
 
 # === Quality Checks ===
 manuscript-check: # Check manuscript for issues
@@ -100,6 +138,75 @@ manuscript-list-assets: # List all assets
 manuscript-list-reviews: # List all review files
     find reviews -type f
 
-# === Default Task ===
-default:
-    @just --list
+# === Collaboration Management ===
+manuscript-new-collaborator name: # Create new collaborator workspace
+    mkdir -p collaborators/{{name}}/{feedback,responses}
+    touch collaborators/{{name}}/README.md
+    echo "# {{name}}'s Workspace\n\n## Feedback History\n\n## Response History" > collaborators/{{name}}/README.md
+    fossil branch new collaborator-{{name}} trunk
+
+manuscript-send-to-collaborator name: # Prepare package for collaborator
+    fossil checkout collaborator-{{name}}
+    mkdir -p collaborators/{{name}}/packages
+    zip -r collaborators/{{name}}/packages/manuscript-$(date +%Y%m%d).zip \
+        src/*.qmd \
+        assets/figures/* \
+        assets/tables/* \
+        _output/pdf/draft/*
+    fossil commit -m "Prepared package for {{name}}"
+    fossil checkout trunk
+
+# === Review Process Management ===
+manuscript-prepare-review-package: # Prepare review package
+    fossil branch new review-branch trunk
+    fossil checkout review-branch
+    mkdir -p reviews/packages/$(date +%Y%m%d)
+    cp _output/pdf/draft/* reviews/packages/$(date +%Y%m%d)/
+    cp _output/docx/draft/* reviews/packages/$(date +%Y%m%d)/
+    echo "Review package prepared on $(date)" > reviews/packages/$(date +%Y%m%d)/README.md
+    fossil commit -m "Prepared review package"
+    fossil checkout trunk
+
+manuscript-track-review-status: # Track review status
+    find reviews -type f -name "*.md" | xargs grep -l "TODO" || echo "No pending reviews"
+    fossil status review-branch
+
+# === Enhanced Quality Control ===
+manuscript-check-formatting: # Check formatting consistency
+    find src -name "*.qmd" -exec grep -l "\\n\\n\\n" {} \;
+    find src -name "*.qmd" -exec grep -l "  " {} \;
+
+manuscript-check-references: # Check reference consistency
+    quarto tools citeproc --check src/index.qmd
+    grep -r "\\[@.*\\]" src/
+
+manuscript-check-figures: # Check figure references
+    find src -name "*.qmd" -exec grep -l "!\\[" {} \;
+    find assets/figures -type f -name "*.png" -o -name "*.jpg" -o -name "*.pdf" | sort > /tmp/figures.txt
+    grep -r "!\\[" src/ | grep -o "!\\[.*\\]" | sort > /tmp/refs.txt
+    diff /tmp/figures.txt /tmp/refs.txt
+
+# === Version Management ===
+manuscript-create-version version: # Create new version
+    mkdir -p versions/{{version}}
+    fossil checkout trunk
+    cp -r src assets _quarto.yml versions/{{version}}/
+    echo "Version {{version}} created on $(date)" > versions/{{version}}/README.md
+    fossil tag add {{version}}
+
+manuscript-compare-versions v1 v2: # Compare two versions
+    fossil diff --from {{v1}} --to {{v2}} src/
+
+manuscript-merge-review-changes: # Merge review changes
+    fossil merge review-branch
+    just manuscript-build-all
+    fossil commit -m "Merged review changes"
+
+# === Enhanced Build System ===
+manuscript-build-all: # Build all formats
+    just manuscript-export-pdf version=final
+    just manuscript-export-docx version=final
+    just manuscript-export-html version=final
+
+manuscript-watch: # Watch for changes and rebuild
+    fswatch -o src/ assets/ | xargs -n1 -I{} just manuscript-build-all
