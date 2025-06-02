@@ -48,22 +48,22 @@ sync-fossil-repos: # Sync Fossil repositories with Git
     # Sync manuscript
     cd writeup/manuscript
     fossil add .
-    fossil commit -m "Sync with Git" || true
+    fossil commit -m "Sync with Git at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" || true
     cd ../..
     
     # Sync analysis
     cd analysis
     fossil add .
-    fossil commit -m "Sync with Git" || true
+    fossil commit -m "Sync with Git at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" || true
     cd ..
 
 backup-fossil-repos: # Backup Fossil repositories
     # Backup manuscript
     cd writeup/manuscript
-    fossil backup manuscript-backup-$(date +%Y%m%d).fossil
+    fossil backup manuscript-backup-$(date -u +"%Y-%m-%dT%H:%M:%SZ").fossil
     cd ../..
     
     # Backup analysis
     cd analysis
-    fossil backup analysis-backup-$(date +%Y%m%d).fossil
+    fossil backup analysis-backup-$(date -u +"%Y-%m-%dT%H:%M:%SZ").fossil
     cd ..

@@ -11,16 +11,6 @@ manuscript-init: # Initialize manuscript structure
     touch src/references.bib
     touch _quarto.yml
 
-# === Source Management ===
-manuscript-new-section name: # Create a new section file
-    touch src/{{name}}.qmd
-
-manuscript-edit-section name: # Open section in default editor
-    $EDITOR src/{{name}}.qmd
-
-manuscript-list-sections: # List all section files
-    ls -1 src/*.qmd
-
 # === Rendering and Preview ===
 manuscript-render format="pdf" version="draft": # Render manuscript
     quarto render src/index.qmd --to {{format}} --_output-dir _output/{{format}}/{{version}}
@@ -43,26 +33,26 @@ manuscript-add-supplementary name: # Add new supplementary material
 
 # === Review Management ===
 manuscript-new-feedback: # Create new feedback directory
-    mkdir -p reviews/feedback/$(date +%Y%m%d)
+    mkdir -p reviews/feedback/$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 manuscript-new-response: # Create new response directory
-    mkdir -p reviews/responses/$(date +%Y%m%d)
+    mkdir -p reviews/responses/$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 manuscript-new-revision: # Create new revision directory
-    mkdir -p reviews/revisions/$(date +%Y%m%d)
+    mkdir -p reviews/revisions/$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 # === Submission Management ===
 manuscript-prepare-journal-submission journal: # Prepare journal submission
-    mkdir -p submissions/{{journal}}/$(date +%Y%m%d)
-    cp _output/pdf/final/* submissions/{{journal}}/$(date +%Y%m%d)/
-    cp _output/docx/final/* submissions/{{journal}}/$(date +%Y%m%d)/
-    echo "Submission prepared for {{journal}} on $(date)" > submissions/{{journal}}/$(date +%Y%m%d)/README.md
+    mkdir -p submissions/{{journal}}/$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    cp _output/pdf/final/* submissions/{{journal}}/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/
+    cp _output/docx/final/* submissions/{{journal}}/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/
+    echo "Submission prepared for {{journal}} at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > submissions/{{journal}}/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/README.md
 
 manuscript-prepare-preprint platform: # Prepare preprint submission
-    mkdir -p submissions/preprint/{{platform}}/$(date +%Y%m%d)
-    cp _output/pdf/final/* submissions/preprint/{{platform}}/$(date +%Y%m%d)/
-    cp _output/html/final/* submissions/preprint/{{platform}}/$(date +%Y%m%d)/
-    echo "Preprint prepared for {{platform}} on $(date)" > submissions/preprint/{{platform}}/$(date +%Y%m%d)/README.md
+    mkdir -p submissions/preprint/{{platform}}/$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    cp _output/pdf/final/* submissions/preprint/{{platform}}/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/
+    cp _output/html/final/* submissions/preprint/{{platform}}/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/
+    echo "Preprint prepared for {{platform}} at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > submissions/preprint/{{platform}}/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/README.md
 
 # === Bibliography Management ===
 manuscript-update-bib: # Update bibliography
@@ -74,10 +64,10 @@ manuscript-check-bib: # Check bibliography for issues
 # === Version Control ===
 manuscript-sync: # Sync with version control
     fossil add src assets _quarto.yml
-    fossil commit -m "Update manuscript" || true
+    fossil commit -m "Update manuscript at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" || true
 
 manuscript-backup: # Create backup
-    tar -czf manuscript-backup-$(date +%Y%m%d).tar.gz .
+    tar -czf manuscript-backup-$(date -u +"%Y-%m-%dT%H:%M:%SZ").tar.gz .
 
 manuscript-track-changes: # Track changes between versions
     fossil diff --brief | grep -E '\.qmd$|\.bib$' | xargs -I{} echo "Changed: {}"
@@ -148,23 +138,22 @@ manuscript-new-collaborator name: # Create new collaborator workspace
 manuscript-send-to-collaborator name version_name: # Prepare package for collaborator
     fossil checkout collaborator-{{name}}
     mkdir -p collaborators/{{name}}/packages
-    zip -r collaborators/{{name}}/packages/manuscript-$(date +%Y%m%d).zip \
+    zip -r collaborators/{{name}}/packages/manuscript-$(date -u +"%Y-%m-%dT%H:%M:%SZ").zip \
         src/*.qmd \
         assets/figures/* \
         assets/tables/* \
-        versions/{{version_name}}/manuscript.pdf
-    fossil commit -m "Prepared package for {{name}} for version {{version_name}}"
+
     fossil checkout trunk
 
 # === Review Process Management ===
 manuscript-prepare-review-package: # Prepare review package
     fossil branch new review-branch trunk
     fossil checkout review-branch
-    mkdir -p reviews/packages/$(date +%Y%m%d)
-    cp _output/pdf/draft/* reviews/packages/$(date +%Y%m%d)/
-    cp _output/docx/draft/* reviews/packages/$(date +%Y%m%d)/
-    echo "Review package prepared on $(date)" > reviews/packages/$(date +%Y%m%d)/README.md
-    fossil commit -m "Prepared review package"
+    mkdir -p reviews/packages/$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    cp _output/pdf/draft/* reviews/packages/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/
+    cp _output/docx/draft/* reviews/packages/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/
+    echo "Review package prepared at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > reviews/packages/$(date -u +"%Y-%m-%dT%H:%M:%SZ")/README.md
+    fossil commit -m "Prepared review package at $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
     fossil checkout trunk
 
 manuscript-track-review-status: # Track review status
@@ -191,7 +180,7 @@ manuscript-create-version version: # Create new version
     mkdir -p versions/{{version}}
     fossil checkout trunk
     cp -r src assets _quarto.yml versions/{{version}}/
-    echo "Version {{version}} created on $(date)" > versions/{{version}}/README.md
+    echo "Version {{version}} created at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > versions/{{version}}/README.md
     fossil tag add {{version}}
 
 manuscript-compare-versions v1 v2: # Compare two versions
@@ -200,7 +189,7 @@ manuscript-compare-versions v1 v2: # Compare two versions
 manuscript-merge-review-changes: # Merge review changes
     fossil merge review-branch
     just manuscript-build-all
-    fossil commit -m "Merged review changes"
+    fossil commit -m "Merged review changes at $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
 # === Enhanced Build System ===
 manuscript-build-all: # Build all formats
