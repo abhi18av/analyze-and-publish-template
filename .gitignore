@@ -62,4 +62,5 @@ bazel-template
 bazel-testlogs
 
 MODULE.bazel.lock
-/template/writeup/presentation/_extensions/
+template/writeup/presentation/_extensions/
+template/writeup/manuscript/pollen/compiled
