@@ -64,3 +64,6 @@ bazel-testlogs
 MODULE.bazel.lock
 template/writeup/presentation/_extensions/
 template/writeup/manuscript/pollen/compiled
+
+template/.idea
+template/template.iml

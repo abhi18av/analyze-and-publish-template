@@ -18,5 +18,9 @@ fastparquet = "==2024.11.0"
 openjdk = "==21"
 clojure="==1.12.0.1530"
 
+
+#matlabengine
+#wolframclient
+
 [tasks]
 start = "python scripts/python/hello.py"
