@@ -6,7 +6,10 @@ default:
 
 # === Setup and Initialization ===
 
-#NOTE:  quarto use template grantmcdermott/quarto-revealjs-clean
+
+# NOTE:
+# HTML quarto use template grantmcdermott/quarto-revealjs-clean
+# TYPST quarto use template kazuyanagimoto/quarto-clean-typst
 
 manuscript-init: # Initialize manuscript structure
     mkdir -p src assets/{figures,tables,supplementary} _output/{pdf,docx,html}/{draft,final} reviews/{feedback,responses,revisions} submissions/{preprint}

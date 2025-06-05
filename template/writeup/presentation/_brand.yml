@@ -1,0 +1,25 @@
+color:
+  palette:
+    brilliant-gold: "#b79962"
+    confident-maroon: "#61223b"
+    faculty-fhms: "#005F61"
+  foreground: white
+  background: white
+  primary: confident-maroon
+  secondary: brilliant-gold
+  tertiary: "#C2C2C4"
+  success: green
+  info: teal
+  warning: orange
+  danger: burgundy
+  light: white
+  dark: "#404041"
+#logo:
+#  medium: logo.png
+
+typography:
+  fonts:
+    - family: Jura
+      source: google
+  base: Jura
+  headings: Jura
