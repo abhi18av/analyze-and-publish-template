@@ -1,15 +1,16 @@
 ---
 title: A title
 subtitle: A subtitle
-format: clean-typst
+format: clean-revealjs
+html-math-method:
+  method: mathjax
+  url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
 author:
   - name: Your Name
     orcid: 0000-0000-0000-0000
     email: alias@email.com
     affiliations: Your Institution
-date: today
-date-format: long
-
+date: last-modified
 brand:
   color:
     primary: "#61223b"
@@ -30,62 +31,76 @@ brand:
     monospace:
       family: Fira Code
       size: 0.9em
+  logo:
+    large: "_extensions/SU_primary logo/CMYK/Gold and Maroon CMYK/Jpg/SU corporate_horizontal_without_slogan_CMYK-01.jpg"
 ---
 
-# Section Slide as Header Level 1
+## Example slide
 
-## Slide Title as Header Level 2
+### This is a subtitle
 
-### Subtitle as Header Level 3
+Here we have some text that may run over several lines of the slide frame,
+depending on how long it is.
 
-You can put any content here, including text, images, tables, code blocks, etc.
-
-- first unorder list item
+- first item
     - A sub item
-
-1. first ordered list item
-    1. A sub item
 
 Next, we'll brief review some theme-specific components.
 
-- Note that _all_ of the standard Quarto + Typst
-[features](https://quarto.org/docs/output-formats/typst.html)
-can be used with this theme
-- Also, all the [Touying](https://touying-typ.github.io) features can be used by **Typst native code**
+- Note that _all_ of the standard Reveal.js
+[features](https://quarto.org/docs/presentations/revealjs/)
+can be used with this theme, even if we don't highlight them here.
 
-## Additional Theme Classes
+## Additional theme classes
 
 ### Some extra things you can do with the clean theme
 
 Special classes for emphasis
 
-- `.alert` class for default emphasis, e.g. [the second accent color]{.alert}.
-- `.fg` class for custom color, e.g. [with `options='fill: rgb("#5D639E")'`]{.fg options='fill: rgb("#5D639E")'}.
-- `.bg` class for custom background, e.g. [with the default color]{.bg}.
+- `.alert` class for default emphasis, e.g. [important note]{.alert}.
+- `.fg` class for custom colour, e.g. [important note]{.fg style="--col: #e64173"}.
+- `.bg` class for custom background, e.g. [important note]{.bg style="--col: #e64173"}.
 
 Cross-references
 
 - `.button` class provides a Beamer-like button, e.g.
 [[Summary]{.button}](#sec-summary)
 
+## Want more?
+
+### See our longer demo slides
+
+We've deliberarely kept this template lean, to get you up and running as fast as
+possible.
+
+We provide a separate
+[demo template](https://github.com/grantmcdermott/quarto-revealjs-clean-demo),
+with more examples for integrating code, tables, figures, etc.
+
+  - See the live demo slides
+  [here](https://grantmcdermott.com/quarto-revealjs-clean-demo/template.html).
 
 ## Summary {#sec-summary}
 
-### A Minimalistic Presentation Theme for Quarto + Typst with Touying
+### A minimalist and elegant presentation theme
 
-Add the theme to an existing project
+The Quarto reveal.js clean theme aims to be a minimalist and elegant presention
+theme. Here are some options to get you started:
 
-```{.bash}
-quarto install extension kazuyanagimoto/quarto-clean-typst
-```
-
-... or, create a new project using this slide deck as a lean template
+Add the theme to an existing project.
 
 ```{.bash}
-quarto use template kazuyanagimoto/quarto-clean-typst
+quarto install extension grantmcdermott/quarto-revealjs-clean
 ```
 
+... or, create a new project using this slide deck as a lean template.
 
-### Longer Demo
+```{.bash}
+quarto use template grantmcdermott/quarto-revealjs-clean
+```
 
-For a more comprehensive demo, see the [demo slides](https://kazuyanagimoto.com/quarto-slides-typst/slides/quarto-clean-typst/clean.pdf) and [code](https://github.com/kazuyanagimoto/quarto-slides-typst/blob/main/slides/quarto-clean-typst/clean.qmd)!
+... or, create a new project using the demo slide deck as a full template.
+
+```{.bash}
+quarto use template grantmcdermott/quarto-revealjs-clean-demo
+```

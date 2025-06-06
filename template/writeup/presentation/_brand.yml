@@ -7,15 +7,19 @@ color:
   background: white
   primary: confident-maroon
   secondary: brilliant-gold
-  tertiary: "#C2C2C4"
+  tertiary: faculty-fhms
   success: green
   info: teal
   warning: orange
   danger: burgundy
   light: white
   dark: "#404041"
-#logo:
-#  medium: logo.png
+logo:
+  width: 1in
+  location: right-top
+  padding-right: 0.5in
+  padding-top: 0.25in
+  medium: "_extensions/SU_primary logo/CMYK/Gold and Maroon CMYK/Jpg/SU corporate_horizontal_without_slogan_CMYK-01.jpg"
 
 typography:
   fonts:
