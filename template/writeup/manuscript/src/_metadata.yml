@@ -1,4 +1,3 @@
-always_allow_html: yes
 # Set names and affiliations.
 # It is nice to specify everyone's orcid, if possible.
 # There can be only one corresponding author, but declaring one is optional.
@@ -106,9 +105,11 @@ language:
   title-block-correspondence-note: "Correspondence concerning this article should be addressed to"
   title-block-role-introduction: "Author roles were classified using the Contributor Role Taxonomy (CRediT; https://credit.niso.org/) as follows:"
   references-meta-analysis: "References marked with an asterisk indicate studies included in the meta-analysis."
+
+always_allow_html: yes
+
 format:
   apaquarto-docx: default
   apaquarto-html: default
   apaquarto-typst:
     keep-typ: true
-

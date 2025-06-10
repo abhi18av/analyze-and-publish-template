@@ -1,3 +1,136 @@
+---
+title: "Title of Experiment"
+author: "Your Name"
+date: "2025-05-25"
+format: html
+jupyter: true
+# Add other formats as needed (pdf, docx, etc.)
+# editor: visual
+# bibliography: references.bib
+# csl: your-style.csl
+# Execute code on render
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+# 1. Introduction and Objectives
+
+Briefly describe the context, motivation, and objectives of your computational experiment.
+
+- **Background:**
+- **Research Question(s):**
+- **Objectives:**
+
+---
+
+# 2. Experimental Design
+
+Describe your experimental setup and plan.
+
+- **Overview:**
+- **Datasets/Source:**
+- **Diagram/Flowchart:**
+- **Dependencies and Environment:**
+   - R/Python version:
+   - Package versions:
+   - Hardware:
+
+---
+
+# 3. Data Acquisition and Preprocessing
+
+```{r}
+# Download, import, or load your data here
+```
+
+- **Raw data inspection:**
+- **Preprocessing steps:**
+- **Summary statistics:**
+- **Data partitioning (train/test/validation):**
+
+---
+
+# 4. Methods/Modeling
+
+Describe and implement the computational methods or models.
+
+- **Methods/Algorithms:**
+- **Parameter settings:**
+- **Implementation details:**
+- **References:**
+
+```{python}
+# Example: Method implementation or model training
+```
+
+---
+
+# 5. Experiment Execution
+
+Document the actual running of experiments.
+
+```{r}
+# Run experiments, log outputs, record random seeds, etc.
+```
+
+- **Intermediate results:**
+- **Troubleshooting:**
+
+---
+
+# 6. Results
+
+Present and discuss your findings using tables, plots, and text interpretation.
+
+```{python}
+# Visualizations, summary tables, etc.
+```
+
+- **Statistical analysis:**
+- **Comparison to baselines:**
+- **Interpretation:**
+
+---
+
+# 7. Discussion
+
+Discuss insights, limitations, and potential improvements.
+
+- **Key findings:**
+- **Limitations:**
+- **Unexpected observations:**
+- **Alternative approaches:**
+
+---
+
+# 8. Conclusions
+
+Summarize main findings and outline next steps.
+
+---
+
+# 9. Reproducibility Checklist
+
+- Instructions to rerun this notebook
+- Environment/dependencies
+- Random seeds/configuration
+- Data access
+
+---
+
+# 10. References
+
+<!-- List references here or use a .bib file -->
+
+---
+
+# 11. Appendix (Optional)
+
+Additional code, figures, or supplementary information.
+
+
 
 # {{ cookiecutter.project_name }} - Notebooks
 
@@ -18,15 +151,14 @@ Examples:
 
 ```bash
 ├── notebooks
-│   ├── 1-data                   # data extraction and cleaning
-│   ├── 2-exploration            # exploratory data analysis (EDA)
-│   ├── 3-analysis               # Statistical analysis, hypothesis testing.
-│   ├── 4-feat_eng               # feature engineering (creation, selection, and transformation.)
-│   ├── 5-models                 # model training, evaluation, and hyperparameter tuning.
-│   ├── 6-interpretation         # model interpretation
-│   ├── 7-deploy                 # model packaging, deployment strategies.
-│   ├── 8-reports                # story telling, summaries and analysis conclusions.
-│   ├── notebook_template.ipynb
+│   ├── 01-data                   # data extraction and cleaning
+│   ├── 02-exploration            # exploratory data analysis (EDA)
+│   ├── 03-analysis               # Statistical analysis, hypothesis testing.
+│   ├── 04-feat_eng               # feature engineering (creation, selection, and transformation.)
+│   ├── 05-models                 # model training, evaluation, and hyperparameter tuning.
+│   ├── 06-interpretation         # model interpretation
+│   ├── 07-reports                # story telling, summaries and analysis conclusions.
+│   ├── 08-deploy                 # model packaging, deployment strategies.
 ```
 
 # Tracking experiments
@@ -36,11 +168,55 @@ Examples:
 03. MLFlow
 
 
-01-data
-02-exploration
-03-analysis
-04-feat_eng
-05-models
-06-interpretation
-07-deploy
-08-reports
+
+notebooks/
+    ├── 01-data/
+    │   ├── 11_data_extraction/
+    │   ├── 12_data_loading/
+    │   ├── 13_data_inspection/
+    │   ├── 14_data_cleaning/
+    │   ├── 15_data_validation/
+    │   └── 16_data_saving/
+    ├── 02-exploration/
+    │   ├── 21_descriptive_statistics/
+    │   ├── 22_univariate_analysis/
+    │   ├── 23_bivariate_analysis/
+    │   ├── 24_multivariate_analysis/
+    │   ├── 25_outlier_detection/
+    │   ├── 26_missing_value_analysis/
+    │   └── 27_visualization/
+    ├── 03-analysis/
+    │   ├── 31_hypothesis_testing/
+    │   ├── 32_correlation_analysis/
+    │   ├── 33_group_comparison/
+    │   ├── 34_time_series_analysis/
+    │   └── 35_statistical_modeling/
+    ├── 04-feat_eng/
+    │   ├── 41_feature_creation/
+    │   ├── 42_feature_transformation/
+    │   ├── 43_feature_selection/
+    │   ├── 44_feature_scaling/
+    │   └── 45_dimensionality_reduction/
+    ├── 05-models/
+    │   ├── 51_baseline_models/
+    │   ├── 52_advanced_models/
+    │   ├── 53_hyperparameter_tuning/
+    │   ├── 54_model_evaluation/
+    │   └── 55_model_selection/
+    ├── 06-interpretation/
+    │   ├── 61_feature_importance/
+    │   ├── 62_partial_dependence/
+    │   ├── 63_shap_explainer/
+    │   ├── 64_limitation_analysis/
+    │   └── 65_domain_validation/
+    ├── 07-reports/
+    │   ├── 71_executive_summary/
+    │   ├── 72_visual_storytelling/
+    │   ├── 73_notebook_slides/
+    │   └── 74_appendices/
+    └── 08-deploy/
+        ├── 81_model_packaging/
+        ├── 82_api_deployment/
+        ├── 83_dockerization/
+        ├── 84_ci_cd_pipelines/
+        └── 85_monitoring/
