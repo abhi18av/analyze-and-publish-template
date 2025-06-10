@@ -15,6 +15,15 @@ execute:
   message: false
 ---
 
+Summary Table
+
+Phase	Tooling	Best Practices
+Exploration	Clojure (Clerk, Clay, Portal) + Interop	Version/organize notebooks, log experiments
+Reproducible	Quarto notebooks (per stage/language)	Document, clean code, log provenance
+Extraction	Quarto extract → scripts/	Automate extraction, maintain mapping/logging
+Pipelines	Nextflow/DVC	Modular, reproducible, documented, artifact logs
+
+
 # 1. Introduction and Objectives
 
 Briefly describe the context, motivation, and objectives of your computational experiment.
