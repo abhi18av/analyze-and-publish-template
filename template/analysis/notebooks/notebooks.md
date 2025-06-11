@@ -240,6 +240,8 @@ This directory follows a modular, highly granular structure for organizing data 
 - **053_cross_validation/**:
 - **054_model_evaluation/**: Metrics, validation curves, confusion matrices
 - **055_model_selection/**: Compare models, pick best, ensemble
+- **056_model_testing/**:  unit_tests,integration_tests, data_drift_tests
+
 
 ### 06-interpretation: Model Interpretation and Business Impact
 - **061_feature_importance/**: Coefficients, tree feature importances
@@ -270,7 +272,24 @@ This directory follows a modular, highly granular structure for organizing data 
     - [ ] Performance monitoring
     - [ ] Drift detection
     - [ ] Alert system
+- **086_model_registry**
+- **087_rollback_strategy**
+- **088_a_b_testing**
+- **089_feature_store**
 
+- **09-governance**
+    ├── 091_model_cards/        # Documentation of model behavior, limitations
+    ├── 092_datasheets/         # Dataset documentation
+    ├── 093_ethical_assessment/ # Fairness, bias evaluations
+    ├── 094_privacy_compliance/ # GDPR, CCPA considerations
+    └── 095_audit_logs/         # Usage tracking for compliance
+
+
+- **10-iteration**
+    ├── 101_stakeholder_feedback/
+    ├── 102_model_updates/
+    ├── 103_version_comparison/
+    └── 104_release_notes/
 
 ---
 
@@ -390,6 +409,9 @@ touch notebooks/05-models/054_model_evaluation/.gitkeep
 mkdir -p notebooks/05-models/055_model_selection
 touch notebooks/05-models/055_model_selection/.gitkeep
 
+mkdir -p notebooks/05-models/056_model_testing
+touch notebooks/05-models/056_model_testing/.gitkeep
+
 
 # 06-interpretation
 mkdir -p notebooks/06-interpretation/061_feature_importance
@@ -447,6 +469,29 @@ touch notebooks/08-deploy/084_api_deployment/.gitkeep
 mkdir -p notebooks/08-deploy/085_monitoring
 touch notebooks/08-deploy/085_monitoring/.gitkeep
 
+
+mkdir 09-governance
+mkdir -p 09-governance/091_model_cards
+touch 09-governance/091_model_cards/.gitkeep
+mkdir -p 09-governance/092_datasheets
+touch 09-governance/092_datasheets/.gitkeep
+mkdir -p 09-governance/093_ethical_assessment
+touch 09-governance/093_ethical_assessment/.gitkeep
+mkdir -p 09-governance/094_privacy_compliance
+touch 09-governance/094_privacy_compliance/.gitkeep
+mkdir -p 09-governance/095_audit_logs
+touch 09-governance/095_audit_logs/.gitkeep
+
+
+mkdir 10-iterations
+mkdir -p 10-iterations/101_stakeholder_feedback
+touch 10-iterations/101_stakeholder_feedback/.gitkeep
+mkdir -p 10-iterations/102_model_updates
+touch 10-iterations/102_model_updates/.gitkeep
+mkdir -p 10-iterations/103_version_comparison
+touch 10-iterations/103_version_comparison/.gitkeep
+mkdir -p 10-iterations/104_release_notes
+touch 10-iterations/104_release_notes/.gitkeep
 
 echo "Project directory structure created successfully!"
 
