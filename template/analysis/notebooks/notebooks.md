@@ -186,87 +186,87 @@ This directory follows a modular, highly granular structure for organizing data 
 ## Directory Structure, Stage & Substage Descriptions
 
 ### 01-data: Data Extraction, Transformation, Cleaning and Storage
-- **11_data_extraction/**: Pull raw data from sources (files, DB, APIs)
-- **12_data_loading/**: Load raw data into the workspace
-- **13_data_inspection/**: Initial data checks (types, head/tail, shapes)
-- **14_data_cleaning/**: Remove/impute missing, fix errors, correct types
-- **15_data_validation/**: Ensure data quality, schema checks
-- **16_data_transformation/**:
+- **011_data_extraction/**: Pull raw data from sources (files, DB, APIs)
+- **012_data_loading/**: Load raw data into the workspace
+- **013_data_inspection/**: Initial data checks (types, head/tail, shapes)
+- **014_data_cleaning/**: Remove/impute missing, fix errors, correct types
+- **015_data_validation/**: Ensure data quality, schema checks
+- **016_data_transformation/**:
     - [ ] Normalization
     - [ ] Encoding
     - [ ] Feature scaling
-- **17_data_saving/**: Save cleaned data for downstream steps
+- **017_data_saving/**: Save cleaned data for downstream steps
     - [ ] Format selection
     - [ ] Storage location
     - [ ] Version control
 
 ### 02-exploration: Exploratory Data Analysis (EDA)
-- **21_descriptive_statistics/**: Summary stats, central tendency, spread
-- **22_univariate_analysis/**: Distributions, histograms, boxplots
-- **23_bivariate_analysis/**: Scatterplots, pairplots, groupwise stats
-- **24_multivariate_analysis/**: Correlation matrices, PCA for exploration
-- **25_outlier_detection/**: Detect and document outliers
-- **26_missing_value_analysis/**: Patterns and mechanisms of missingness
-- **27_visualization/**: General, high-level visualizations
+- **021_descriptive_statistics/**: Summary stats, central tendency, spread
+- **022_univariate_analysis/**: Distributions, histograms, boxplots
+- **023_bivariate_analysis/**: Scatterplots, pairplots, groupwise stats
+- **024_multivariate_analysis/**: Correlation matrices, PCA for exploration
+- **025_outlier_detection/**: Detect and document outliers
+- **026_missing_value_analysis/**: Patterns and mechanisms of missingness
+- **027_visualization/**: General, high-level visualizations
 
 ### 03-analysis: Hypothesis Testing and Statistical Analysis
-- **31_hypothesis_testing/**: t-tests, ANOVA, chi-squared, etc.
+- **031_hypothesis_testing/**: t-tests, ANOVA, chi-squared, etc.
     - [ ] Test selection
     - [ ] Assumption checking
     - [ ] Results interpretation
-- **32_correlation_analysis/**: Pearson, Spearman, etc.
-- **33_group_comparison/**: A/B tests, group means, etc.
-- **34_time_series_analysis/**: Trends, seasonality, stationarity
-- **35_spatial_analysis/**:
-- **36_network_analysis/**:
-- **37_statistical_modeling/**: Regression, GLMs, etc.
+- **032_correlation_analysis/**: Pearson, Spearman, etc.
+- **033_group_comparison/**: A/B tests, group means, etc.
+- **034_time_series_analysis/**: Trends, seasonality, stationarity
+- **035_spatial_analysis/**:
+- **036_network_analysis/**:
+- **037_statistical_modeling/**: Regression, GLMs, etc.
 
 ### 04-feat_eng: Feature Engineering (Creation and Selection)
-- **41_feature_creation/**: New features from domain logic
+- **041_feature_creation/**: New features from domain logic
     - [ ] Domain features
     - [ ] Statistical features
     - [ ] Interaction features
-- **42_feature_transformation/**: Encoding, log, binning, etc.
-- **43_feature_selection/**: Filter, wrapper, embedded methods
-- **44_feature_scaling/**: Standardization, normalization
+- **042_feature_transformation/**: Encoding, log, binning, etc.
+- **043_feature_selection/**: Filter, wrapper, embedded methods
+- **044_feature_scaling/**: Standardization, normalization
     - [ ] Correlation analysis
     - [ ] Importance ranking
-- **45_dimensionality_reduction/**: PCA, t-SNE, UMAP, etc.
+- **045_dimensionality_reduction/**: PCA, t-SNE, UMAP, etc.
 
 ### 05-models: Model Training, Evaluation, Hyperparameter Tuning
-- **51_baseline_models/**: Simple models for benchmarking
-- **52_advanced_models/**: More complex ML models
-- **53_hyperparameter_tuning/**: Search, optimization, validation
-- **53_cross_validation/**:
-- **54_model_evaluation/**: Metrics, validation curves, confusion matrices
-- **55_model_selection/**: Compare models, pick best, ensemble
+- **051_baseline_models/**: Simple models for benchmarking
+- **052_advanced_models/**: More complex ML models
+- **053_hyperparameter_tuning/**: Search, optimization, validation
+- **053_cross_validation/**:
+- **054_model_evaluation/**: Metrics, validation curves, confusion matrices
+- **055_model_selection/**: Compare models, pick best, ensemble
 
 ### 06-interpretation: Model Interpretation and Business Impact
-- **61_feature_importance/**: Coefficients, tree feature importances
-- **62_partial_dependence/**: PDP, ICE plots
-- **63_shap_explainer/**: SHAP, LIME, etc.
-- **64_domain_validation/**: SMEs validate output
-- **65_roi_analysis/**:
-- **66_limitation_analysis/**: Limitations, caveats, assumptions
-- **67_risk_assesment/**:
-- **68_implementation_strategy/**:
+- **061_feature_importance/**: Coefficients, tree feature importances
+- **062_partial_dependence/**: PDP, ICE plots
+- **063_shap_explainer/**: SHAP, LIME, etc.
+- **064_domain_validation/**: SMEs validate output
+- **065_roi_analysis/**:
+- **066_limitation_analysis/**: Limitations, caveats, assumptions
+- **067_risk_assesment/**:
+- **068_implementation_strategy/**:
 
 
 ### 07-reports: Storytelling, Summaries, Conclusions
-- **71_executive_summary/**: Main findings for non-technical audience
-- **72_visual_storytelling/**: Dashboards, infographics
-- **73_notebook_slides/**: Exported slides for presentations
-- **75_appendices/**: Supplementary analyses
+- **071_executive_summary/**: Main findings for non-technical audience
+- **072_visual_storytelling/**: Dashboards, infographics
+- **073_notebook_slides/**: Exported slides for presentations
+- **074_appendices/**: Supplementary analyses
 
 ### 08-deploy: Packaging and Deployment Strategies
-- **81_model_packaging/**: Saving, exporting models
-- **82_dockerization/**: Containerize for reproducibility
-- **83_ci_cd_pipelines/**: Automation for deployment
-- **84_api_deployment/**: REST API, Flask, FastAPI, Plumber, etc.
+- **081_model_packaging/**: Saving, exporting models
+- **082_dockerization/**: Containerize for reproducibility
+- **083_ci_cd_pipelines/**: Automation for deployment
+- **084_api_deployment/**: REST API, Flask, FastAPI, Plumber, etc.
     - [ ] API arch design, doc
     - [ ] Containerization
     - [ ] Scaling strategy
-- **85_monitoring/**: Model drift, performance monitoring
+- **085_monitoring/**: Model drift, performance monitoring
     - [ ] Performance monitoring
     - [ ] Drift detection
     - [ ] Alert system
@@ -275,3 +275,179 @@ This directory follows a modular, highly granular structure for organizing data 
 ---
 
 > **Tip:** Use this structure for every language (`python/`, `r/`, `julia/`, etc.) for maximum consistency.
+
+
+
+```bash
+#!/bin/bash
+
+set -e
+
+mkdir -p notebooks
+
+# 01-data
+mkdir -p notebooks/01-data/011_data_extraction
+touch notebooks/01-data/011_data_extraction/.gitkeep
+
+mkdir -p notebooks/01-data/012_data_loading
+touch notebooks/01-data/012_data_loading/.gitkeep
+
+mkdir -p notebooks/01-data/013_data_inspection
+touch notebooks/01-data/013_data_inspection/.gitkeep
+
+mkdir -p notebooks/01-data/014_data_cleaning
+touch notebooks/01-data/014_data_cleaning/.gitkeep
+
+mkdir -p notebooks/01-data/015_data_validation
+touch notebooks/01-data/015_data_validation/.gitkeep
+
+mkdir -p notebooks/01-data/016_data_transformation
+touch notebooks/01-data/016_data_transformation/.gitkeep
+
+mkdir -p notebooks/01-data/017_data_saving
+touch notebooks/01-data/017_data_saving/.gitkeep
+
+
+# 02-exploration
+mkdir -p notebooks/02-exploration/021_descriptive_statistics
+touch notebooks/02-exploration/021_descriptive_statistics/.gitkeep
+
+mkdir -p notebooks/02-exploration/022_univariate_analysis
+touch notebooks/02-exploration/022_univariate_analysis/.gitkeep
+
+mkdir -p notebooks/02-exploration/023_bivariate_analysis
+touch notebooks/02-exploration/023_bivariate_analysis/.gitkeep
+
+mkdir -p notebooks/02-exploration/024_multivariate_analysis
+touch notebooks/02-exploration/024_multivariate_analysis/.gitkeep
+
+mkdir -p notebooks/02-exploration/025_outlier_detection
+touch notebooks/02-exploration/025_outlier_detection/.gitkeep
+
+mkdir -p notebooks/02-exploration/026_missing_value_analysis
+touch notebooks/02-exploration/026_missing_value_analysis/.gitkeep
+
+mkdir -p notebooks/02-exploration/027_visualization
+touch notebooks/02-exploration/027_visualization/.gitkeep
+
+
+# 03-analysis
+mkdir -p notebooks/03-analysis/031_hypothesis_testing
+touch notebooks/03-analysis/031_hypothesis_testing/.gitkeep
+
+mkdir -p notebooks/03-analysis/032_correlation_analysis
+touch notebooks/03-analysis/032_correlation_analysis/.gitkeep
+
+mkdir -p notebooks/03-analysis/033_group_comparison
+touch notebooks/03-analysis/033_group_comparison/.gitkeep
+
+mkdir -p notebooks/03-analysis/034_time_series_analysis
+touch notebooks/03-analysis/034_time_series_analysis/.gitkeep
+
+mkdir -p notebooks/03-analysis/035_spatial_analysis
+touch notebooks/03-analysis/035_spatial_analysis/.gitkeep
+
+mkdir -p notebooks/03-analysis/036_network_analysis
+touch notebooks/03-analysis/036_network_analysis/.gitkeep
+
+mkdir -p notebooks/03-analysis/037_statistical_modeling
+touch notebooks/03-analysis/037_statistical_modeling/.gitkeep
+
+
+# 04-feat_eng
+mkdir -p notebooks/04-feat_eng/041_feature_creation
+touch notebooks/04-feat_eng/041_feature_creation/.gitkeep
+
+mkdir -p notebooks/04-feat_eng/042_feature_transformation
+touch notebooks/04-feat_eng/042_feature_transformation/.gitkeep
+
+mkdir -p notebooks/04-feat_eng/043_feature_selection
+touch notebooks/04-feat_eng/043_feature_selection/.gitkeep
+
+mkdir -p notebooks/04-feat_eng/044_feature_scaling
+touch notebooks/04-feat_eng/044_feature_scaling/.gitkeep
+
+mkdir -p notebooks/04-feat_eng/045_dimensionality_reduction
+touch notebooks/04-feat_eng/045_dimensionality_reduction/.gitkeep
+
+
+# 05-models
+mkdir -p notebooks/05-models/051_baseline_models
+touch notebooks/05-models/051_baseline_models/.gitkeep
+
+mkdir -p notebooks/05-models/052_advanced_models
+touch notebooks/05-models/052_advanced_models/.gitkeep
+
+mkdir -p notebooks/05-models/053_hyperparameter_tuning
+touch notebooks/05-models/053_hyperparameter_tuning/.gitkeep
+
+mkdir -p notebooks/05-models/053_cross_validation
+touch notebooks/05-models/053_cross_validation/.gitkeep
+
+mkdir -p notebooks/05-models/054_model_evaluation
+touch notebooks/05-models/054_model_evaluation/.gitkeep
+
+mkdir -p notebooks/05-models/055_model_selection
+touch notebooks/05-models/055_model_selection/.gitkeep
+
+
+# 06-interpretation
+mkdir -p notebooks/06-interpretation/061_feature_importance
+touch notebooks/06-interpretation/061_feature_importance/.gitkeep
+
+mkdir -p notebooks/06-interpretation/062_partial_dependence
+touch notebooks/06-interpretation/062_partial_dependence/.gitkeep
+
+mkdir -p notebooks/06-interpretation/063_shap_explainer
+touch notebooks/06-interpretation/063_shap_explainer/.gitkeep
+
+mkdir -p notebooks/06-interpretation/064_domain_validation
+touch notebooks/06-interpretation/064_domain_validation/.gitkeep
+
+mkdir -p notebooks/06-interpretation/065_roi_analysis
+touch notebooks/06-interpretation/065_roi_analysis/.gitkeep
+
+mkdir -p notebooks/06-interpretation/066_limitation_analysis
+touch notebooks/06-interpretation/066_limitation_analysis/.gitkeep
+
+mkdir -p notebooks/06-interpretation/067_risk_assesment
+touch notebooks/06-interpretation/067_risk_assesment/.gitkeep
+
+mkdir -p notebooks/06-interpretation/068_implementation_strategy
+touch notebooks/06-interpretation/068_implementation_strategy/.gitkeep
+
+
+# 07-reports
+mkdir -p notebooks/07-reports/071_executive_summary
+touch notebooks/07-reports/071_executive_summary/.gitkeep
+
+mkdir -p notebooks/07-reports/072_visual_storytelling
+touch notebooks/07-reports/072_visual_storytelling/.gitkeep
+
+mkdir -p notebooks/07-reports/073_notebook_slides
+touch notebooks/07-reports/073_notebook_slides/.gitkeep
+
+mkdir -p notebooks/07-reports/074_appendices
+touch notebooks/07-reports/074_appendices/.gitkeep
+
+
+# 08-deploy
+mkdir -p notebooks/08-deploy/081_model_packaging
+touch notebooks/08-deploy/081_model_packaging/.gitkeep
+
+mkdir -p notebooks/08-deploy/082_dockerization
+touch notebooks/08-deploy/082_dockerization/.gitkeep
+
+mkdir -p notebooks/08-deploy/083_ci_cd_pipelines
+touch notebooks/08-deploy/083_ci_cd_pipelines/.gitkeep
+
+mkdir -p notebooks/08-deploy/084_api_deployment
+touch notebooks/08-deploy/084_api_deployment/.gitkeep
+
+mkdir -p notebooks/08-deploy/085_monitoring
+touch notebooks/08-deploy/085_monitoring/.gitkeep
+
+
+echo "Project directory structure created successfully!"
+
+```
