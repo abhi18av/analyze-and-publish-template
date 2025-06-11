@@ -27,6 +27,11 @@
 
 # Finally is recommended to have a script that orchestrates the execution of the pipelines. This script should could be run in a cron job or a workflow orchestrator like Airflow, Prefect, Dagster, etc.
 
+# Resources
+- https://microsoft.github.io/Data-Science-For-Beginners/#/
+- https://microsoft.github.io/ML-For-Beginners/#/
+- https://microsoft.github.io/AI-For-Beginners/
+
 
 data
 inference
