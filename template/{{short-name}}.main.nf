@@ -72,11 +72,134 @@ workflow DATA {
         validation = validation_report
 }
 
+
+/*
+========================================================================================
+    PROCESS DEFINITIONS
+========================================================================================
+*/
+
+// 01-DATA Processes
+process DATA_EXTRACTION {
+    publishDir "${params.dataDir}/raw", mode: 'copy'
+
+    input:
+    val source
+
+    output:
+    path "extracted_data.csv"
+
+    script:
+    """
+    python ${params.projectDir}/notebooks/01-data/011_data_extraction/extract.py \
+        --source "${source}" \
+        --output extracted_data.csv
+    """
+}
+
+process DATA_LOADING {
+    input:
+    path data
+
+    output:
+    path "loaded_data.csv"
+
+    script:
+    """
+    python ${params.projectDir}/notebooks/01-data/012_data_loading/load.py \
+        --input ${data} \
+        --output loaded_data.csv
+    """
+}
+
+process DATA_INSPECTION {
+    publishDir "${params.reportsDir}/data", mode: 'copy'
+
+    input:
+    path data
+
+    output:
+    path "inspection_report.html"
+
+    script:
+    """
+    python ${params.projectDir}/notebooks/01-data/013_data_inspection/inspect.py \
+        --input ${data} \
+        --output inspection_report.html
+    """
+}
+
+process DATA_CLEANING {
+    input:
+    path data
+
+    output:
+    path "cleaned_data.csv"
+
+    script:
+    """
+    python ${params.projectDir}/notebooks/01-data/014_data_cleaning/clean.py \
+        --input ${data} \
+        --output cleaned_data.csv
+    """
+}
+
+process DATA_VALIDATION {
+    publishDir "${params.reportsDir}/data", mode: 'copy'
+
+    input:
+    path data
+
+    output:
+    path "validation_report.json"
+
+    script:
+    """
+    python ${params.projectDir}/notebooks/01-data/015_data_validation/validate.py \
+        --input ${data} \
+        --output validation_report.json
+    """
+}
+
+process DATA_TRANSFORMATION {
+    input:
+    path data
+
+    output:
+    path "transformed_data.csv"
+
+    script:
+    """
+    python ${params.projectDir}/notebooks/01-data/016_data_transformation/transform.py \
+        --input ${data} \
+        --output transformed_data.csv
+    """
+}
+
+process DATA_SAVING {
+    publishDir "${params.processedData}", mode: 'copy'
+
+    input:
+    path data
+
+    output:
+    path "final_data.parquet"
+
+    script:
+    """
+    python ${params.projectDir}/notebooks/01-data/017_data_saving/save.py \
+        --input ${data} \
+        --output final_data.parquet
+    """
+}
+
+
 /*
 ========================================================================================
     02-EXPLORATION SUBWORKFLOW - Exploratory Data Analysis
 ========================================================================================
 */
+
 workflow EXPLORATION {
     take:
         data // Path to processed data
@@ -333,147 +456,6 @@ workflow DEPLOYMENT {
         monitoring = monitoring
 }
 
-/*
-========================================================================================
-    PROCESS DEFINITIONS
-========================================================================================
-*/
-
-// 01-DATA Processes
-process DATA_EXTRACTION {
-    publishDir "${params.dataDir}/raw", mode: 'copy'
-
-    input:
-    val source
-
-    output:
-    path "extracted_data.csv"
-
-    script:
-    """
-    python ${params.projectDir}/notebooks/01-data/011_data_extraction/extract.py \
-        --source "${source}" \
-        --output extracted_data.csv
-    """
-}
-
-process DATA_LOADING {
-    input:
-    path data
-
-    output:
-    path "loaded_data.csv"
-
-    script:
-    """
-    python ${params.projectDir}/notebooks/01-data/012_data_loading/load.py \
-        --input ${data} \
-        --output loaded_data.csv
-    """
-}
-
-process DATA_INSPECTION {
-    publishDir "${params.reportsDir}/data", mode: 'copy'
-
-    input:
-    path data
-
-    output:
-    path "inspection_report.html"
-
-    script:
-    """
-    python ${params.projectDir}/notebooks/01-data/013_data_inspection/inspect.py \
-        --input ${data} \
-        --output inspection_report.html
-    """
-}
-
-process DATA_CLEANING {
-    input:
-    path data
-
-    output:
-    path "cleaned_data.csv"
-
-    script:
-    """
-    python ${params.projectDir}/notebooks/01-data/014_data_cleaning/clean.py \
-        --input ${data} \
-        --output cleaned_data.csv
-    """
-}
-
-process DATA_VALIDATION {
-    publishDir "${params.reportsDir}/data", mode: 'copy'
-
-    input:
-    path data
-
-    output:
-    path "validation_report.json"
-
-    script:
-    """
-    python ${params.projectDir}/notebooks/01-data/015_data_validation/validate.py \
-        --input ${data} \
-        --output validation_report.json
-    """
-}
-
-process DATA_TRANSFORMATION {
-    input:
-    path data
-
-    output:
-    path "transformed_data.csv"
-
-    script:
-    """
-    python ${params.projectDir}/notebooks/01-data/016_data_transformation/transform.py \
-        --input ${data} \
-        --output transformed_data.csv
-    """
-}
-
-process DATA_SAVING {
-    publishDir "${params.processedData}", mode: 'copy'
-
-    input:
-    path data
-
-    output:
-    path "final_data.parquet"
-
-    script:
-    """
-    python ${params.projectDir}/notebooks/01-data/017_data_saving/save.py \
-        --input ${data} \
-        --output final_data.parquet
-    """
-}
-
-// Define similar process blocks for other stages...
-// For brevity, I'm including only the first stage processes in detail
-// Additional processes would follow the same pattern
-
-// Placeholder processes for other stages
-process DESCRIPTIVE_STATISTICS {
-    input:
-    path data
-
-    output:
-    path "desc_stats.json"
-
-    script:
-    """
-    python ${params.projectDir}/notebooks/02-exploration/021_descriptive_statistics/stats.py \
-        --input ${data} \
-        --output desc_stats.json
-    """
-}
-
-// ... (other processes would be defined similarly)
 
 /*
 ========================================================================================
