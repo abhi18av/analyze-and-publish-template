@@ -54,6 +54,10 @@ https://www.nature.com/articles/533452a
 - Open-source
 - Hashicorp
 - Ubuntu (Canonical)
+- Oracle Cloud Infrastructure
+
+
+
 
 
 * Possible enhancements @abhi18av
@@ -98,6 +102,8 @@ https://egeria-project.org/education/
 https://github.com/grai-io/grai-core
 https://www.grai.io
 
+* GenAIScript
+https://microsoft.github.io/genaiscript/getting-started/installation/
 
 * CHECKLISTS
 ** Data sharing
