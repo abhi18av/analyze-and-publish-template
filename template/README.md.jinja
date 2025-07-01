@@ -1,15 +1,586 @@
 # {{project_name}}
 
+> **{{description|default('A comprehensive data science analysis project')}}}**
+
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-orange.json)](https://github.com/copier-org/copier)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![Just](https://img.shields.io/badge/task_runner-just-blue)](https://github.com/casey/just)
+{% if experiment_tracking != "None" %}
+{% if experiment_tracking == "MLflow" %}
+[![MLflow](https://img.shields.io/badge/experiment_tracking-MLflow-blue)](https://mlflow.org/)
+{% elif experiment_tracking == "Weights & Biases" %}
+[![W&B](https://img.shields.io/badge/experiment_tracking-W%26B-yellow)](https://wandb.ai/)
+{% elif experiment_tracking == "Neptune" %}
+[![Neptune](https://img.shields.io/badge/experiment_tracking-Neptune-blue)](https://neptune.ai/)
+{% endif %}
+{% endif %}
+{% if data_versioning %}
+[![DVC](https://img.shields.io/badge/data_versioning-DVC-blue)](https://dvc.org/)
+{% endif %}
+
+## 🚀 Quick Start
 
 Get started by running the following with [just](https://github.com/casey/just):
 
 ```shell
+# Set up the development environment
 just setup
+
+# Start your first analysis
+just notebooks new-eda "initial-exploration"
+
+# Launch Jupyter Lab
+just notebooks jupyter
 ```
 
+## 📋 Table of Contents
 
-Explore
-- https://deon.drivendata.org/
+- [Quick Start](#-quick-start)
+- [Project Overview](#-project-overview)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Workflow Guide](#-workflow-guide)
+- [Available Commands](#-available-commands)
+- [Configuration](#-configuration)
+- [Data Management](#-data-management)
+- [Experiment Tracking](#-experiment-tracking)
+- [Academic Writing](#-academic-writing)
+- [Deployment](#-deployment)
+- [Contributing](#-contributing)
+
+## 🎯 Project Overview
+
+This project follows a structured approach to data science that covers the entire lifecycle from data exploration to publication:
+
+- **🔬 Analysis Pipeline**: 10-stage workflow from data extraction to deployment
+- **📊 Reproducible Research**: Version-controlled data, code, and experiments
+- **📝 Academic Integration**: Built-in support for manuscripts, presentations, and grants
+- **⚙️ Production Ready**: Infrastructure as code and deployment templates
+- **🔄 Continuous Integration**: Automated testing and code quality checks
+
+### Key Features
+
+{% if programming_language == "Python" or programming_language == "Both" %}
+- 🐍 **Python**: Modern Python development with uv package management
+{% endif %}
+{% if programming_language == "R" or programming_language == "Both" %}
+- 📊 **R**: Statistical computing with R/RMarkdown integration
+{% endif %}
+{% if experiment_tracking != "None" %}
+- 📈 **Experiment Tracking**: {{experiment_tracking}} integration for ML experiments
+{% endif %}
+{% if data_versioning %}
+- 🗂️ **Data Version Control**: DVC for data pipeline management
+{% endif %}
+{% if data_validation %}
+- ✅ **Data Validation**: Great Expectations and Pandera for data quality
+{% endif %}
+- 📖 **Documentation**: {{documentation_format}} for rich, interactive documentation
+- 🚀 **Task Automation**: Just for streamlined workflow management
+
+## 📁 Project Structure
+
+```
+{{project_name}}/
+├── analysis/                    # 🔬 Main analysis directory
+│   ├── notebooks/              # 📓 Analysis notebooks (organized by stage)
+│   │   ├── 00_scratch/         # 🚀 Quick experiments and prototypes
+│   │   ├── 01-data/            # 📥 Data extraction, loading, cleaning
+│   │   ├── 02-exploration/     # 🔍 Exploratory data analysis
+│   │   ├── 03-analysis/        # 📊 Statistical analysis
+│   │   ├── 04-feat_eng/        # 🔧 Feature engineering
+│   │   ├── 05-models/          # 🤖 Model development & training
+│   │   ├── 06-interpretation/  # 🔬 Model interpretation & validation
+│   │   ├── 07-reports/         # 📄 Summary reports & presentations
+│   │   ├── 08-deploy/          # 🚀 Deployment preparation
+│   │   ├── 09-governance/      # 🛡️ Model governance & ethics
+│   │   └── 10-iteration/       # 🔄 Continuous improvement
+│   ├── data/                   # 💾 Data pipeline structure
+│   │   ├── 01_raw/            # Raw source data
+│   │   ├── 02_intermediate/    # Processed data
+│   │   ├── 03_primary/         # Analysis-ready data
+│   │   └── 08_reporting/       # Final outputs
+│   ├── scripts/                # 🛠️ Production scripts
+│   │   ├── python/            # Python modules
+│   │   ├── r/                 # R scripts
+│   │   └── shells/            # Shell scripts
+│   ├── tests/                  # 🧪 Testing framework
+│   ├── packages/               # 📦 Local packages
+│   └── infrastructure/         # 🏗️ Infrastructure as code
+├── writeup/                    # ✍️ Academic writing
+│   ├── manuscript/             # 📄 Journal articles
+│   ├── presentations/          # 🎤 Conference presentations
+│   ├── grants/                 # 💰 Grant applications
+│   ├── reports/                # 📋 Technical reports
+│   └── blog/                   # 📝 Blog posts
+├── .github/                    # 🔄 GitHub workflows
+├── justfile                    # ⚡ Task automation
+├── pyproject.toml              # 🐍 Python configuration
+├── dvc.yaml                    # 📊 Data pipeline definition
+└── README.md                   # 📖 This file
+```
+
+## 🏁 Getting Started
+
+### Prerequisites
+
+- Python {{python_version|default('3.11')}}+
+- [Just](https://just.systems/) task runner
+- [Git](https://git-scm.com/) for version control
+{% if data_versioning %}
+- [DVC](https://dvc.org/) for data version control
+{% endif %}
+
+### Initial Setup
+
+1. **Clone and setup** (if not already done):
+   ```shell
+   cd {{project_name}}
+   just setup
+   ```
+
+2. **Verify installation**:
+   ```shell
+   just --list  # Show available commands
+   ```
+
+3. **Initialize version control** (if needed):
+   ```shell
+   git init
+   git add .
+   git commit -m "Initial commit"
+   ```
+
+{% if data_versioning %}
+4. **Initialize DVC** (if using data version control):
+   ```shell
+   dvc init
+   ```
+{% endif %}
+
+## 🔄 Workflow Guide
+
+### 1. Data Analysis Workflow
+
+```mermaid
+flowchart TD
+    A["📥 01-data: Extract & Clean"] --> B["🔍 02-exploration: EDA"]
+    B --> C["📊 03-analysis: Statistical Analysis"]
+    C --> D["🔧 04-feat_eng: Feature Engineering"]
+    D --> E["🤖 05-models: Model Development"]
+    E --> F["🔬 06-interpretation: Model Analysis"]
+    F --> G["📄 07-reports: Summarize Results"]
+    G --> H["🚀 08-deploy: Deployment"]
+    H --> I["🔄 10-iteration: Continuous Improvement"]
+```
+
+### 2. Typical Project Workflow
+
+1. **Start with Data Exploration**:
+   ```shell
+   just notebooks new-eda "dataset-overview"
+   ```
+
+2. **Develop Analysis Pipeline**:
+   ```shell
+   just notebooks new-experiment "statistical-tests" "03-analysis"
+   ```
+
+3. **Build and Evaluate Models**:
+   ```shell
+   just notebooks new-model "baseline-model" --type="baseline"
+   just notebooks new-model "advanced-model" --type="advanced"
+   ```
+
+4. **Create Reports and Documentation**:
+   ```shell
+   just writeup manuscript-new "research-findings"
+   just writeup presentation-new "conference-talk"
+   ```
+
+## ⚡ Available Commands
+
+### Analysis & Notebooks
+
+```shell
+# Notebook Management
+just notebooks list                    # List all notebooks
+just notebooks new-eda "name"           # Create EDA notebook
+just notebooks new-model "name"         # Create modeling notebook
+just notebooks run "notebook.qmd"       # Execute specific notebook
+just notebooks run-stage "05-models"    # Run all notebooks in a stage
+just notebooks search "keyword"         # Search notebook content
+just notebooks stats                   # Show notebook statistics
+
+# Analysis Pipeline
+just analysis pipeline                 # Run DVC pipeline
+just analysis test-cov                 # Run tests with coverage
+just analysis update                   # Update dependencies
+```
+
+### Academic Writing
+
+```shell
+# Manuscript Management
+just writeup manuscript-new "title"    # Create new manuscript
+just writeup manuscript-render         # Compile to PDF
+just writeup presentation-new "title"  # Create presentation
+just writeup export-all               # Export all documents
+
+# Grant Applications
+just writeup grants new-nsf "title"    # Create NSF proposal
+just writeup grants new-nih "title"    # Create NIH proposal
+just writeup grants deadlines          # Check grant deadlines
+```
+
+### Infrastructure & Deployment
+
+```shell
+# Infrastructure
+just infrastructure vm-create          # Create development VM
+just infrastructure docker-build       # Build Docker images
+just infrastructure deploy             # Deploy to production
+
+# Environment Management
+just project-fish                     # Start Fish shell environment
+just clean                            # Clean temporary files
+```
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Create a `.env` file for project-specific configuration:
+
+```bash
+# Project Configuration
+PROJECT_NAME="{{project_name}}"
+AUTHOR_NAME="{{author_name|default('Your Name')}}"
+AUTHOR_EMAIL="{{author_email|default('your.email@example.com')}}"
+
+{% if experiment_tracking == "MLflow" %}
+# MLflow Configuration
+MLFLOW_TRACKING_URI="file:./analysis/mlruns"
+MLFLOW_EXPERIMENT_NAME="{{project_name}}"
+{% elif experiment_tracking == "Weights & Biases" %}
+# Weights & Biases Configuration
+WANDB_PROJECT="{{project_name}}"
+WANDB_ENTITY="your-username"
+{% elif experiment_tracking == "Neptune" %}
+# Neptune Configuration
+NEPTUNE_PROJECT="your-workspace/{{project_name}}"
+{% endif %}
+
+# Data Sources
+DATABASE_URL="postgresql://user:pass@localhost:5432/dbname"
+API_BASE_URL="https://api.example.com"
+
+# Cloud Configuration (if using)
+AWS_REGION="us-west-2"
+AWS_S3_BUCKET="your-data-bucket"
+```
+
+### Key Configuration Files
+
+- **`justfile`**: Task automation and workflow commands
+- **`pyproject.toml`**: Python project configuration and dependencies
+- **`dvc.yaml`**: Data pipeline definition and stages
+- **`.pre-commit-config.yaml`**: Code quality and formatting hooks
+- **`analysis/config/`**: Analysis-specific configuration files
+
+## 💾 Data Management
+
+### Data Directory Structure
+
+The `analysis/data/` directory follows a structured approach:
+
+- **`01_raw/`**: Original, immutable data
+- **`02_intermediate/`**: Partially processed data
+- **`03_primary/`**: Analysis-ready datasets
+- **`04_feature/`**: Engineered features
+- **`05_model_input/`**: Training/validation/test sets
+- **`06_models/`**: Trained model artifacts
+- **`07_model_output/`**: Predictions and evaluations
+- **`08_reporting/`**: Final outputs and visualizations
+
+### Data Version Control
+
+{% if data_versioning %}
+This project uses DVC for data version control:
+
+```shell
+# Add data to DVC tracking
+dvc add analysis/data/01_raw/dataset.csv
+git add analysis/data/01_raw/dataset.csv.dvc
+
+# Run data pipeline
+dvc repro
+
+# Push data to remote storage
+dvc push
+```
+{% else %}
+Data version control is not configured. Consider adding DVC for better data management:
+
+```shell
+# Initialize DVC
+dvc init
+# Add data tracking
+dvc add analysis/data/
+```
+{% endif %}
+
+## 📈 Experiment Tracking
+
+{% if experiment_tracking == "MLflow" %}
+### MLflow Integration
+
+This project uses MLflow for experiment tracking:
+
+```python
+import mlflow
+import mlflow.sklearn
+
+# Start experiment
+with mlflow.start_run():
+    # Log parameters
+    mlflow.log_param("model_type", "random_forest")
+    mlflow.log_param("n_estimators", 100)
+    
+    # Log metrics
+    mlflow.log_metric("accuracy", 0.95)
+    mlflow.log_metric("f1_score", 0.92)
+    
+    # Log model
+    mlflow.sklearn.log_model(model, "model")
+```
+
+**Start MLflow UI**:
+```shell
+mlflow ui --port 5000
+```
+
+{% elif experiment_tracking == "Weights & Biases" %}
+### Weights & Biases Integration
+
+This project uses W&B for experiment tracking:
+
+```python
+import wandb
+
+# Initialize run
+wandb.init(project="{{project_name}}")
+
+# Log configuration
+wandb.config.update({
+    "model_type": "random_forest",
+    "n_estimators": 100
+})
+
+# Log metrics
+wandb.log({"accuracy": 0.95, "f1_score": 0.92})
+
+# Log model
+wandb.log_artifact("model.pkl")
+```
+
+**Setup W&B**:
+```shell
+wandb login
+```
+
+{% elif experiment_tracking == "Neptune" %}
+### Neptune Integration
+
+This project uses Neptune for experiment tracking:
+
+```python
+import neptune
+
+# Initialize run
+run = neptune.init(project="your-workspace/{{project_name}}")
+
+# Log parameters
+run["parameters"] = {"model_type": "random_forest", "n_estimators": 100}
+
+# Log metrics
+run["metrics/accuracy"] = 0.95
+run["metrics/f1_score"] = 0.92
+
+# Log model
+run["model"].upload("model.pkl")
+```
+
+{% else %}
+### Experiment Tracking
+
+Experiment tracking is not configured. Consider adding MLflow, W&B, or Neptune:
+
+```shell
+# MLflow setup
+pip install mlflow
+mlflow ui
+
+# Weights & Biases setup
+pip install wandb
+wandb login
+
+# Neptune setup
+pip install neptune
+```
+{% endif %}
+
+## ✍️ Academic Writing
+
+The `writeup/` directory provides templates for academic output:
+
+### Manuscript Writing
+
+```shell
+# Create new manuscript
+just writeup manuscript-new "my-research-paper"
+
+# Edit in writeup/manuscript/src/
+# Compile to PDF
+just writeup manuscript-render
+```
+
+### Presentations
+
+```shell
+# Create presentation
+just writeup presentation-new "conference-talk"
+
+# Create poster
+just writeup poster-new "poster-session"
+```
+
+### Grant Applications
+
+```shell
+# Create NSF proposal
+just writeup grants new-nsf "innovative-research"
+
+# Create NIH proposal
+just writeup grants new-nih "medical-research"
+
+# Track deadlines
+just writeup grants deadlines
+```
+
+## 🚀 Deployment
+
+{% if include_deployment_templates %}
+This project includes deployment templates:
+
+### Docker Deployment
+
+```shell
+# Build Docker image
+just infrastructure docker-build
+
+# Run container
+just infrastructure docker-run
+```
+
+### Cloud Deployment
+
+```shell
+# Deploy to cloud
+just infrastructure deploy-cloud
+
+# Monitor deployment
+just infrastructure status
+```
+
+### API Deployment
+
+The project includes FastAPI templates in `analysis/web/`:
+
+```shell
+# Start API server
+cd analysis/web
+uvicorn main:app --reload
+```
+
+{% else %}
+### Deployment
+
+Deployment templates are not included. Consider adding them for production use.
+{% endif %}
+
+## 🧪 Testing and Quality
+
+### Running Tests
+
+```shell
+# Run all tests
+just analysis test-cov
+
+# Run specific test
+pytest analysis/tests/test_specific.py
+
+# Check code quality
+just analysis pc-update  # Update pre-commit
+```
+
+### Code Quality Tools
+
+- **Ruff**: Fast Python linter and formatter
+- **pre-commit**: Git hooks for code quality
+- **pytest**: Testing framework
+- **typos**: Spell checking
+
+## 🤝 Contributing
+
+### Development Workflow
+
+1. **Create feature branch**:
+   ```shell
+   git checkout -b feature/new-analysis
+   ```
+
+2. **Make changes and test**:
+   ```shell
+   just analysis test-cov
+   ```
+
+3. **Commit with pre-commit hooks**:
+   ```shell
+   git add .
+   git commit -m "Add new analysis feature"
+   ```
+
+4. **Push and create PR**:
+   ```shell
+   git push origin feature/new-analysis
+   ```
+
+### Code Standards
+
+- Follow PEP 8 for Python code
+- Use descriptive commit messages
+- Add tests for new functionality
+- Update documentation as needed
+
+## 📚 Additional Resources
+
+### Documentation
+- [Project Wiki](link-to-wiki)
+- [API Documentation](link-to-api-docs)
+- [Best Practices Guide](link-to-best-practices)
+
+### Data Science Resources
+- [Data Ethics Checklist](https://deon.drivendata.org/)
+- [Reproducible Research Guidelines](link-to-guidelines)
+- [Model Documentation Standards](link-to-standards)
+
+### Getting Help
+- [Issues & Bug Reports](link-to-issues)
+- [Discussions & Questions](link-to-discussions)
+- [Contributing Guide](link-to-contributing)
+
+---
+
+**Generated with ❤️ using the [Comprehensive Data Science Template](https://github.com/abhi18av/template-analysis-and-writeup)**
