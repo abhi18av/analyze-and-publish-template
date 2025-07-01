@@ -49,6 +49,13 @@ https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0309210
 
 https://www.nature.com/articles/533452a
 
+
+* PREFERENCES
+- Open-source
+- Hashicorp
+- Ubuntu (Canonical)
+
+
 * Possible enhancements @abhi18av
 ** research object
 *** https://www.researchobject.org/ro-crate/background

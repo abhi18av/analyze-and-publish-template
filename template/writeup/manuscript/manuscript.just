@@ -12,11 +12,11 @@ manuscript-init: # Initialize manuscript structure
     touch _quarto.yml
 
 # === Rendering and Preview ===
-manuscript-render format="pdf" version="draft": # Render manuscript
-    quarto render src/index.qmd --to {{format}} --_output-dir _output/{{format}}/{{version}}
+manuscript-render format="apaquarto-docx" version="draft": # Render manuscript
+    quarto render src/index.qmd --to {{format}} --output-dir _output/{{format}}/{{version}}
 
 manuscript-preview: # Preview with live reload
-    quarto preview src/index.qmd
+    quarto preview src/index.qmd --to apaquarto-html
 
 manuscript-clean: # Clean generated files
     rm -rf src/_book src/index_files
