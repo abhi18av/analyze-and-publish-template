@@ -1,4 +1,6 @@
 import "analysis/analysis.just"
+{% if include_jujutsu %}import "jj.just"{% endif %}
+{% if include_jujutsu and include_fossil %}import "hybrid-vcs.just"{% endif %}
 
 # {{ project_name }} - Data Science Project Tasks
 

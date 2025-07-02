@@ -293,3 +293,20 @@ include_automation:
   help: Include automation tools (GitHub Actions, etc.)
   default: true
   when: "{{ include_infrastructure }}"
+
+# === VERSION CONTROL ENHANCEMENT ===
+include_jujutsu:
+  type: bool
+  help: Include Jujutsu (jj) version control with Git backend for enhanced academic workflows
+  default: false
+
+include_fossil:
+  type: bool
+  help: Include Fossil SCM for self-contained archives and manuscript versioning
+  default: false
+
+use_hybrid_vcs:
+  type: bool
+  help: Use hybrid version control (Jujutsu + Fossil) for comprehensive research management
+  default: false
+  when: "{{ include_jujutsu and include_fossil }}"
