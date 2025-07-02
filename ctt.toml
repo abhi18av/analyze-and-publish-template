@@ -1,13 +1,13 @@
-[defaults]
-template_path = "."
-output_path = "./.ctt"
+[template]
+src_path = "."
+
+[config]
+output_dir = ".ctt"
 cleanup = true
 
 # Test 1: Full Academic Project (default configuration)
-[[test]]
-name = "full-academic"
-output_path = "./.ctt/full-academic"
-[test.answers]
+[output."full-academic"]
+[output."full-academic".answers]
 project_name = "Test Academic Project"
 short_name = "test-academic"
 description = "A comprehensive academic research project"
@@ -20,10 +20,8 @@ experiment_tracking = "MLflow"
 data_versioning = true
 
 # Test 2: Analysis Only Project
-[[test]]
-name = "analysis-only"
-output_path = "./.ctt/analysis-only"
-[test.answers]
+[output."analysis-only"]
+[output."analysis-only".answers]
 project_name = "Data Pipeline Project"
 short_name = "data-pipeline"
 description = "Data science analysis pipeline only"
@@ -37,10 +35,8 @@ data_versioning = true
 include_ml_components = true
 
 # Test 3: Manuscript Only Project
-[[test]]
-name = "manuscript-only"
-output_path = "./.ctt/manuscript-only"
-[test.answers]
+[output."manuscript-only"]
+[output."manuscript-only".answers]
 project_name = "Research Paper"
 short_name = "research-paper"
 description = "Academic manuscript writing project"
@@ -52,10 +48,8 @@ documentation_format = "Quarto"
 include_publication_templates = true
 
 # Test 4: Package Development Project
-[[test]]
-name = "package-dev"
-output_path = "./.ctt/package-dev"
-[test.answers]
+[output."package-dev"]
+[output."package-dev".answers]
 project_name = "Scientific Package"
 short_name = "sci-package"
 description = "Python/R package for scientific computing"
@@ -70,10 +64,8 @@ github_actions = true
 pre_commit_hooks = true
 
 # Test 5: Custom Configuration - Minimal Setup
-[[test]]
-name = "custom-minimal"
-output_path = "./.ctt/custom-minimal"
-[test.answers]
+[output."custom-minimal"]
+[output."custom-minimal".answers]
 project_name = "Minimal Project"
 short_name = "minimal"
 description = "Minimal custom project setup"
@@ -95,10 +87,8 @@ experiment_tracking = "None"
 data_versioning = false
 
 # Test 6: Custom Configuration - Maximum Setup
-[[test]]
-name = "custom-maximal"
-output_path = "./.ctt/custom-maximal"
-[test.answers]
+[output."custom-maximal"]
+[output."custom-maximal".answers]
 project_name = "Comprehensive Project"
 short_name = "comprehensive"
 description = "Full-featured custom project with all components"
@@ -138,10 +128,8 @@ github_actions = true
 pre_commit_hooks = true
 
 # Test 7: Bioinformatics Specialized Project
-[[test]]
-name = "bioinformatics"
-output_path = "./.ctt/bioinformatics"
-[test.answers]
+[output."bioinformatics"]
+[output."bioinformatics".answers]
 project_name = "Genomics Analysis"
 short_name = "genomics"
 description = "Bioinformatics project for genomic data analysis"
@@ -159,10 +147,8 @@ documentation_format = "Quarto"
 include_publication_templates = true
 
 # Test 8: Quick Manuscript Project
-[[test]]
-name = "quick-manuscript"
-output_path = "./.ctt/quick-manuscript"
-[test.answers]
+[output."quick-manuscript"]
+[output."quick-manuscript".answers]
 project_name = "Conference Paper"
 short_name = "conf-paper"
 description = "Quick manuscript for conference submission"
