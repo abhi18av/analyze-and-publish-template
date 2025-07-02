@@ -1,0 +1,126 @@
+# Poster Management Automation
+# Use with just (https://github.com/casey/just)
+
+# Set default shell
+set shell := ["bash", "-c"]
+
+# Variables
+posters_dir := justfile_directory()
+templates_dir := posters_dir + "/templates"
+output_dir := posters_dir + "/_output"
+posters_storage := posters_dir + "/posters"
+styles_dir := posters_dir + "/styles"
+
+# Default recipe
+default:
+    @echo "Available poster management commands:"
+    @just --list
+
+# === Setup and Initialization ===
+
+poster-init: # Initialize poster directory structure
+    mkdir -p "templates/"{academic,conference,professional} "_output/"{pdf,html}/{draft,final} posters styles
+    touch _quarto.yml
+
+# === Template-based Creation ===
+
+create-academic name: # Create academic poster
+    #!/usr/bin/env bash
+    mkdir -p "posters/academic/{{name}}"
+    cp "templates/academic/academic_poster.qmd" "posters/academic/{{name}}/{{name}}.qmd"
+    echo "Created academic poster in posters/academic/{{name}}/"
+
+create-conference name: # Create conference poster
+    #!/usr/bin/env bash
+    mkdir -p "posters/conference/{{name}}"
+    cp "templates/conference/conference_poster.qmd" "posters/conference/{{name}}/{{name}}.qmd"
+    echo "Created conference poster in posters/conference/{{name}}/"
+
+create-professional name: # Create professional poster
+    #!/usr/bin/env bash
+    mkdir -p "posters/professional/{{name}}"
+    cp "templates/professional/professional_poster.qmd" "posters/professional/{{name}}/{{name}}.qmd"
+    echo "Created professional poster in posters/professional/{{name}}/"
+
+# === Rendering Posters ===
+
+render-poster type name format="pdf" version="draft": # Render a specific poster
+    #!/usr/bin/env bash
+    if [ -f "posters/{{type}}/{{name}}/{{name}}.qmd" ]; then
+        mkdir -p "_output/{{format}}/{{version}}/{{name}}"
+        quarto render "posters/{{type}}/{{name}}/{{name}}.qmd" --to {{format}} --output-dir "_output/{{format}}/{{version}}/{{name}}"
+        echo "Rendered {{name}} to _output/{{format}}/{{version}}/{{name}}"
+    else
+        echo "Error: Poster {{name}} not found in {{type}} category"
+    fi
+
+# === Utility Functions ===
+
+list-posters: # List all posters
+    @echo "Available posters:"
+    @echo "Academic posters:"
+    @find posters/academic -name "*.qmd" | sort
+    @echo "Conference posters:"
+    @find posters/conference -name "*.qmd" | sort
+    @echo "Professional posters:"
+    @find posters/professional -name "*.qmd" | sort
+
+list-templates: # List available templates
+    @echo "Available templates:"
+    @find templates -name "*.qmd" | sort
+
+clone-poster source target type: # Clone a poster to create a new version
+    #!/usr/bin/env bash
+    if [ -f "posters/{{type}}/{{source}}/{{source}}.qmd" ]; then
+        mkdir -p "posters/{{type}}/{{target}}"
+        cp -r "posters/{{type}}/{{source}}/"* "posters/{{type}}/{{target}}/"
+        if [ -f "posters/{{type}}/{{target}}/{{source}}.qmd" ]; then
+            mv "posters/{{type}}/{{target}}/{{source}}.qmd" "posters/{{type}}/{{target}}/{{target}}.qmd"
+        fi
+        echo "Cloned {{source}} to {{target}} in {{type}} category"
+    else
+        echo "Error: Source poster {{source}} not found in {{type}} category"
+    fi
+
+clean: # Clean output directories
+    rm -rf "_output/pdf/draft/"* "_output/html/draft/"*
+    echo "Cleaned draft output directories"
+
+clean-all: # Clean all output directories
+    rm -rf "_output/"*
+    echo "Cleaned all output directories"
+
+# === Advanced Functions ===
+
+export-pdf type name version="draft": # Export poster as PDF with timestamp
+    #!/usr/bin/env bash
+    if [ -f "posters/{{type}}/{{name}}/{{name}}.qmd" ]; then
+        timestamp=$(date +"%Y%m%d_%H%M%S")
+        output_dir="_output/pdf/{{version}}/{{name}}"
+        mkdir -p "$output_dir"
+        
+        # Render to PDF
+        quarto render "posters/{{type}}/{{name}}/{{name}}.qmd" --to pdf --output-dir "$output_dir"
+        
+        # Copy with timestamp
+        cp "$output_dir/{{name}}.pdf" "$output_dir/{{name}}_$timestamp.pdf"
+        echo "Exported {{name}} to $output_dir/{{name}}_$timestamp.pdf"
+    else
+        echo "Error: Poster {{name}} not found in {{type}} category"
+    fi
+
+resize-poster type name size="36x24": # Create a new size version of an existing poster
+    #!/usr/bin/env bash
+    if [ -f "posters/{{type}}/{{name}}/{{name}}.qmd" ]; then
+        target="${{name}}_{{size}}"
+        mkdir -p "posters/{{type}}/$target"
+        cp -r "posters/{{type}}/{{name}}/"* "posters/{{type}}/$target/"
+        
+        # Update the size in the new poster file
+        sed -i '' "s/size: \"[0-9]*x[0-9]*\"/size: \"{{size}}\"/g" "posters/{{type}}/$target/{{name}}.qmd"
+        mv "posters/{{type}}/$target/{{name}}.qmd" "posters/{{type}}/$target/$target.qmd"
+        
+        echo "Created resized version of {{name}} as $target in {{type}} category"
+    else
+        echo "Error: Poster {{name}} not found in {{type}} category"
+    fi
