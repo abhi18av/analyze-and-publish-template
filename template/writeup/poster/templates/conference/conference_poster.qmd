@@ -1,0 +1,146 @@
+---
+title: "Conference Poster Template"
+subtitle: "For Professional Meetings and Academic Conferences"
+author:
+  - name: "Presenter Name"
+    affiliation: "Department, Institution"
+    email: "presenter@institution.edu"
+  - name: "Co-Presenter Name"
+    affiliation: "Department, Institution"
+date: last-modified
+format:
+  poster-typst:
+    size: "42x30" 
+    orientation: "landscape"
+    poster-authors: "Presenter Name, Co-Presenter Name"
+    departments: "Department, Institution"
+    institution-logo: "../../styles/logo.png"
+    institution-url: "institution.edu"
+    footer-text: "Conference Name, Location, Date"
+    footer-color: "#4169E1"
+    header-color: "#4169E1"
+    sectitle-color: "#4169E1"
+    columns: 4
+    fontsize: 28px
+    sectitle-fontsize: 38px
+    title-fontsize: 54px
+    self-contained: true
+---
+
+# Conference Information
+
+**Event**: [Full Conference Name]  
+**Location**: [City, State/Country]  
+**Date**: [Conference Dates]  
+**Session**: [Poster Session ID/Number]  
+**Track**: [Conference Track/Theme]
+
+# Abstract
+
+[Include a brief abstract of your poster presentation here - 150-200 words summarizing the purpose, methods, results, and conclusions.]
+
+# Introduction
+
+## Context
+
+- [Brief overview of the field or topic]
+- [Current state of knowledge]
+- [Gap or problem being addressed]
+
+## Objective
+
+[Clearly state the objective or purpose of this work]
+
+# Methods
+
+## Design
+
+[Overview of study design or approach]
+
+## Materials
+
+- [Key materials or equipment]
+- [Software or tools used]
+- [Data sources]
+
+## Procedure
+
+1. [Step 1 of your methodology]
+2. [Step 2 of your methodology]
+3. [Step 3 of your methodology]
+
+# Results
+
+## Main Findings
+
+[Present your key results in a clear, visually appealing manner]
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 5
+#| fig-cap: "Figure 1: Key Results"
+# Insert code for primary visualization here
+```
+
+## Secondary Results
+
+[Additional results that support your main findings]
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 5
+#| fig-cap: "Figure 2: Supporting Results"
+# Insert code for secondary visualization here
+```
+
+# Implications
+
+## Field Impact
+
+- [How these findings contribute to the field]
+- [Theoretical implications]
+- [Practical applications]
+
+## Broader Impact
+
+- [Relevance to industry, policy, or society]
+- [Potential benefits or applications]
+
+# Conclusions
+
+## Summary
+
+- [Brief summary of key findings]
+- [Main takeaway points]
+- [Answer to research question]
+
+## Future Work
+
+- [Next steps in this research]
+- [Unanswered questions]
+- [Planned extensions]
+
+# Acknowledgments
+
+[Funding sources]  
+[Contributors]  
+[Support staff or resources]
+
+# Contact Information
+
+**Presenter Name**  
+Email: presenter@institution.edu  
+ORCID: [ORCID ID]  
+Website: institution.edu/presenter
+
+**Scan for additional information:**
+
+```{r qrcode, echo=FALSE}
+#| eval: false
+# For including a QR code
+#library(qrcode)
+#qr <- qr_code("https://yourwebsite.com/research")
+#plot(qr)
+```
