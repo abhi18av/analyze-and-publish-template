@@ -24,6 +24,12 @@ packages/
 ├── r/                            # R packages
 │   ├── {{project_name}}R/        # Main R package
 │   └── experimental/             # R prototypes
+├── powershell/                   # PowerShell modules
+│   ├── {{project_name}}PS/       # Main PowerShell module
+│   └── experimental/             # PowerShell prototypes
+├── clojure/                      # Clojure libraries
+│   ├── {{project_name}}-clj/     # Main Clojure library
+│   └── experimental/             # Clojure prototypes
 ├── data-packages/                # Structured data distributions
 │   ├── datasets/                 # Research datasets
 │   └── benchmarks/              # Benchmark datasets

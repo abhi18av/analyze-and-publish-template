@@ -801,6 +801,949 @@ EOF
     echo "   cd ${tool_dir}"
     echo "   python3 test_{{name}}.py"
 
+# Create a PowerShell module
+create-powershell-module name description="Research PowerShell module":
+    #!/usr/bin/env bash
+    module_dir="powershell/{{name}}"
+    mkdir -p "${module_dir}"
+    
+    # Create PowerShell module structure
+    mkdir -p "${module_dir}/Public"
+    mkdir -p "${module_dir}/Private"
+    mkdir -p "${module_dir}/Tests"
+    mkdir -p "${module_dir}/en-US"
+    mkdir -p "${module_dir}/Docs"
+    
+    # Generate module manifest
+    cat > "${module_dir}/{{name}}.psd1" << 'EOF'
+@{
+    RootModule = '{{name}}.psm1'
+    ModuleVersion = '0.1.0'
+    GUID = '{{guid}}'
+    Author = '{{author_name}}'
+    CompanyName = '{{project_name}}'
+    Copyright = '(c) {{year}} {{author_name}}. All rights reserved.'
+    Description = '{{description}}'
+    PowerShellVersion = '5.1'
+    FunctionsToExport = @('*')
+    CmdletsToExport = @()
+    VariablesToExport = '*'
+    AliasesToExport = @()
+    PrivateData = @{
+        PSData = @{
+            Tags = @('Research', 'DataScience', 'Academic')
+            LicenseUri = 'https://github.com/{{author_name}}/{{name}}/blob/main/LICENSE'
+            ProjectUri = 'https://github.com/{{author_name}}/{{name}}'
+            ReleaseNotes = 'Initial release'
+        }
+    }
+}
+EOF
+    
+    # Generate module file
+    cat > "${module_dir}/{{name}}.psm1" << 'EOF'
+<#
+.SYNOPSIS
+    {{description}}
+    
+.DESCRIPTION
+    A PowerShell module for research workflows developed as part of {{project_name}}.
+    
+.AUTHOR
+    {{author_name}}
+    
+.VERSION
+    0.1.0
+#>
+
+# Get public and private function definition files
+$Public = @(Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue)
+$Private = @(Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue)
+
+# Dot source the files
+foreach ($import in @($Public + $Private)) {
+    try {
+        Write-Verbose "Importing $($import.FullName)"
+        . $import.FullName
+    }
+    catch {
+        Write-Error "Failed to import function $($import.FullName): $_"
+    }
+}
+
+# Export only the public functions
+Export-ModuleMember -Function $Public.BaseName
+EOF
+    
+    # Create main research function
+    cat > "${module_dir}/Public/Invoke-ResearchAnalysis.ps1" << 'EOF'
+function Invoke-ResearchAnalysis {
+    <#
+    .SYNOPSIS
+        Performs research analysis on provided data.
+    
+    .DESCRIPTION
+        This function demonstrates the structure for implementing research
+        algorithms in PowerShell with proper documentation and parameter validation.
+    
+    .PARAMETER InputData
+        The input data for analysis (CSV file path or PSObject array)
+    
+    .PARAMETER Parameter
+        Research parameter for analysis (default: 1.0)
+    
+    .PARAMETER OutputPath
+        Optional output file path for results
+    
+    .EXAMPLE
+        PS> Invoke-ResearchAnalysis -InputData "data.csv" -Parameter 2.0
+        
+    .EXAMPLE
+        PS> $data | Invoke-ResearchAnalysis -Parameter 1.5 -OutputPath "results.csv"
+    
+    .OUTPUTS
+        PSObject array containing processed research results
+    #>
+    
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateNotNullOrEmpty()]
+        $InputData,
+        
+        [Parameter()]
+        [ValidateRange(0.1, 100.0)]
+        [double]$Parameter = 1.0,
+        
+        [Parameter()]
+        [string]$OutputPath
+    )
+    
+    begin {
+        Write-Verbose "Starting research analysis with parameter: $Parameter"
+        $Results = @()
+    }
+    
+    process {
+        try {
+            # Handle different input types
+            if ($InputData -is [string] -and (Test-Path $InputData)) {
+                Write-Verbose "Loading data from file: $InputData"
+                $Data = Import-Csv -Path $InputData
+            }
+            elseif ($InputData -is [array] -or $InputData -is [System.Collections.IEnumerable]) {
+                $Data = $InputData
+            }
+            else {
+                throw "Invalid input data type. Expected CSV file path or PSObject array."
+            }
+            
+            # Process each data item
+            foreach ($Item in $Data) {
+                $ProcessedItem = $Item.PSObject.Copy()
+                
+                # Apply research algorithm (example: multiply numeric properties)
+                foreach ($Property in $Item.PSObject.Properties) {
+                    if ($Property.Value -is [double] -or $Property.Value -is [int]) {
+                        $ProcessedItem.$($Property.Name) = $Property.Value * $Parameter
+                    }
+                }
+                
+                $Results += $ProcessedItem
+            }
+        }
+        catch {
+            Write-Error "Error processing data: $_"
+            throw
+        }
+    }
+    
+    end {
+        Write-Verbose "Analysis completed. Processed $($Results.Count) items."
+        
+        # Output to file if specified
+        if ($OutputPath) {
+            try {
+                $Results | Export-Csv -Path $OutputPath -NoTypeInformation
+                Write-Verbose "Results saved to: $OutputPath"
+            }
+            catch {
+                Write-Error "Failed to save results: $_"
+            }
+        }
+        
+        # Return results
+        return $Results
+    }
+}
+EOF
+    
+    # Create utility function
+    cat > "${module_dir}/Public/Test-ResearchData.ps1" << 'EOF'
+function Test-ResearchData {
+    <#
+    .SYNOPSIS
+        Validates research data quality.
+    
+    .DESCRIPTION
+        Performs quality checks on research data including missing values,
+        data types, and basic statistics.
+    
+    .PARAMETER Data
+        The data to validate (PSObject array or CSV file path)
+    
+    .EXAMPLE
+        PS> Test-ResearchData -Data "data.csv"
+        
+    .EXAMPLE
+        PS> $myData | Test-ResearchData
+    
+    .OUTPUTS
+        PSObject containing validation results
+    #>
+    
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateNotNullOrEmpty()]
+        $Data
+    )
+    
+    begin {
+        $ValidationResults = @{
+            TotalRows = 0
+            TotalColumns = 0
+            MissingValues = @{}
+            DataTypes = @{}
+            NumericColumns = @()
+            TextColumns = @()
+        }
+    }
+    
+    process {
+        try {
+            # Handle file input
+            if ($Data -is [string] -and (Test-Path $Data)) {
+                $DataSet = Import-Csv -Path $Data
+            }
+            else {
+                $DataSet = $Data
+            }
+            
+            $ValidationResults.TotalRows = $DataSet.Count
+            
+            if ($DataSet.Count -gt 0) {
+                $FirstRow = $DataSet[0]
+                $ValidationResults.TotalColumns = $FirstRow.PSObject.Properties.Count
+                
+                # Analyze each column
+                foreach ($Property in $FirstRow.PSObject.Properties) {
+                    $ColumnName = $Property.Name
+                    $Values = $DataSet | ForEach-Object { $_.$ColumnName }
+                    
+                    # Count missing values
+                    $MissingCount = ($Values | Where-Object { [string]::IsNullOrWhiteSpace($_) }).Count
+                    $ValidationResults.MissingValues[$ColumnName] = $MissingCount
+                    
+                    # Determine data type
+                    $NonEmptyValues = $Values | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+                    if ($NonEmptyValues.Count -gt 0) {
+                        $SampleValue = $NonEmptyValues[0]
+                        if ([double]::TryParse($SampleValue, [ref]$null)) {
+                            $ValidationResults.DataTypes[$ColumnName] = "Numeric"
+                            $ValidationResults.NumericColumns += $ColumnName
+                        }
+                        else {
+                            $ValidationResults.DataTypes[$ColumnName] = "Text"
+                            $ValidationResults.TextColumns += $ColumnName
+                        }
+                    }
+                }
+            }
+        }
+        catch {
+            Write-Error "Error validating data: $_"
+            throw
+        }
+    }
+    
+    end {
+        return [PSCustomObject]$ValidationResults
+    }
+}
+EOF
+    
+    # Create private helper function
+    cat > "${module_dir}/Private/Write-ResearchLog.ps1" << 'EOF'
+function Write-ResearchLog {
+    <#
+    .SYNOPSIS
+        Internal logging function for research operations.
+    #>
+    
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Message,
+        
+        [Parameter()]
+        [ValidateSet('Info', 'Warning', 'Error')]
+        [string]$Level = 'Info'
+    )
+    
+    $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $LogMessage = "[$Timestamp] [$Level] $Message"
+    
+    switch ($Level) {
+        'Info' { Write-Verbose $LogMessage }
+        'Warning' { Write-Warning $LogMessage }
+        'Error' { Write-Error $LogMessage }
+    }
+}
+EOF
+    
+    # Generate Pester tests
+    cat > "${module_dir}/Tests/{{name}}.Tests.ps1" << 'EOF'
+BeforeAll {
+    # Import the module
+    Import-Module "$PSScriptRoot\..\{{name}}.psd1" -Force
+}
+
+Describe "{{name}} Module Tests" {
+    Context "Module Import" {
+        It "Should import without errors" {
+            { Import-Module "$PSScriptRoot\..\{{name}}.psd1" -Force } | Should -Not -Throw
+        }
+        
+        It "Should export expected functions" {
+            $ExportedFunctions = (Get-Module {{name}}).ExportedFunctions.Keys
+            $ExportedFunctions | Should -Contain "Invoke-ResearchAnalysis"
+            $ExportedFunctions | Should -Contain "Test-ResearchData"
+        }
+    }
+    
+    Context "Invoke-ResearchAnalysis" {
+        It "Should process simple data correctly" {
+            $TestData = @(
+                [PSCustomObject]@{ X = 1; Y = 2 }
+                [PSCustomObject]@{ X = 3; Y = 4 }
+            )
+            
+            $Result = Invoke-ResearchAnalysis -InputData $TestData -Parameter 2.0
+            
+            $Result.Count | Should -Be 2
+            $Result[0].X | Should -Be 2
+            $Result[0].Y | Should -Be 4
+            $Result[1].X | Should -Be 6
+            $Result[1].Y | Should -Be 8
+        }
+        
+        It "Should handle invalid parameter values" {
+            $TestData = @([PSCustomObject]@{ X = 1 })
+            { Invoke-ResearchAnalysis -InputData $TestData -Parameter -1 } | Should -Throw
+        }
+    }
+    
+    Context "Test-ResearchData" {
+        It "Should validate data structure correctly" {
+            $TestData = @(
+                [PSCustomObject]@{ Name = "Test"; Value = 10; Empty = $null }
+                [PSCustomObject]@{ Name = "Test2"; Value = 20; Empty = "" }
+            )
+            
+            $Validation = Test-ResearchData -Data $TestData
+            
+            $Validation.TotalRows | Should -Be 2
+            $Validation.TotalColumns | Should -Be 3
+            $Validation.MissingValues["Empty"] | Should -Be 2
+            $Validation.DataTypes["Value"] | Should -Be "Numeric"
+            $Validation.DataTypes["Name"] | Should -Be "Text"
+        }
+    }
+}
+EOF
+    
+    # Create README
+    cat > "${module_dir}/README.md" << 'EOF'
+# {{name}}
+
+{{description}}
+
+## Installation
+
+### From PowerShell Gallery (when published)
+```powershell
+Install-Module -Name {{name}}
+```
+
+### Local Development
+```powershell
+# Clone and import
+git clone https://github.com/{{author_name}}/{{name}}.git
+Import-Module .\{{name}}\{{name}}.psd1
+```
+
+## Usage
+
+```powershell
+# Import the module
+Import-Module {{name}}
+
+# Perform research analysis
+$results = Invoke-ResearchAnalysis -InputData "data.csv" -Parameter 2.0
+
+# Validate data quality
+$validation = Test-ResearchData -Data "data.csv"
+```
+
+## Functions
+
+### Invoke-ResearchAnalysis
+Performs research analysis on provided data with configurable parameters.
+
+### Test-ResearchData
+Validates research data quality including missing values and data types.
+
+## Testing
+
+```powershell
+# Run Pester tests
+Invoke-Pester -Path .\Tests\
+```
+
+## Development
+
+```powershell
+# Load module for development
+Import-Module .\{{name}}.psd1 -Force
+
+# Run specific tests
+Invoke-Pester -Path .\Tests\{{name}}.Tests.ps1
+```
+
+## Publishing
+
+```powershell
+# Publish to PowerShell Gallery
+Publish-Module -Path . -NuGetApiKey $apiKey
+```
+
+## Citation
+
+If you use this module in your research, please cite:
+
+```
+{{author_name}} ({{year}}). {{name}}: {{description}}. 
+PowerShell module version 0.1.0. https://github.com/{{author_name}}/{{name}}
+```
+
+## License
+
+MIT License - see LICENSE file for details.
+EOF
+    
+    # Replace placeholders with actual values
+    guid=$(uuidgen)
+    year=$(date +%Y)
+    
+    # Use portable sed for cross-platform compatibility
+    find "${module_dir}" -type f \( -name "*.psd1" -o -name "*.psm1" -o -name "*.ps1" -o -name "*.md" \) -exec sed -i.bak "s/{{guid}}/${guid}/g; s/{{year}}/${year}/g" {} \;
+    find "${module_dir}" -name "*.bak" -delete
+    
+    echo "📦 Created PowerShell module: ${module_dir}"
+    echo "📝 To get started:"
+    echo "   cd ${module_dir}"
+    echo "   Import-Module .\{{name}}.psd1"
+    echo "   Invoke-Pester -Path .\Tests\"
+
+# Create a Clojure library
+create-clojure-library name description="Research Clojure library":
+    #!/usr/bin/env bash
+    lib_dir="clojure/{{name}}"
+    mkdir -p "${lib_dir}"
+    
+    # Create Clojure project structure
+    mkdir -p "${lib_dir}/src/{{name}}"
+    mkdir -p "${lib_dir}/test/{{name}}"
+    mkdir -p "${lib_dir}/resources"
+    mkdir -p "${lib_dir}/doc"
+    mkdir -p "${lib_dir}/dev"
+    
+    # Generate deps.edn
+    cat > "${lib_dir}/deps.edn" << 'EOF'
+{:paths ["src" "resources"]
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        org.clojure/data.csv {:mvn/version "1.0.1"}
+        org.clojure/data.json {:mvn/version "2.4.0"}
+        semantic-csv/semantic-csv {:mvn/version "0.2.1-alpha1"}}
+ 
+ :aliases
+ {:test {:extra-paths ["test"]
+         :extra-deps {org.clojure/test.check {:mvn/version "1.1.1"}}}
+  :dev {:extra-paths ["dev"]
+        :extra-deps {org.clojure/tools.namespace {:mvn/version "1.4.4"}
+                     org.clojure/tools.deps.alpha {:mvn/version "0.15.1244"}}}
+  :build {:deps {io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}
+                 slipset/deps-deploy {:mvn/version "0.2.0"}}
+          :ns-default build}
+  :uberjar {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.303"}}
+            :exec-fn hf.depstar/uberjar
+            :exec-args {:aot true
+                        :jar "{{name}}.jar"
+                        :main-class "{{name}}.core"
+                        :sync-pom true}}}}
+EOF
+    
+    # Generate pom.xml template
+    cat > "${lib_dir}/pom.xml" << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>{{author_name}}</groupId>
+  <artifactId>{{name}}</artifactId>
+  <version>0.1.0</version>
+  <name>{{name}}</name>
+  <description>{{description}}</description>
+  <url>https://github.com/{{author_name}}/{{name}}</url>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>{{author_name}}</name>
+      <email>{{author_email}}</email>
+    </developer>
+  </developers>
+  <scm>
+    <url>https://github.com/{{author_name}}/{{name}}</url>
+    <connection>scm:git:git://github.com/{{author_name}}/{{name}}.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/{{author_name}}/{{name}}.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>clojure</artifactId>
+      <version>1.11.1</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+  </build>
+  <repositories>
+    <repository>
+      <id>clojars</id>
+      <url>https://repo.clojars.org/</url>
+    </repository>
+  </repositories>
+</project>
+EOF
+    
+    # Create main namespace
+    cat > "${lib_dir}/src/{{name}}/core.clj" << 'EOF'
+(ns {{name}}.core
+  "{{description}}
+  
+  A Clojure library for research workflows developed as part of {{project_name}}."
+  (:require [clojure.data.csv :as csv]
+            [clojure.data.json :as json]
+            [clojure.java.io :as io]
+            [clojure.string :as str]))
+
+;; Research Component Protocol
+(defprotocol ResearchComponent
+  "Protocol for research analysis components."
+  (fit [this data] "Fit the component to data.")
+  (transform [this data] "Transform data using fitted component.")
+  (fit-transform [this data] "Fit component and transform data."))
+
+;; Base Research Analyzer
+(defrecord ResearchAnalyzer [name config fitted?]
+  ResearchComponent
+  (fit [this data]
+    (println (str "Fitting " name " with " (count data) " samples"))
+    (assoc this :fitted? true))
+  
+  (transform [this data]
+    (when-not (:fitted? this)
+      (throw (ex-info "Component must be fitted before transform" {:component this})))
+    ;; Example transformation - apply parameter to numeric values
+    (let [parameter (get-in this [:config :parameter] 1.0)]
+      (map #(into {} (for [[k v] %]
+                       [k (if (number? v) (* v parameter) v)])) data)))
+  
+  (fit-transform [this data]
+    (-> this
+        (fit data)
+        (transform data))))
+
+(defn research-analyzer
+  "Creates a new research analyzer component."
+  ([name] (research-analyzer name {}))
+  ([name config]
+   (->ResearchAnalyzer name config false)))
+
+;; Data Loading Functions
+(defn load-csv
+  "Load research data from CSV file."
+  [filepath & {:keys [header?] :or {header? true}}]
+  (with-open [reader (io/reader filepath)]
+    (let [data (csv/read-csv reader)]
+      (if header?
+        (let [headers (first data)
+              rows (rest data)]
+          (map #(zipmap (map keyword headers) %) rows))
+        (map-indexed #(zipmap (map keyword (range (count %2))) %2) data)))))
+
+(defn load-json
+  "Load research data from JSON file."
+  [filepath]
+  (with-open [reader (io/reader filepath)]
+    (json/read reader :key-fn keyword)))
+
+(defn save-csv
+  "Save research results to CSV file."
+  [data filepath]
+  (let [headers (-> data first keys)
+        rows (map #(map % headers) data)]
+    (with-open [writer (io/writer filepath)]
+      (csv/write-csv writer (cons (map name headers) rows)))))
+
+(defn save-json
+  "Save research results to JSON file."
+  [data filepath]
+  (with-open [writer (io/writer filepath)]
+    (json/write data writer :escape-unicode false)))
+
+;; Data Validation Functions
+(defn validate-data
+  "Validate research data quality."
+  [data]
+  (let [sample (first data)
+        columns (keys sample)
+        total-rows (count data)]
+    {:total-rows total-rows
+     :total-columns (count columns)
+     :columns columns
+     :missing-values (into {} (for [col columns]
+                               [col (count (filter #(or (nil? (col %))
+                                                        (and (string? (col %))
+                                                             (str/blank? (col %)))) data))]))
+     :data-types (into {} (for [col columns]
+                           [col (let [sample-val (col sample)]
+                                 (cond
+                                   (number? sample-val) :numeric
+                                   (string? sample-val) :text
+                                   (boolean? sample-val) :boolean
+                                   :else :unknown))]))
+     :memory-estimate (* total-rows (count columns) 8)}))
+
+;; Statistical Functions
+(defn summary-stats
+  "Calculate summary statistics for numeric columns."
+  [data]
+  (let [numeric-cols (->> (first data)
+                          (filter #(number? (val %)))
+                          (map key))]
+    (into {} (for [col numeric-cols]
+               [col (let [values (map col data)
+                         sorted-vals (sort values)
+                         n (count values)
+                         sum (reduce + values)
+                         mean (/ sum n)
+                         median (if (odd? n)
+                                 (nth sorted-vals (/ (dec n) 2))
+                                 (/ (+ (nth sorted-vals (/ n 2))
+                                      (nth sorted-vals (dec (/ n 2)))) 2))]
+                     {:count n
+                      :sum sum
+                      :mean mean
+                      :median median
+                      :min (first sorted-vals)
+                      :max (last sorted-vals)
+                      :std-dev (Math/sqrt (/ (reduce + (map #(Math/pow (- % mean) 2) values))
+                                             (dec n)))})]))
+
+;; Research Pipeline Functions
+(defn research-pipeline
+  "Execute a research analysis pipeline."
+  [data & steps]
+  (reduce (fn [acc step]
+           (if (fn? step)
+             (step acc)
+             (throw (ex-info "Pipeline step must be a function" {:step step}))))
+         data steps))
+
+(defn apply-filter
+  "Create a filter step for research pipeline."
+  [pred]
+  (fn [data]
+    (filter pred data)))
+
+(defn apply-transform
+  "Create a transform step for research pipeline."
+  [transform-fn]
+  (fn [data]
+    (map transform-fn data)))
+
+(defn apply-analysis
+  "Create an analysis step for research pipeline."
+  [analysis-fn]
+  (fn [data]
+    {:data data
+     :analysis (analysis-fn data)}))
+
+;; Example research function
+(defn research-function
+  "Example research function demonstrating the library structure."
+  [data & {:keys [parameter] :or {parameter 1.0}}]
+  (when-not (sequential? data)
+    (throw (ex-info "Data must be a sequence" {:data data})))
+  (map #(into {} (for [[k v] %]
+                  [k (if (number? v) (* v parameter) v)])) data))
+
+;; Utility Functions
+(defn current-timestamp
+  "Get current timestamp for research logging."
+  []
+  (java.time.Instant/now))
+
+(defn log-research
+  "Log research operation with timestamp."
+  [operation & args]
+  (println (str "[" (current-timestamp) "] " operation ": " (str/join ", " args))))
+EOF
+    
+    # Create test file
+    cat > "${lib_dir}/test/{{name}}/core_test.clj" << 'EOF'
+(ns {{name}}.core-test
+  (:require [clojure.test :refer :all]
+            [{{name}}.core :refer :all]))
+
+(deftest test-research-analyzer
+  (testing "ResearchAnalyzer creation and basic operations"
+    (let [analyzer (research-analyzer "test-analyzer" {:parameter 2.0})
+          test-data [{:x 1 :y 2} {:x 3 :y 4}]]
+      
+      (is (= "test-analyzer" (:name analyzer)))
+      (is (false? (:fitted? analyzer)))
+      
+      ;; Test fitting
+      (let [fitted-analyzer (fit analyzer test-data)]
+        (is (true? (:fitted? fitted-analyzer))))
+      
+      ;; Test fit-transform
+      (let [result (fit-transform analyzer test-data)]
+        (is (= 4 (count result)))
+        (is (= 2 (:x (first result))))
+        (is (= 4 (:y (first result))))))))
+
+(deftest test-data-validation
+  (testing "Data validation functionality"
+    (let [test-data [{:name "test" :value 10 :empty nil}
+                     {:name "test2" :value 20 :empty ""}]
+          validation (validate-data test-data)]
+      
+      (is (= 2 (:total-rows validation)))
+      (is (= 3 (:total-columns validation)))
+      (is (= 2 (get-in validation [:missing-values :empty])))
+      (is (= :text (get-in validation [:data-types :name])))
+      (is (= :numeric (get-in validation [:data-types :value]))))))
+
+(deftest test-summary-stats
+  (testing "Summary statistics calculation"
+    (let [test-data [{:value 1} {:value 2} {:value 3} {:value 4} {:value 5}]
+          stats (summary-stats test-data)
+          value-stats (:value stats)]
+      
+      (is (= 5 (:count value-stats)))
+      (is (= 15 (:sum value-stats)))
+      (is (= 3.0 (:mean value-stats)))
+      (is (= 3 (:median value-stats)))
+      (is (= 1 (:min value-stats)))
+      (is (= 5 (:max value-stats))))))
+
+(deftest test-research-function
+  (testing "Basic research function"
+    (let [test-data [{:x 1 :y 2} {:x 3 :y 4}]
+          result (research-function test-data :parameter 2.0)]
+      
+      (is (= 2 (count result)))
+      (is (= 2 (:x (first result))))
+      (is (= 4 (:y (first result))))
+      (is (= 6 (:x (second result))))
+      (is (= 8 (:y (second result)))))))
+
+(deftest test-research-pipeline
+  (testing "Research pipeline execution"
+    (let [test-data [{:value 1} {:value 2} {:value 3} {:value 4} {:value 5}]
+          result (research-pipeline test-data
+                                   (apply-filter #(even? (:value %)))
+                                   (apply-transform #(update % :value * 2))
+                                   (apply-analysis #(count %)))]
+      
+      (is (= 2 (count (:data result))))
+      (is (= 2 (:analysis result)))
+      (is (= 4 (:value (first (:data result))))))))
+
+(deftest test-invalid-inputs
+  (testing "Error handling for invalid inputs"
+    (is (thrown? Exception (research-function "not-a-sequence")))
+    (is (thrown? Exception (transform (research-analyzer "test") [{:x 1}])))))
+EOF
+    
+    # Create build script
+    cat > "${lib_dir}/build.clj" << 'EOF'
+(ns build
+  (:require [clojure.tools.build.api :as b]
+            [deps-deploy.deps-deploy :as dd]))
+
+(def lib '{{author_name}}/{{name}})
+(def version "0.1.0")
+(def class-dir "target/classes")
+(def basis (b/create-basis {:project "deps.edn"}))
+(def jar-file (format "target/%s-%s.jar" (name lib) version))
+
+(defn clean [_]
+  (b/delete {:path "target"}))
+
+(defn jar [_]
+  (b/write-pom {:class-dir class-dir
+                :lib lib
+                :version version
+                :basis basis
+                :src-dirs ["src"]})
+  (b/copy-dir {:src-dirs ["src" "resources"]
+               :target-dir class-dir})
+  (b/jar {:class-dir class-dir
+          :jar-file jar-file}))
+
+(defn deploy [_]
+  (dd/deploy {:installer :remote
+              :artifact jar-file
+              :pom-file (b/pom-path {:lib lib :class-dir class-dir})}))
+EOF
+    
+    # Create README
+    cat > "${lib_dir}/README.md" << 'EOF'
+# {{name}}
+
+{{description}}
+
+## Installation
+
+### From Clojars (when published)
+```clojure
+;; Add to deps.edn
+{{author_name}}/{{name}} {:mvn/version "0.1.0"}
+```
+
+### Local Development
+```bash
+git clone https://github.com/{{author_name}}/{{name}}.git
+cd {{name}}
+clj -M:dev
+```
+
+## Usage
+
+```clojure
+(require '[{{name}}.core :as research])
+
+;; Load and analyze data
+(def data (research/load-csv "data.csv"))
+(def analyzer (research/research-analyzer "my-analysis" {:parameter 2.0}))
+(def results (research/fit-transform analyzer data))
+
+;; Validate data quality
+(def validation (research/validate-data data))
+
+;; Calculate summary statistics
+(def stats (research/summary-stats data))
+
+;; Use research pipeline
+(def pipeline-result
+  (research/research-pipeline data
+                             (research/apply-filter #(> (:value %) 10))
+                             (research/apply-transform #(update % :value * 2))
+                             (research/apply-analysis count)))
+```
+
+## Core Functions
+
+### Data Loading
+- `load-csv` - Load CSV files with optional headers
+- `load-json` - Load JSON data files
+- `save-csv` / `save-json` - Save results to files
+
+### Analysis Components
+- `research-analyzer` - Create configurable analysis components
+- `fit` / `transform` / `fit-transform` - Component interface
+
+### Data Quality
+- `validate-data` - Comprehensive data validation
+- `summary-stats` - Statistical summaries for numeric columns
+
+### Research Pipeline
+- `research-pipeline` - Compose analysis steps
+- `apply-filter` / `apply-transform` / `apply-analysis` - Pipeline steps
+
+## Testing
+
+```bash
+# Run all tests
+clj -M:test -m clojure.test.runner
+
+# Run specific test namespace
+clj -M:test -m {{name}}.core-test
+```
+
+## Building
+
+```bash
+# Build JAR
+clj -T:build jar
+
+# Clean build artifacts
+clj -T:build clean
+
+# Deploy to Clojars
+clj -T:build deploy
+```
+
+## Development
+
+```bash
+# Start REPL
+clj -M:dev
+
+# Run tests with file watching
+clj -M:test --watch
+```
+
+## Citation
+
+If you use this library in your research, please cite:
+
+```
+{{author_name}} ({{year}}). {{name}}: {{description}}. 
+Clojure library version 0.1.0. https://github.com/{{author_name}}/{{name}}
+```
+
+## License
+
+MIT License - see LICENSE file for details.
+EOF
+    
+    echo "📦 Created Clojure library: ${lib_dir}"
+    echo "📝 To get started:"
+    echo "   cd ${lib_dir}"
+    echo "   clj -M:dev"
+    echo "   clj -M:test -m clojure.test.runner"
+
 # === PACKAGE MANAGEMENT ===
 
 # List all packages
@@ -814,6 +1757,12 @@ list-packages:
     @echo ""
     @echo "CLI Tools:"
     @find tools/cli -maxdepth 1 -type d ! -name cli 2>/dev/null | sed 's/tools\/cli\///g' | grep -v '^$' | sort || echo "No CLI tools found"
+    @echo ""
+    @echo "PowerShell Modules:"
+    @find powershell -maxdepth 1 -type d ! -name powershell ! -name experimental 2>/dev/null | sed 's/powershell\///g' | grep -v '^$' | sort || echo "No PowerShell modules found"
+    @echo ""
+    @echo "Clojure Libraries:"
+    @find clojure -maxdepth 1 -type d ! -name clojure ! -name experimental 2>/dev/null | sed 's/clojure\///g' | grep -v '^$' | sort || echo "No Clojure libraries found"
 
 # Install a Python package in development mode
 install-python package:
@@ -846,6 +1795,40 @@ test-r package:
         R -e "devtools::test()"
     else
         echo "❌ Package not found: r/{{package}}"
+        exit 1
+    fi
+
+# Test a PowerShell module
+test-powershell module:
+    #!/usr/bin/env bash
+    if [ -d "powershell/{{module}}" ]; then
+        cd "powershell/{{module}}"
+        if command -v pwsh &> /dev/null; then
+            pwsh -Command "Invoke-Pester -Path ./Tests/ -Passthru"
+        elif command -v powershell &> /dev/null; then
+            powershell -Command "Invoke-Pester -Path ./Tests/ -Passthru"
+        else
+            echo "❌ PowerShell not found. Install PowerShell Core (pwsh) or Windows PowerShell"
+            exit 1
+        fi
+    else
+        echo "❌ Module not found: powershell/{{module}}"
+        exit 1
+    fi
+
+# Test a Clojure library
+test-clojure library:
+    #!/usr/bin/env bash
+    if [ -d "clojure/{{library}}" ]; then
+        cd "clojure/{{library}}"
+        if command -v clj &> /dev/null; then
+            clj -M:test -m clojure.test.runner
+        else
+            echo "❌ Clojure CLI not found. Install from https://clojure.org/guides/getting_started"
+            exit 1
+        fi
+    else
+        echo "❌ Library not found: clojure/{{library}}"
         exit 1
     fi
 
@@ -1045,6 +2028,91 @@ EOF
         echo "   conda-build distribution/conda/{{package}}/"
     else
         echo "❌ Package not found: python/{{package}}"
+        exit 1
+    fi
+
+# Distribute PowerShell module to PowerShell Gallery
+dist-powershell-gallery module:
+    #!/usr/bin/env bash
+    if [ -d "powershell/{{module}}" ]; then
+        cd "powershell/{{module}}"
+        echo "📦 Preparing PowerShell module {{module}} for PowerShell Gallery..."
+        
+        # Validate module manifest
+        if command -v pwsh &> /dev/null; then
+            pwsh -Command "Test-ModuleManifest -Path ./{{module}}.psd1"
+        elif command -v powershell &> /dev/null; then
+            powershell -Command "Test-ModuleManifest -Path ./{{module}}.psd1"
+        else
+            echo "❌ PowerShell not found"
+            exit 1
+        fi
+        
+        echo "📦 Module validated successfully"
+        echo "📝 To publish to PowerShell Gallery:"
+        echo "   # Set your API key:"
+        echo "   \$apiKey = 'your-powershell-gallery-api-key'"
+        echo "   # Publish module:"
+        echo "   Publish-Module -Path . -NuGetApiKey \$apiKey"
+        echo "   # Or publish to test repository:"
+        echo "   Publish-Module -Path . -Repository PSGalleryInt -NuGetApiKey \$apiKey"
+    else
+        echo "❌ Module not found: powershell/{{module}}"
+        exit 1
+    fi
+
+# Build Clojure library JAR
+build-clojure library:
+    #!/usr/bin/env bash
+    if [ -d "clojure/{{library}}" ]; then
+        cd "clojure/{{library}}"
+        echo "🏗️ Building Clojure library {{library}}..."
+        
+        if command -v clj &> /dev/null; then
+            # Clean previous builds
+            clj -T:build clean
+            
+            # Build JAR
+            clj -T:build jar
+            
+            echo "✅ JAR built successfully"
+            echo "📦 Files in target/:"
+            ls -la target/
+        else
+            echo "❌ Clojure CLI not found"
+            exit 1
+        fi
+    else
+        echo "❌ Library not found: clojure/{{library}}"
+        exit 1
+    fi
+
+# Distribute Clojure library to Clojars
+dist-clojars library:
+    #!/usr/bin/env bash
+    if [ -d "clojure/{{library}}" ]; then
+        cd "clojure/{{library}}"
+        echo "📦 Preparing Clojure library {{library}} for Clojars..."
+        
+        if command -v clj &> /dev/null; then
+            # Build JAR first
+            clj -T:build jar
+            
+            echo "📦 Library built successfully"
+            echo "📝 To deploy to Clojars:"
+            echo "   # Set your Clojars credentials in ~/.m2/settings.xml or use environment variables:"
+            echo "   # CLOJARS_USERNAME=your-username"
+            echo "   # CLOJARS_PASSWORD=your-deploy-token"
+            echo "   # Then deploy:"
+            echo "   clj -T:build deploy"
+            echo "   # Or deploy manually with:"
+            echo "   # mvn deploy:deploy-file -DgroupId={{author_name}} -DartifactId={{library}} -Dversion=0.1.0 -Dpackaging=jar -Dfile=target/{{library}}-0.1.0.jar -DrepositoryId=clojars -Durl=https://clojars.org/repo"
+        else
+            echo "❌ Clojure CLI not found"
+            exit 1
+        fi
+    else
+        echo "❌ Library not found: clojure/{{library}}"
         exit 1
     fi
 
