@@ -1,9 +1,162 @@
-[defaults]
-template_path = "template"
-output_path = "./.ctt/test-defaults"
-answers_file = "ctt-answers.yml"
+[template]
+src_path = "."
+
+[config]
+output_dir = ".ctt"
 cleanup = true
 
-[[test]]
-name = "default"
-answers = { short_name = "demo", author = "Test User" }
+# Test 1: Full Academic Project (default configuration)
+[output."full-academic"]
+[output."full-academic".answers]
+project_name = "Test Academic Project"
+short_name = "test-academic"
+description = "A comprehensive academic research project"
+author_name = "Dr. Test Researcher"
+author_email = "test@university.edu"
+project_type = "Full Academic Project (analysis + writeup)"
+programming_language = "Both"
+specialized_domain = "Bioinformatics"
+experiment_tracking = "MLflow"
+data_versioning = true
+
+# Test 2: Analysis Only Project
+[output."analysis-only"]
+[output."analysis-only".answers]
+project_name = "Data Pipeline Project"
+short_name = "data-pipeline"
+description = "Data science analysis pipeline only"
+author_name = "Data Scientist"
+author_email = "datascientist@company.com"
+project_type = "Analysis Only (data science pipeline)"
+programming_language = "Python"
+specialized_domain = "Time Series"
+experiment_tracking = "Weights & Biases"
+data_versioning = true
+include_ml_components = true
+
+# Test 3: Manuscript Only Project
+[output."manuscript-only"]
+[output."manuscript-only".answers]
+project_name = "Research Paper"
+short_name = "research-paper"
+description = "Academic manuscript writing project"
+author_name = "Prof. Writer"
+author_email = "writer@academic.org"
+project_type = "Manuscript Only (writing and publications)"
+programming_language = "R"
+documentation_format = "Quarto"
+include_publication_templates = true
+
+# Test 4: Package Development Project
+[output."package-dev"]
+[output."package-dev".answers]
+project_name = "Scientific Package"
+short_name = "sci-package"
+description = "Python/R package for scientific computing"
+author_name = "Package Developer"
+author_email = "dev@packages.io"
+project_type = "Package Development (software/library)"
+programming_language = "Python"
+specialized_domain = "Geospatial"
+experiment_tracking = "None"
+data_versioning = false
+github_actions = true
+pre_commit_hooks = true
+
+# Test 5: Custom Configuration - Minimal Setup
+[output."custom-minimal"]
+[output."custom-minimal".answers]
+project_name = "Minimal Project"
+short_name = "minimal"
+description = "Minimal custom project setup"
+author_name = "Minimalist"
+author_email = "minimal@example.com"
+project_type = "Custom (choose components manually)"
+include_analysis = true
+include_writeup = false
+include_infrastructure = false
+include_misc = false
+include_notebooks = true
+include_scripts = false
+include_data_pipeline = true
+include_testing = false
+include_packages = false
+programming_language = "Python"
+specialized_domain = "None"
+experiment_tracking = "None"
+data_versioning = false
+
+# Test 6: Custom Configuration - Maximum Setup
+[output."custom-maximal"]
+[output."custom-maximal".answers]
+project_name = "Comprehensive Project"
+short_name = "comprehensive"
+description = "Full-featured custom project with all components"
+author_name = "Power User"
+author_email = "power@research.edu"
+project_type = "Custom (choose components manually)"
+include_analysis = true
+include_writeup = true
+include_infrastructure = true
+include_misc = true
+# Analysis subcomponents
+include_notebooks = true
+include_scripts = true
+include_data_pipeline = true
+include_testing = true
+include_packages = true
+# Writeup subcomponents
+include_manuscript = true
+include_presentations = true
+include_grants = true
+include_abstracts = true
+include_posters = true
+include_reports = true
+include_blog = true
+# Infrastructure subcomponents
+include_docker = true
+include_cloud_deployment = true
+include_virtualization = true
+include_automation = true
+# Other settings
+programming_language = "Both"
+specialized_domain = "Bioinformatics"
+experiment_tracking = "Neptune"
+data_versioning = true
+documentation_format = "Quarto"
+github_actions = true
+pre_commit_hooks = true
+
+# Test 7: Bioinformatics Specialized Project
+[output."bioinformatics"]
+[output."bioinformatics".answers]
+project_name = "Genomics Analysis"
+short_name = "genomics"
+description = "Bioinformatics project for genomic data analysis"
+author_name = "Bioinformatician"
+author_email = "bio@genomics.edu"
+project_type = "Full Academic Project (analysis + writeup)"
+programming_language = "Both"
+specialized_domain = "Bioinformatics"
+experiment_tracking = "MLflow"
+data_versioning = true
+include_eda_templates = true
+include_statistical_analysis = true
+include_ml_components = true
+documentation_format = "Quarto"
+include_publication_templates = true
+
+# Test 8: Quick Manuscript Project
+[output."quick-manuscript"]
+[output."quick-manuscript".answers]
+project_name = "Conference Paper"
+short_name = "conf-paper"
+description = "Quick manuscript for conference submission"
+author_name = "Research Fellow"
+author_email = "fellow@university.edu"
+project_type = "Manuscript Only (writing and publications)"
+programming_language = "R"
+documentation_format = "RMarkdown"
+include_publication_templates = true
+github_actions = false
+pre_commit_hooks = false
