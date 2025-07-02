@@ -35,6 +35,64 @@ author_email:
   help: Contact email for the project
   default: "your.email@example.com"
 
+# === PROJECT STRUCTURE SELECTION ===
+project_type:
+  type: str
+  help: What type of project are you creating?
+  choices:
+    - Full Academic Project (analysis + writeup)
+    - Analysis Only (data science pipeline)
+    - Manuscript Only (writing and publications)
+    - Package Development (software/library)
+    - Custom (choose components manually)
+  default: Full Academic Project (analysis + writeup)
+
+# === PRINCIPAL FOLDER SELECTION ===
+include_analysis:
+  type: bool
+  help: Include analysis folder (notebooks, scripts, data pipeline)
+  default: >
+    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Analysis Only (data science pipeline)", "Package Development (software/library)"] -%}
+    true
+    {%- elif project_type == "Custom (choose components manually)" -%}
+    true
+    {%- else -%}
+    false
+    {%- endif -%}
+  when: "{{ project_type == 'Custom (choose components manually)' }}"
+
+include_writeup:
+  type: bool
+  help: Include writeup folder (manuscripts, presentations, grants, reports)
+  default: >
+    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Manuscript Only (writing and publications)"] -%}
+    true
+    {%- elif project_type == "Custom (choose components manually)" -%}
+    true
+    {%- else -%}
+    false
+    {%- endif -%}
+  when: "{{ project_type == 'Custom (choose components manually)' }}"
+
+include_infrastructure:
+  type: bool
+  help: Include infrastructure folder (Docker, cloud deployment, CI/CD)
+  default: >
+    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Package Development (software/library)"] -%}
+    true
+    {%- elif project_type == "Custom (choose components manually)" -%}
+    false
+    {%- else -%}
+    false
+    {%- endif -%}
+  when: "{{ project_type == 'Custom (choose components manually)' }}"
+
+include_misc:
+  type: bool
+  help: Include misc folder (utilities, legacy code, experimental features)
+  default: false
+  when: "{{ project_type == 'Custom (choose components manually)' }}"
+
 # Project Configuration
 programming_language:
   type: str
@@ -128,152 +186,130 @@ module_name:
   default: "{{ short_name|lower|replace(' ', '_')|replace('-', '_') }}"
   when: false  # Auto-generated, not user input
 
-# description:
-#   type: str
-#   help: Brief description of the project
-#   default: A data analysis project
+# === SPECIALIZED DOMAIN SUPPORT ===
+specialized_domain:
+  type: str
+  help: Include specialized domain-specific tools
+  choices:
+    - None
+    - Bioinformatics
+    - Epidemiology
+    - Geospatial
+    - Time Series
+    - Other
+  default: None
+  when: "{{ include_analysis }}"
 
-# # Author Information
-# author_name:
-#   type: str
-#   help: Your name or team name
+# === SUBCOMPONENT SELECTION FOR ANALYSIS ===
+include_notebooks:
+  type: bool
+  help: Include structured notebook workflow (00-scratch to 10-iteration)
+  default: true
+  when: "{{ include_analysis }}"
 
-# author_email:
-#   type: str
-#   help: Contact email for the project
-#   default: ""
+include_scripts:
+  type: bool
+  help: Include production scripts directory (Python, R, shells)
+  default: true
+  when: "{{ include_analysis }}"
 
-# # Project Configuration
-# programming_language:
-#   type: str
-#   help: Primary programming language
-#   choices:
-#     - Python
-#     - R
-#     - Both
-#   default: Both
+include_data_pipeline:
+  type: bool
+  help: Include data pipeline structure (01_raw to 08_reporting)
+  default: true
+  when: "{{ include_analysis }}"
 
-# # Analysis Components
-# include_eda_templates:
-#   type: bool
-#   help: Include exploratory data analysis templates
-#   default: true
+include_testing:
+  type: bool
+  help: Include testing framework for data and models
+  default: true
+  when: "{{ include_analysis }}"
 
-# include_statistical_analysis:
-#   type: bool
-#   help: Include statistical analysis templates
-#   default: true
+include_packages:
+  type: bool
+  help: Include local package development structure
+  default: >
+    {%- if project_type == "Package Development (software/library)" -%}
+    true
+    {%- else -%}
+    false
+    {%- endif -%}
+  when: "{{ include_analysis }}"
 
-# include_ml_components:
-#   type: bool
-#   help: Include machine learning workflow templates
-#   default: true
+# === SUBCOMPONENT SELECTION FOR WRITEUP ===
+include_manuscript:
+  type: bool
+  help: Include manuscript writing capabilities
+  default: true
+  when: "{{ include_writeup }}"
 
-# # # Specialized Components
-# # specialized_domain:
-# #   type: str
-# #   help: Include specialized domain-specific tools
-# #   choices:
-# #     - None
-# #     - Bioinformatics
-# #     - Epidemiology
-# #     - Geospatial
-# #     - Time Series
-# #     - Other
-# #   default: None
+include_presentations:
+  type: bool
+  help: Include presentation templates and management
+  default: true
+  when: "{{ include_writeup }}"
 
-# # # Data Management
-# data_versioning:
-#   type: bool
-#   help: Include DVC setup for data versioning
-#   default: true
+include_grants:
+  type: bool
+  help: Include grant application management
+  default: >
+    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Manuscript Only (writing and publications)"] -%}
+    true
+    {%- else -%}
+    false
+    {%- endif -%}
+  when: "{{ include_writeup }}"
 
-# data_validation:
-#   type: bool
-#   help: Include data validation frameworks (Great Expectations)
-#   default: true
+include_abstracts:
+  type: bool
+  help: Include abstract submission management
+  default: >
+    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Manuscript Only (writing and publications)"] -%}
+    true
+    {%- else -%}
+    false
+    {%- endif -%}
+  when: "{{ include_writeup }}"
 
-# # Documentation and Reporting
-# documentation_format:
-#   type: str
-#   help: Primary documentation format
-#   choices:
-#     - Markdown
-#     - Jupyter Notebooks
-#     - Quarto
-#     - RMarkdown
-#   default: Quarto
+include_posters:
+  type: bool
+  help: Include poster creation and management
+  default: true
+  when: "{{ include_writeup }}"
 
-# include_publication_templates:
-#   type: bool
-#   help: Include academic publication templates
-#   default: true
+include_reports:
+  type: bool
+  help: Include technical report templates
+  default: true
+  when: "{{ include_writeup }}"
 
-# # Experiment Tracking
-# experiment_tracking:
-#   type: str
-#   help: Experiment tracking platform
-#   choices:
-#     - None
-#     - MLflow
-#     - Weights & Biases
-#   default: None
+include_blog:
+  type: bool
+  help: Include blog post templates for informal writing
+  default: false
+  when: "{{ include_writeup }}"
 
-# # CI/CD and Automation
-# github_actions:
-#   type: bool
-#   help: Add GitHub Actions workflows
-#   default: true
+# === INFRASTRUCTURE SUBCOMPONENTS ===
+include_docker:
+  type: bool
+  help: Include Docker configuration
+  default: true
+  when: "{{ include_infrastructure }}"
 
-# pre_commit_hooks:
-#   type: bool
-#   help: Configure pre-commit hooks for code quality
-#   default: true
+include_cloud_deployment:
+  type: bool
+  help: Include cloud deployment templates (AWS, GCP, Azure)
+  default: false
+  when: "{{ include_infrastructure }}"
 
-# # Deployment Options
-# include_deployment_templates:
-#   type: bool
-#   help: Include deployment templates (Docker, FastAPI, etc.)
-#   default: true
+include_virtualization:
+  type: bool
+  help: Include VM and container orchestration
+  default: false
+  when: "{{ include_infrastructure }}"
 
-
-
-# # Multipass VM Support
-# use_multipass:
-#   type: bool
-#   help: Include Multipass VM configuration for isolated environments
-#   default: true
-
-# multipass_profile:
-#   type: str
-#   help: Type of Multipass VM profile to include
-#   choices:
-#     - minimal
-#     - data-science
-#     - gpu-optimized
-#   default: data-science
-#   when: "{{ use_multipass }}"
-
-# multipass_memory:
-#   type: str
-#   help: Memory allocation for Multipass VM
-#   default: "4G"
-#   when: "{{ use_multipass }}"
-
-# multipass_cpus:
-#   type: str
-#   help: CPU cores for Multipass VM
-#   default: "2"
-#   when: "{{ use_multipass }}"
-
-# multipass_disk:
-#   type: str
-#   help: Disk size for Multipass VM
-#   default: "20G"
-#   when: "{{ use_multipass }}"
-
-# ssh_public_key:
-#   type: str
-#   help: Your SSH public key for accessing VMs (optional)
-#   default: ""
-#   when: "{{ use_multipass }}"
+include_automation:
+  type: bool
+  help: Include automation tools (GitHub Actions, etc.)
+  default: true
+  when: "{{ include_infrastructure }}"
