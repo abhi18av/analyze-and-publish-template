@@ -1,0 +1,271 @@
+# Blog Post Creation and Management
+# Usage: just <command> [arguments]
+
+# Default recipe - show available commands
+default:
+    @echo "Blog Post Management Commands:"
+    @echo ""
+    @echo "Creation:"
+    @echo "  just new <type> <template> <title>  - Create new blog post from template"
+    @echo "  just list-templates                 - Show all available templates"
+    @echo ""
+    @echo "Technical Templates:"
+    @echo "  - bug-hunt"
+    @echo "  - rewrote-it-in-x"
+    @echo "  - how-we-built-it"
+    @echo "  - lessons-learned"
+    @echo "  - thoughts-on-trends"
+    @echo "  - non-markety-product-perspective"
+    @echo "  - benchmarks-and-test-results"
+    @echo ""
+    @echo "Personal Templates:"
+    @echo "  - reflections"
+    @echo "  - journey"
+    @echo "  - philosophy"
+    @echo "  - walkthrough"
+    @echo ""
+    @echo "Management:"
+    @echo "  just list                          - List all blog posts"
+    @echo "  just drafts                        - List draft posts"
+    @echo "  just published                     - List published posts"
+    @echo ""
+    @echo "Examples:"
+    @echo "  just new technical bug-hunt \"Fixing the Database Connection Pool Bug\""
+    @echo "  just new personal journey \"My Path to Understanding Rust\""
+
+# Create a new blog post from template
+new type template title:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    
+    # Validate type
+    if [[ "{{type}}" != "technical" && "{{type}}" != "personal" ]]; then
+        echo "Error: Type must be 'technical' or 'personal'"
+        echo "Usage: just new <technical|personal> <template> <title>"
+        exit 1
+    fi
+    
+    # Check if template exists
+    template_file="templates/{{type}}/{{template}}.md"
+    if [[ ! -f "$template_file" ]]; then
+        echo "Error: Template '$template_file' not found"
+        echo "Available {{type}} templates:"
+        ls templates/{{type}}/ | sed 's/\.md$//' | sed 's/^/  - /'
+        exit 1
+    fi
+    
+    # Generate filename from title
+    filename=$(echo "{{title}}" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
+    date=$(date +%Y-%m-%d)
+    output_file="${date}-${filename}.md"
+    
+    # Check if file already exists
+    if [[ -f "$output_file" ]]; then
+        echo "Error: File '$output_file' already exists"
+        exit 1
+    fi
+    
+    # Create the new post from template
+    cp "$template_file" "$output_file"
+    
+    # Replace placeholders in the new file
+    slug="${date}-${filename}"
+    
+    # Use sed to replace placeholders (macOS compatible)
+    sed -i '' "s/\[slug-for-url\]/${slug}/g" "$output_file"
+    sed -i '' "s/\[YYYY-MM-DD\]/${date}/g" "$output_file"
+    sed -i '' "s/\[title placeholder\]/{{title}}/g" "$output_file"
+    
+    # Handle template-specific replacements
+    case "{{template}}" in
+        "bug-hunt")
+            sed -i '' "s/\[Bug\/Issue Name\]/{{title}}/g" "$output_file"
+            ;;
+        "rewrote-it-in-x")
+            sed -i '' "s/\[Project\]/{{title}}/g" "$output_file"
+            ;;
+        "how-we-built-it")
+            sed -i '' "s/\[Project Name\]/{{title}}/g" "$output_file"
+            ;;
+        "lessons-learned")
+            sed -i '' "s/\[Project\/Experience\]/{{title}}/g" "$output_file"
+            ;;
+        "thoughts-on-trends")
+            sed -i '' "s/\[Technology\/Trend\]/{{title}}/g" "$output_file"
+            ;;
+        "non-markety-product-perspective")
+            sed -i '' "s/\[Product\/Feature\]/{{title}}/g" "$output_file"
+            ;;
+        "benchmarks-and-test-results")
+            sed -i '' "s/\[Project\/Benchmark\]/{{title}}/g" "$output_file"
+            ;;
+        "reflections")
+            sed -i '' "s/\[Reflection Topic\]/{{title}}/g" "$output_file"
+            ;;
+        "journey")
+            sed -i '' "s/\[Topic\/Experience\]/{{title}}/g" "$output_file"
+            ;;
+        "philosophy")
+            sed -i '' "s/\[Philosophical Topic\]/{{title}}/g" "$output_file"
+            ;;
+        "walkthrough")
+            sed -i '' "s/\[Process\/Topic\]/{{title}}/g" "$output_file"
+            ;;
+    esac
+    
+    echo "✅ Created new {{type}} blog post: $output_file"
+    echo "📝 Template: {{template}}"
+    echo "📅 Date: $date"
+    echo ""
+    echo "Next steps:"
+    echo "1. Edit the content in $output_file"
+    echo "2. Replace all remaining placeholders (marked with [brackets])"
+    echo "3. Add appropriate tags"
+    echo "4. Review and publish when ready"
+
+# List all available templates
+list-templates:
+    @echo "Available Blog Templates:"
+    @echo ""
+    @echo "📱 Technical Templates (blog/templates/technical/):"
+    @ls templates/technical/ | sed 's/\.md$//' | sed 's/^/  ✓ /'
+    @echo ""
+    @echo "👤 Personal Templates (blog/templates/personal/):"
+    @ls templates/personal/ | sed 's/\.md$//' | sed 's/^/  ✓ /'
+    @echo ""
+    @echo "Usage: just new <technical|personal> <template-name> \"<title>\""
+
+# List all blog posts
+list:
+    @echo "All Blog Posts:"
+    @echo ""
+    @if ls *.md >/dev/null 2>&1; then \
+        ls -la *.md | awk '{print "📄 " $9 " (" $5 " bytes, " $6 " " $7 " " $8 ")"}'; \
+    else \
+        echo "No blog posts found in current directory"; \
+    fi
+
+# List draft posts (posts with draft: true in frontmatter)
+drafts:
+    @echo "Draft Blog Posts:"
+    @echo ""
+    @if ls *.md >/dev/null 2>&1; then \
+        for file in *.md; do \
+            if grep -q "draft: true" "$file" 2>/dev/null; then \
+                echo "📝 $file (draft)"; \
+            fi; \
+        done; \
+    else \
+        echo "No blog posts found"; \
+    fi
+
+# List published posts (posts without draft: true)
+published:
+    @echo "Published Blog Posts:"
+    @echo ""
+    @if ls *.md >/dev/null 2>&1; then \
+        for file in *.md; do \
+            if ! grep -q "draft: true" "$file" 2>/dev/null; then \
+                echo "📰 $file (published)"; \
+            fi; \
+        done; \
+    else \
+        echo "No blog posts found"; \
+    fi
+
+# Show template content (for preview)
+show-template type template:
+    #!/usr/bin/env bash
+    template_file="templates/{{type}}/{{template}}.md"
+    if [[ -f "$template_file" ]]; then
+        echo "📋 Template: {{type}}/{{template}}"
+        echo "📁 File: $template_file"
+        echo ""
+        echo "Content preview:"
+        echo "=================="
+        head -30 "$template_file"
+        echo ""
+        echo "... (showing first 30 lines)"
+        echo ""
+        echo "To create a post from this template:"
+        echo "just new {{type}} {{template}} \"Your Title Here\""
+    else
+        echo "❌ Template not found: $template_file"
+        echo ""
+        echo "Available {{type}} templates:"
+        ls templates/{{type}}/ 2>/dev/null | sed 's/\.md$//' | sed 's/^/  - /' || echo "  No templates found"
+    fi
+
+# Quick create commands for common templates
+quick-bug title:
+    just new technical bug-hunt "{{title}}"
+
+quick-build title:
+    just new technical how-we-built-it "{{title}}"
+
+quick-lessons title:
+    just new technical lessons-learned "{{title}}"
+
+quick-trend title:
+    just new technical thoughts-on-trends "{{title}}"
+
+quick-reflection title:
+    just new personal reflections "{{title}}"
+
+quick-journey title:
+    just new personal journey "{{title}}"
+
+quick-philosophy title:
+    just new personal philosophy "{{title}}"
+
+quick-walkthrough title:
+    just new personal walkthrough "{{title}}"
+
+# Initialize blog directory structure (if needed)
+init:
+    @echo "🚀 Initializing blog directory structure..."
+    @mkdir -p templates/technical templates/personal
+    @echo "✅ Blog directory structure created"
+    @echo ""
+    @echo "Directory structure:"
+    @echo "  blog/"
+    @echo "  ├── templates/"
+    @echo "  │   ├── technical/    (technical blog templates)"
+    @echo "  │   └── personal/     (personal blog templates)"
+    @echo "  ├── justfile          (this automation file)"
+    @echo "  └── *.md              (your blog posts)"
+
+# Validate all templates for syntax
+validate:
+    @echo "🔍 Validating all blog templates..."
+    @echo ""
+    @error_count=0; \
+    for template_dir in templates/*/; do \
+        category=$(basename "$template_dir"); \
+        echo "📁 Checking $category templates:"; \
+        for template in "$template_dir"*.md; do \
+            if [[ -f "$template" ]]; then \
+                name=$(basename "$template" .md); \
+                if head -1 "$template" | grep -q "^---$" && \
+                   head -20 "$template" | tail -n +2 | grep -q "^---$"; then \
+                    echo "  ✅ $name - Valid frontmatter"; \
+                else \
+                    echo "  ❌ $name - Invalid frontmatter"; \
+                    error_count=$((error_count + 1)); \
+                fi; \
+            fi; \
+        done; \
+        echo ""; \
+    done; \
+    if [[ $error_count -eq 0 ]]; then \
+        echo "🎉 All templates are valid!"; \
+    else \
+        echo "⚠️  Found $error_count template(s) with issues"; \
+    fi
+
+# Clean up any temporary files
+clean:
+    @echo "🧹 Cleaning up temporary files..."
+    @find . -name "*.tmp" -delete 2>/dev/null || true
+    @find . -name ".DS_Store" -delete 2>/dev/null || true
+    @echo "✅ Cleanup complete"
