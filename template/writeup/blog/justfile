@@ -9,20 +9,18 @@ default:
     @echo "  just new <type> <template> <title>  - Create new blog post from template"
     @echo "  just list-templates                 - Show all available templates"
     @echo ""
-    @echo "Technical Templates:"
-    @echo "  - bug-hunt"
-    @echo "  - rewrote-it-in-x"
-    @echo "  - how-we-built-it"
-    @echo "  - lessons-learned"
-    @echo "  - thoughts-on-trends"
-    @echo "  - non-markety-product-perspective"
-    @echo "  - benchmarks-and-test-results"
+    @echo "Data Science Templates:"
+    @echo "  - project-journey"
+    @echo "  - research-reflections"
+    @echo "  - lessons"
+    @echo "  - debugging-detective"
+    @echo "  - philosophy"
+    @echo ""
+    @echo "Academic Templates:"
+    @echo "  - research-benchmarks"
     @echo ""
     @echo "Personal Templates:"
     @echo "  - reflections"
-    @echo "  - journey"
-    @echo "  - philosophy"
-    @echo "  - walkthrough"
     @echo ""
     @echo "Management:"
     @echo "  just list                          - List all blog posts"
@@ -30,8 +28,9 @@ default:
     @echo "  just published                     - List published posts"
     @echo ""
     @echo "Examples:"
-    @echo "  just new technical bug-hunt \"Fixing the Database Connection Pool Bug\""
-    @echo "  just new personal journey \"My Path to Understanding Rust\""
+    @echo "  just new data-science project-journey \"My 6-Month Deep Learning Journey\""
+    @echo "  just new academic research-benchmarks \"Comparing Our Method vs State-of-the-Art\""
+    @echo "  just new personal reflections \"Lessons from Academic Research\""
 
 # Create a new blog post from template
 new type template title:
@@ -39,9 +38,9 @@ new type template title:
     set -euo pipefail
     
     # Validate type
-    if [[ "{{type}}" != "technical" && "{{type}}" != "personal" ]]; then
-        echo "Error: Type must be 'technical' or 'personal'"
-        echo "Usage: just new <technical|personal> <template> <title>"
+    if [[ "{{type}}" != "data-science" && "{{type}}" != "academic" && "{{type}}" != "personal" ]]; then
+        echo "Error: Type must be 'data-science', 'academic', or 'personal'"
+        echo "Usage: just new <data-science|academic|personal> <template> <title>"
         exit 1
     fi
     
@@ -78,38 +77,28 @@ new type template title:
     
     # Handle template-specific replacements
     case "{{template}}" in
-        "bug-hunt")
-            sed -i '' "s/\[Bug\/Issue Name\]/{{title}}/g" "$output_file"
-            ;;
-        "rewrote-it-in-x")
-            sed -i '' "s/\[Project\]/{{title}}/g" "$output_file"
-            ;;
-        "how-we-built-it")
+        "project-journey")
             sed -i '' "s/\[Project Name\]/{{title}}/g" "$output_file"
+            sed -i '' "s/\[Duration\]/6-Month/g" "$output_file"
             ;;
-        "lessons-learned")
+        "research-reflections")
+            sed -i '' "s/\[Research Topic\]/{{title}}/g" "$output_file"
+            ;;
+        "lessons")
             sed -i '' "s/\[Project\/Experience\]/{{title}}/g" "$output_file"
             ;;
-        "thoughts-on-trends")
-            sed -i '' "s/\[Technology\/Trend\]/{{title}}/g" "$output_file"
+        "debugging-detective")
+            sed -i '' "s/\[Problem Description\]/{{title}}/g" "$output_file"
             ;;
-        "non-markety-product-perspective")
-            sed -i '' "s/\[Product\/Feature\]/{{title}}/g" "$output_file"
-            ;;
-        "benchmarks-and-test-results")
-            sed -i '' "s/\[Project\/Benchmark\]/{{title}}/g" "$output_file"
+        "research-benchmarks")
+            sed -i '' "s/\[Your Method\]/{{title}}/g" "$output_file"
+            sed -i '' "s/\[Baseline Methods\]/Baseline Methods/g" "$output_file"
             ;;
         "reflections")
             sed -i '' "s/\[Reflection Topic\]/{{title}}/g" "$output_file"
             ;;
-        "journey")
-            sed -i '' "s/\[Topic\/Experience\]/{{title}}/g" "$output_file"
-            ;;
         "philosophy")
             sed -i '' "s/\[Philosophical Topic\]/{{title}}/g" "$output_file"
-            ;;
-        "walkthrough")
-            sed -i '' "s/\[Process\/Topic\]/{{title}}/g" "$output_file"
             ;;
     esac
     
@@ -127,13 +116,16 @@ new type template title:
 list-templates:
     @echo "Available Blog Templates:"
     @echo ""
-    @echo "📱 Technical Templates (blog/templates/technical/):"
-    @ls templates/technical/ | sed 's/\.md$//' | sed 's/^/  ✓ /'
+    @echo "🔬 Data Science Templates (blog/templates/data-science/):"
+    @ls templates/data-science/ | sed 's/\.md$//' | sed 's/^/  ✓ /'
+    @echo ""
+    @echo "📚 Academic Templates (blog/templates/academic/):"
+    @ls templates/academic/ | sed 's/\.md$//' | sed 's/^/  ✓ /'
     @echo ""
     @echo "👤 Personal Templates (blog/templates/personal/):"
     @ls templates/personal/ | sed 's/\.md$//' | sed 's/^/  ✓ /'
     @echo ""
-    @echo "Usage: just new <technical|personal> <template-name> \"<title>\""
+    @echo "Usage: just new <data-science|academic|personal> <template-name> \"<title>\""
 
 # List all blog posts
 list:
