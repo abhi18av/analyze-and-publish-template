@@ -1,5 +1,6 @@
 # Remove broken imports
 import 'pipelines/pipelines.just'
+import 'dashboards/dashboards.just'
 import "data/data.just"
 import "infrastructure/environments.just"
 import "infrastructure/infrastructure.just"
