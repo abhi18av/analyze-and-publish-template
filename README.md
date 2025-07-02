@@ -27,7 +27,7 @@ just notebooks new-eda "initial-exploration"
 ## ✨ Key Features
 
 - 📊 **10-Stage Analysis Pipeline**: From data extraction to deployment
-- 📝 **Academic Writing Integration**: Manuscript, presentations, and grant templates
+- 📝 **Comprehensive Academic Writing**: Complete ecosystem for research dissemination
 - 🔄 **Reproducible Workflows**: DVC pipelines and environment management
 - 🤖 **Multi-Language Support**: Python, R, Julia, Clojure, and more
 - 🐳 **Infrastructure as Code**: Docker, Terraform, and VM provisioning
@@ -35,6 +35,16 @@ just notebooks new-eda "initial-exploration"
 - ✅ **Data Validation**: Great Expectations and Pandera frameworks
 - 🔍 **Code Quality**: Pre-commit hooks, testing, and linting
 - 📖 **Rich Documentation**: Quarto-based reports and documentation
+
+### 🎯 Enhanced Academic Writing System
+
+- **📄 Presentations**: Academic, corporate, and workshop templates with automation
+- **📝 Abstracts**: Conference, journal, and symposium abstract management with tracking
+- **💰 Grants**: NSF, NIH, DOE, and foundation proposal templates with deadlines
+- **📋 Reports**: Technical, executive, project, and grant progress reports
+- **🎨 Posters**: Academic, conference, and professional poster templates
+- **⚡ Automation**: Just-based commands for creation, rendering, and management
+- **🔄 Workflow**: Complete lifecycle from draft to publication with version control
 
 ## Features
 
@@ -116,11 +126,32 @@ my-analysis-project/
 │   ├── data/                   # Data pipeline structure
 │   ├── tests/                  # Testing framework
 │   └── infrastructure/         # Infrastructure as code
-├── writeup/                    # Academic writing
-│   ├── manuscript/             # Journal articles
-│   ├── presentations/          # Conference presentations
-│   ├── grants/                 # Grant applications
-│   └── reports/                # Technical reports
+├── writeup/                    # Academic writing ecosystem
+│   ├── manuscript/             # Journal articles & papers
+│   ├── presentation/           # Conference presentations & slides
+│   │   ├── templates/          # Academic, corporate, workshop templates
+│   │   ├── presentations/      # Your presentation projects
+│   │   └── _output/            # Rendered presentations (PDF/HTML)
+│   ├── abstracts/              # Conference & journal abstracts
+│   │   ├── templates/          # Abstract templates by type
+│   │   ├── conference/         # Conference abstracts
+│   │   ├── journal/            # Journal abstracts
+│   │   ├── symposium/          # Workshop & symposium abstracts
+│   │   └── tracking/           # Deadline & review tracking
+│   ├── grants/                 # Grant applications & management
+│   │   ├── templates/          # NSF, NIH, DOE, private foundation templates
+│   │   ├── applications/       # Active, submitted, awarded grants
+│   │   ├── assets/             # Supporting materials & budgets
+│   │   └── tracking/           # Deadlines & progress tracking
+│   ├── report/                 # Technical reports & documentation
+│   │   ├── templates/          # Technical, executive, project, grant reports
+│   │   ├── reports/            # Your report projects
+│   │   └── _output/            # Rendered reports (PDF/HTML/DOCX)
+│   ├── poster/                 # Academic & professional posters
+│   │   ├── templates/          # Academic, conference, professional templates
+│   │   ├── posters/            # Your poster projects
+│   │   └── _output/            # Rendered posters (PDF/HTML)
+│   └── blog/                   # Blog posts & informal writing
 ├── justfile                    # Task automation
 ├── pyproject.toml              # Python project configuration
 └── README.md                   # Project documentation
@@ -262,14 +293,34 @@ just notebooks report "customer-segmentation"
 ### Academic Writing
 
 ```shell
-# Create manuscript
+# Manuscript writing
 just writeup manuscript-new "customer-analysis-paper"
-
-# Generate presentation
-just writeup presentation-new "conference-talk"
-
-# Compile to PDF
 just writeup manuscript-render
+
+# Presentations and slides
+cd writeup/presentation
+just create-academic "research-talk"
+just render-presentation "research-talk" format=revealjs
+
+# Abstract management
+cd writeup/abstracts
+just new-conference "conference-abstract" "ICML-2024"
+just list-submitted
+
+# Grant applications
+cd writeup/grants
+just new-nsf "data-science-grant"
+just deadlines
+
+# Reports and documentation
+cd writeup/report
+just create-technical "analysis-report"
+just render-report "analysis-report" format=pdf
+
+# Poster creation
+cd writeup/poster
+just create-academic "conference-poster"
+just render-poster academic "conference-poster"
 ```
 
 ### Infrastructure Management
