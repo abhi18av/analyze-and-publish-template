@@ -108,12 +108,32 @@ This project follows a structured approach to data science that covers the entir
 │   ├── tests/                  # 🧪 Testing framework
 │   ├── packages/               # 📦 Local packages
 │   └── infrastructure/         # 🏗️ Infrastructure as code
-├── writeup/                    # ✍️ Academic writing
-│   ├── manuscript/             # 📄 Journal articles
-│   ├── presentations/          # 🎤 Conference presentations
-│   ├── grants/                 # 💰 Grant applications
-│   ├── reports/                # 📋 Technical reports
-│   └── blog/                   # 📝 Blog posts
+├── writeup/                    # ✍️ Academic writing ecosystem
+│   ├── manuscript/             # 📄 Journal articles & papers
+│   ├── presentation/           # 🎤 Conference presentations & slides
+│   │   ├── templates/          # Academic, corporate, workshop templates
+│   │   ├── presentations/      # Your presentation projects
+│   │   └── _output/            # Rendered presentations (PDF/HTML)
+│   ├── abstracts/              # 📝 Conference & journal abstracts
+│   │   ├── templates/          # Abstract templates by type
+│   │   ├── conference/         # Conference abstracts (submitted/accepted/presented)
+│   │   ├── journal/            # Journal abstracts (submitted/accepted/presented)
+│   │   ├── symposium/          # Workshop & symposium abstracts
+│   │   └── tracking/           # Deadline & review tracking
+│   ├── grants/                 # 💰 Grant applications & management
+│   │   ├── templates/          # NSF, NIH, DOE, private foundation templates
+│   │   ├── applications/       # Active, submitted, awarded grants
+│   │   ├── assets/             # Supporting materials & budgets
+│   │   └── tracking/           # Deadlines & progress tracking
+│   ├── report/                 # 📋 Technical reports & documentation
+│   │   ├── templates/          # Technical, executive, project, grant reports
+│   │   ├── reports/            # Your report projects
+│   │   └── _output/            # Rendered reports (PDF/HTML/DOCX)
+│   ├── poster/                 # 🎨 Academic & professional posters
+│   │   ├── templates/          # Academic, conference, professional templates
+│   │   ├── posters/            # Your poster projects
+│   │   └── _output/            # Rendered posters (PDF/HTML)
+│   └── blog/                   # 📝 Blog posts & informal writing
 ├── .github/                    # 🔄 GitHub workflows
 ├── justfile                    # ⚡ Task automation
 ├── pyproject.toml              # 🐍 Python configuration
@@ -433,7 +453,7 @@ pip install neptune
 
 ## ✍️ Academic Writing
 
-The `writeup/` directory provides templates for academic output:
+The `writeup/` directory provides a comprehensive academic writing ecosystem with specialized tools and templates:
 
 ### Manuscript Writing
 
@@ -446,27 +466,112 @@ just writeup manuscript-new "my-research-paper"
 just writeup manuscript-render
 ```
 
-### Presentations
+### Enhanced Presentation System
 
 ```shell
-# Create presentation
-just writeup presentation-new "conference-talk"
+# Navigate to presentations
+cd writeup/presentation
 
-# Create poster
-just writeup poster-new "poster-session"
+# Create different types of presentations
+just create-academic "research-talk"          # Academic conference
+just create-corporate "business-review"        # Corporate presentation
+just create-workshop "data-training"           # Interactive workshop
+
+# Render presentations
+just render-presentation "research-talk" format=revealjs
+just render-presentation "business-review" format=pptx version=final
+
+# List and manage presentations
+just list-presentations
+just clone-presentation "old-talk" "new-talk"
+```
+
+### Abstract Management System
+
+```shell
+# Navigate to abstracts
+cd writeup/abstracts
+
+# Create different types of abstracts
+just new-conference "icml-abstract" "ICML-2024"
+just new-journal "nature-abstract" "Nature-Medicine"
+just new-symposium "workshop-talk" "Data-Science-Symposium"
+
+# Manage abstract workflow
+just list-submitted                           # View pending abstracts
+just accept conference "icml-abstract"         # Move to accepted
+just present conference "icml-abstract"        # Mark as presented
+
+# Track deadlines and reviews
+just deadlines                               # Check upcoming deadlines
+just stats                                   # View submission statistics
 ```
 
 ### Grant Applications
 
 ```shell
-# Create NSF proposal
-just writeup grants new-nsf "innovative-research"
+# Navigate to grants
+cd writeup/grants
 
-# Create NIH proposal
-just writeup grants new-nih "medical-research"
+# Create different types of grant proposals
+just new-nsf "data-science-grant"            # NSF proposal
+just new-nih "medical-ai-research"           # NIH proposal
+just new-foundation "education-project"       # Private foundation
 
-# Track deadlines
-just writeup grants deadlines
+# Track grant lifecycle
+just list-active                             # View active applications
+just submit "data-science-grant"             # Move to submitted
+just award "medical-ai-research"             # Mark as awarded
+
+# Generate supporting documents
+just budget "data-science-grant"             # Create budget template
+just dmp "data-science-grant"                # Data management plan
+
+# Track deadlines and statistics
+just deadlines                              # Upcoming deadlines
+just stats                                   # Success rates
+```
+
+### Report Management System
+
+```shell
+# Navigate to reports
+cd writeup/report
+
+# Create different types of reports
+just create-technical "analysis-report"      # Technical analysis
+just create-executive "quarterly-summary"    # Executive summary
+just create-project "status-update"          # Project report
+just create-grant "nsf-progress"             # Grant progress report
+
+# Render reports
+just render-report "analysis-report" format=pdf
+just render-report "quarterly-summary" format=html version=final
+
+# Advanced features
+just batch-render format=pdf                # Render all reports
+just export-pdf "analysis-report"           # Export with timestamp
+just clone-report "q1-report" "q2-report"    # Clone for new period
+```
+
+### Poster Creation System
+
+```shell
+# Navigate to posters
+cd writeup/poster
+
+# Create different types of posters
+just create-academic "research-poster"       # Academic research
+just create-conference "conference-poster"   # Conference presentation
+just create-professional "business-poster"   # Professional/corporate
+
+# Render posters
+just render-poster academic "research-poster" format=pdf
+just render-poster conference "conference-poster" format=html
+
+# Manage poster versions
+just resize-poster academic "research-poster" size=42x30
+just export-pdf academic "research-poster" version=final
 ```
 
 ## 🚀 Deployment
