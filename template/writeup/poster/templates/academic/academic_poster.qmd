@@ -1,0 +1,163 @@
+---
+title: "Academic Research Poster"
+subtitle: "Research Findings and Analysis"
+author:
+  - name: "Author Name"
+    affiliation: "Department, Institution"
+    email: "author@institution.edu"
+  - name: "Co-Author Name"
+    affiliation: "Department, Institution"
+    email: "coauthor@institution.edu"
+date: last-modified
+format:
+  poster-typst:
+    size: "48x36"
+    poster-authors: "Author Name, Co-Author Name"
+    departments: "Department, Institution"
+    institution-logo: "../../styles/logo.png"
+    institution-url: "institution.edu"
+    footer-text: "Conference Name, Location, Date"
+    footer-color: "#b79962"
+    header-color: "#61223b"
+    sectitle-color: "#61223b"
+    columns: 3
+    font-family: "Fira Sans"
+    sectitle-font-family: "Fira Sans"
+    fontsize: 30px
+    sectitle-fontsize: 45px
+    fontweight: light
+    sectitle-fontweight: medium
+    title-fontweight: regular
+    title-fontsize: 65px
+    sectitle-space-before: 0.5em
+    sectitle-space-after: 0.2em
+    sectitle-style: normal
+    self-contained: true
+bibliography: ../../references.bib
+---
+
+# Introduction
+
+## Background
+
+- [Brief context for your research]
+- [Identify key gaps or challenges in the field]
+- [Significance of addressing this research question]
+
+## Research Question
+
+[Clearly state your primary research question or objective]
+
+# Methods
+
+## Study Design
+
+- [Type of study: experimental, observational, etc.]
+- [Key methodological approaches]
+- [Sample size and selection criteria]
+
+## Data Collection
+
+- [How data was collected]
+- [Instruments or measures used]
+- [Time period of data collection]
+
+## Analysis
+
+- [Statistical methods]
+- [Software used]
+- [Analytical approach]
+
+# Results
+
+## Key Finding 1
+
+[Clearly state the first major finding]
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: "Figure 1: Caption describing the visualization"
+# Insert visualization code here
+plot(1:10, 1:10, type="l", xlab="X", ylab="Y")
+```
+
+## Key Finding 2
+
+[Clearly state the second major finding]
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: "Figure 2: Caption describing the visualization"
+# Insert visualization code here
+plot(10:1, 1:10, type="l", xlab="X", ylab="Y")
+```
+
+## Statistical Results
+
+[Summary of statistical analyses]
+
+```{r}
+#| echo: false
+#| tbl-cap: "Table 1: Statistical Results"
+# Insert table generation code here
+data.frame(
+  Variable = c("Var1", "Var2", "Var3"),
+  Coefficient = c(0.45, -0.21, 0.33),
+  "p-value" = c("<0.001", "0.04", "0.01")
+)
+```
+
+# Discussion
+
+## Interpretation
+
+- [What do these findings mean?]
+- [How do they relate to previous work?]
+- [Theoretical or practical implications]
+
+## Limitations
+
+- [Acknowledge key limitations]
+- [How might these affect the interpretation of results?]
+
+# Conclusion
+
+## Summary
+
+- [Restate key findings]
+- [Emphasize main contribution to the field]
+
+## Future Directions
+
+- [Suggest next steps for research]
+- [Potential applications]
+
+# References
+
+::: {#refs}
+:::
+
+# Acknowledgments
+
+[Funding sources]  
+[Contributors]  
+[Institutional support]
+
+# Contact Information
+
+**Author Name**  
+Email: author@institution.edu  
+Website: institution.edu/author
+
+```{r qrcode, echo=FALSE}
+#| eval: false
+#| echo: false
+# Uncomment to add QR code to website/paper
+#library(qrcode)
+#qr <- qr_code("https://yourwebsite.com/paper")
+#plot(qr)
+```
