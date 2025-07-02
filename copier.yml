@@ -48,43 +48,23 @@ project_type:
   default: Full Academic Project (analysis + writeup)
 
 # === PRINCIPAL FOLDER SELECTION ===
+# These will be auto-calculated based on project_type
 include_analysis:
   type: bool
   help: Include analysis folder (notebooks, scripts, data pipeline)
-  default: >
-    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Analysis Only (data science pipeline)", "Package Development (software/library)"] -%}
-    true
-    {%- elif project_type == "Custom (choose components manually)" -%}
-    true
-    {%- else -%}
-    false
-    {%- endif -%}
+  default: true
   when: "{{ project_type == 'Custom (choose components manually)' }}"
 
 include_writeup:
   type: bool
   help: Include writeup folder (manuscripts, presentations, grants, reports)
-  default: >
-    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Manuscript Only (writing and publications)"] -%}
-    true
-    {%- elif project_type == "Custom (choose components manually)" -%}
-    true
-    {%- else -%}
-    false
-    {%- endif -%}
+  default: true
   when: "{{ project_type == 'Custom (choose components manually)' }}"
 
 include_infrastructure:
   type: bool
   help: Include infrastructure folder (Docker, cloud deployment, CI/CD)
-  default: >
-    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Package Development (software/library)"] -%}
-    true
-    {%- elif project_type == "Custom (choose components manually)" -%}
-    false
-    {%- else -%}
-    false
-    {%- endif -%}
+  default: false
   when: "{{ project_type == 'Custom (choose components manually)' }}"
 
 include_misc:
