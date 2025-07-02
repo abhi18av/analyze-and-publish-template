@@ -1,0 +1,171 @@
+name: template-analysis
+version: '1.0'
+summary: Template Analysis Data Science Platform
+description: |
+  A comprehensive data science platform for template analysis,
+  including Jupyter Lab, data processing pipelines, and analysis tools.
+  
+  This snap packages the entire platform for easy deployment across
+  Ubuntu systems and other snap-enabled distributions.
+
+grade: stable
+confinement: strict
+base: core22
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+
+# Application definitions
+apps:
+  jupyter:
+    command: bin/start-jupyter.sh
+    daemon: simple
+    restart-condition: always
+    environment:
+      JUPYTER_CONFIG_DIR: $SNAP_DATA/jupyter
+      JUPYTER_DATA_DIR: $SNAP_DATA/jupyter
+    plugs:
+      - network
+      - network-bind
+      - home
+      - removable-media
+    
+  api:
+    command: bin/start-api.sh
+    daemon: simple
+    restart-condition: always
+    environment:
+      API_CONFIG: $SNAP_DATA/config/api.yaml
+    plugs:
+      - network
+      - network-bind
+      - home
+    
+  cli:
+    command: bin/template-analysis
+    environment:
+      CONFIG_PATH: $SNAP_DATA/config
+    plugs:
+      - network
+      - home
+      - removable-media
+
+# Parts to build
+parts:
+  # Python application
+  python-app:
+    plugin: python
+    source: .
+    requirements:
+      - requirements.txt
+    python-packages:
+      - jupyter
+      - jupyterlab
+      - pandas
+      - numpy
+      - scikit-learn
+      - matplotlib
+      - seaborn
+      - plotly
+      - fastapi
+      - uvicorn
+    stage-packages:
+      - python3
+      - python3-pip
+      - python3-venv
+    override-build: |
+      craftctl default
+      
+      # Create startup scripts
+      mkdir -p $CRAFTCTL_PART_INSTALL/bin
+      
+      # Jupyter startup script
+      cat > $CRAFTCTL_PART_INSTALL/bin/start-jupyter.sh << 'EOF'
+      #!/bin/bash
+      export JUPYTER_CONFIG_DIR=$SNAP_DATA/jupyter
+      export JUPYTER_DATA_DIR=$SNAP_DATA/jupyter
+      mkdir -p $JUPYTER_CONFIG_DIR $JUPYTER_DATA_DIR
+      cd $SNAP_DATA
+      exec $SNAP/usr/bin/python3 -m jupyter lab \
+        --ip=0.0.0.0 \
+        --port=8888 \
+        --no-browser \
+        --allow-root \
+        --config=$JUPYTER_CONFIG_DIR/jupyter_lab_config.py
+      EOF
+      
+      # API startup script
+      cat > $CRAFTCTL_PART_INSTALL/bin/start-api.sh << 'EOF'
+      #!/bin/bash
+      cd $SNAP_DATA
+      exec $SNAP/usr/bin/python3 -m uvicorn main:app \
+        --host 0.0.0.0 \
+        --port 8000 \
+        --reload
+      EOF
+      
+      # CLI script
+      cat > $CRAFTCTL_PART_INSTALL/bin/template-analysis << 'EOF'
+      #!/bin/bash
+      exec $SNAP/usr/bin/python3 $SNAP/cli.py "$@"
+      EOF
+      
+      chmod +x $CRAFTCTL_PART_INSTALL/bin/*
+  
+  # Configuration files
+  config:
+    plugin: dump
+    source: config/
+    organize:
+      '*': config/
+    stage:
+      - config/*
+  
+  # Data and models
+  data:
+    plugin: dump
+    source: data/
+    organize:
+      '*': data/
+    stage:
+      - data/*
+  
+  # Node.js for Jupyter extensions
+  nodejs:
+    plugin: npm
+    source: .
+    npm-include-node: true
+    npm-node-version: "18.17.0"
+    override-build: |
+      craftctl default
+      # Install JupyterLab extensions
+      npm install -g @jupyterlab/git
+      npm install -g @jupyterlab/github
+
+# Plugs for additional permissions
+plugs:
+  dot-config-jupyter:
+    interface: personal-files
+    write:
+      - $HOME/.config/jupyter
+  dot-jupyter:
+    interface: personal-files
+    write:
+      - $HOME/.jupyter
+
+# Slots for providing services
+slots:
+  jupyter-api:
+    interface: content
+    content: jupyter-api
+    write:
+      - $SNAP_DATA/jupyter
+
+# Hooks for lifecycle management
+hooks:
+  install:
+    plugs:
+      - network
+  configure:
+    plugs:
+      - network

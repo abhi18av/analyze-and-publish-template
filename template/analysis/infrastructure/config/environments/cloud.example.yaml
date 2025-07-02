@@ -1,0 +1,100 @@
+# Cloud Environment Configuration
+# Copy this file to cloud.yaml and customize the values
+
+environment:
+  name: "production"
+  description: "Production cloud environment"
+  
+project:
+  name: "template-analysis"
+  owner: "platform-team"
+  cost_center: "production"
+  
+# Cloud Provider Configuration (OCI)
+cloud:
+  provider: "oci"
+  region: "us-ashburn-1"
+  tenancy_ocid: "${OCI_TENANCY_OCID}"
+  user_ocid: "${OCI_USER_OCID}"
+  fingerprint: "${OCI_FINGERPRINT}"
+  private_key_path: "${OCI_PRIVATE_KEY_PATH}"
+  compartment_ocid: "${OCI_COMPARTMENT_OCID}"
+  
+# Compute Configuration
+compute:
+  instance_shape: "VM.Standard.E4.Flex"
+  instance_count: 3
+  cpu_count: 2
+  memory_gb: 8
+  boot_volume_size_gb: 100
+  
+# Database Configuration
+database:
+  type: "oci-autonomous"
+  cpu_count: 1
+  storage_gb: 20
+  auto_scaling: true
+  backup_retention_days: 30
+  
+# Storage Configuration
+storage:
+  type: "oci-object-storage"
+  bucket_name: "template-analysis-data"
+  backup_enabled: true
+  versioning_enabled: true
+  
+# Networking
+networking:
+  vpc_cidr: "10.1.0.0/16"
+  public_subnet_cidr: "10.1.1.0/24"
+  private_subnet_cidr: "10.1.2.0/24"
+  
+# Load Balancer
+load_balancer:
+  type: "oci-nlb"
+  shape: "flexible"
+  bandwidth_mbps: 100
+  
+# Monitoring Configuration
+monitoring:
+  enabled: true
+  retention_days: 90
+  alerting_enabled: true
+  notification_email: "alerts@company.com"
+  
+# Security
+security:
+  ssh_key_path: "~/.ssh/id_rsa.pub"
+  enable_firewall: true
+  enable_waf: true
+  allowed_ips:
+    - "0.0.0.0/0"  # Restrict this in production
+    
+# Backup Configuration
+backup:
+  enabled: true
+  frequency: "daily"
+  retention_days: 30
+  cross_region_backup: true
+  
+# Auto Scaling
+auto_scaling:
+  enabled: true
+  min_instances: 2
+  max_instances: 10
+  target_cpu_utilization: 70
+  
+# Feature Flags
+features:
+  jupyter_enabled: true
+  minio_enabled: true
+  nomad_enabled: true
+  kubernetes_enabled: true
+  
+# Resource Tags
+tags:
+  Environment: "production"
+  Project: "template-analysis"
+  Owner: "platform-team"
+  CostCenter: "production"
+  Terraform: "true"

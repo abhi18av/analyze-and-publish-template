@@ -1,0 +1,405 @@
+# Infrastructure Management Justfile
+# This file contains recipes for managing infrastructure
+
+set shell := ["bash", "-c"]
+
+# Default recipe - show available commands
+default:
+    @just --list
+
+# === Environment Management ===
+
+# Initialize infrastructure configuration for an environment
+infrastructure-init environment:
+    @echo "Initializing infrastructure for {{environment}}"
+    @mkdir -p logs
+    @cp config/environments/{{environment}}.example.yaml config/environments/{{environment}}.yaml
+    @echo "✅ Configuration template created. Please edit config/environments/{{environment}}.yaml"
+
+# Validate infrastructure configuration
+infrastructure-validate environment:
+    @echo "Validating infrastructure configuration for {{environment}}"
+    @python3 automations/cloud.py validate {{environment}}
+
+# Deploy infrastructure for specified environment
+infrastructure-deploy environment:
+    @echo "Deploying infrastructure for {{environment}}"
+    @python3 automations/cloud.py provision {{environment}}
+
+# Destroy infrastructure for specified environment
+infrastructure-destroy environment:
+    @echo "Destroying infrastructure for {{environment}}"
+    @python3 automations/cloud.py destroy {{environment}}
+
+# Check infrastructure status
+infrastructure-status environment:
+    @echo "Checking infrastructure status for {{environment}}"
+    @python3 automations/cloud.py status {{environment}}
+
+# Check infrastructure health across all services
+infrastructure-health environment:
+    @echo "Checking infrastructure health for {{environment}}"
+    @bash scripts/check_infrastructure_status.sh
+
+# === Terraform Management ===
+
+# Initialize Terraform in specified directory
+terraform-init dir:
+    @echo "Initializing Terraform in {{dir}}"
+    @cd terraform/{{dir}} && terraform init
+
+# Plan Terraform changes
+terraform-plan dir:
+    @echo "Planning Terraform changes in {{dir}}"
+    @cd terraform/{{dir}} && terraform plan
+
+# Apply Terraform changes
+terraform-apply dir:
+    @echo "Applying Terraform changes in {{dir}}"
+    @cd terraform/{{dir}} && terraform apply
+
+# Destroy Terraform resources
+terraform-destroy dir:
+    @echo "Destroying Terraform resources in {{dir}}"
+    @cd terraform/{{dir}} && terraform destroy
+
+# Format Terraform files
+terraform-format:
+    @echo "Formatting Terraform files"
+    @find terraform -name "*.tf" -exec terraform fmt {} \;
+
+# Validate all Terraform configurations
+terraform-validate:
+    @echo "Validating all Terraform configurations"
+    @for dir in terraform/*/; do echo "Validating $dir"; cd "$dir" && terraform init -backend=false && terraform validate && cd ../..; done
+
+# === Kubernetes Management ===
+
+# Apply Kubernetes manifests
+k8s-apply:
+    @echo "Applying Kubernetes manifests"
+    @kubectl apply -f kubernetes/manifests/
+
+# Deploy application to Kubernetes
+k8s-deploy app environment:
+    @echo "Deploying {{app}} to {{environment}}"
+    @kubectl apply -f kubernetes/manifests/{{app}}.yaml
+
+# Get Kubernetes status
+k8s-status:
+    @echo "Getting Kubernetes status"
+    @kubectl get nodes,pods,services --all-namespaces
+
+# === Juju Management ===
+
+# Bootstrap Juju controller
+juju-bootstrap cloud='localhost':
+    @echo "Bootstrapping Juju controller on {{cloud}}"
+    @juju bootstrap {{cloud}} template-analysis-controller
+
+# Deploy Juju bundle
+juju-deploy bundle environment:
+    @echo "Deploying {{bundle}} bundle for {{environment}}"
+    @juju deploy juju/bundles/{{bundle}}.yml --overlay juju/overlays/{{environment}}.yml
+
+# Get Juju status
+juju-status:
+    @echo "Getting Juju status"
+    @juju status
+
+# === Container Management ===
+
+# Start monitoring stack
+monitoring-start:
+    @echo "Starting monitoring stack"
+    @cd monitoring && docker-compose up -d
+
+# Stop monitoring stack
+monitoring-stop:
+    @echo "Stopping monitoring stack"
+    @cd monitoring && docker-compose down
+
+# View monitoring logs
+monitoring-logs:
+    @echo "Viewing monitoring logs"
+    @cd monitoring && docker-compose logs -f
+
+# === Security ===
+
+# Run security scan
+security-scan:
+    @echo "Running security scan"
+    @bash security/scanning/security-scan.sh
+
+# Run security scan with tool installation
+security-scan-install:
+    @echo "Running security scan with tool installation"
+    @bash security/scanning/security-scan.sh --install-tools
+
+# === Testing ===
+
+# Run infrastructure tests
+test-infrastructure:
+    @echo "Running infrastructure tests"
+    @cd testing/terratest && go test -v
+
+# Run Dagger CI/CD pipeline
+pipeline-run type='all':
+    @echo "Running {{type}} pipeline"
+    @python3 dagger/pipeline.py --pipeline {{type}}
+
+# === Virtualization ===
+
+# Start Multipass VM
+vm-start name:
+    @echo "Starting Multipass VM: {{name}}"
+    @multipass start {{name}}
+
+# Stop Multipass VM
+vm-stop name:
+    @echo "Stopping Multipass VM: {{name}}"
+    @multipass stop {{name}}
+
+# Shell into Multipass VM
+vm-shell name:
+    @echo "Connecting to Multipass VM: {{name}}"
+    @multipass shell {{name}}
+
+# List Multipass VMs
+vm-list:
+    @echo "Listing Multipass VMs"
+    @multipass list
+
+# === Maintenance ===
+
+# Clean up unused resources
+cleanup:
+    @echo "Cleaning up unused resources"
+    @docker system prune -f
+    @docker volume prune -f
+    @echo "✅ Docker cleanup completed"
+
+# Update infrastructure tools
+update-tools:
+    @echo "Updating infrastructure tools"
+    @brew update && brew upgrade terraform juju multipass docker
+    @echo "✅ Tools updated"
+
+# Check tool versions
+check-versions:
+    @echo "Checking tool versions"
+    @echo "Terraform: $(terraform version | head -1)"
+    @echo "Docker: $(docker --version)"
+    @echo "Juju: $(juju version)"
+    @echo "Multipass: $(multipass version)"
+    @echo "Kubectl: $(kubectl version --client --short 2>/dev/null || echo 'Not installed')"
+
+# Generate infrastructure documentation
+docs-generate:
+    @echo "Generating infrastructure documentation"
+    @terraform-docs markdown table terraform/local-multipass-vm > terraform/local-multipass-vm/README.md
+    @terraform-docs markdown table terraform/oci-vm > terraform/oci-vm/README.md
+    @echo "✅ Documentation generated"
+
+# === Development ===
+
+# Setup development environment
+dev-setup:
+    @echo "Setting up development environment"
+    @just infrastructure-init local
+    @just infrastructure-deploy local
+    @just monitoring-start
+    @echo "✅ Development environment ready"
+
+# Teardown development environment
+dev-teardown:
+    @echo "Tearing down development environment"
+    @just monitoring-stop
+    @just infrastructure-destroy local
+    @echo "✅ Development environment cleaned up"
+
+# === Logs ===
+
+# View infrastructure logs
+logs service environment:
+    @echo "Viewing logs for {{service}} in {{environment}}"
+    @tail -f logs/{{service}}-{{environment}}.log
+
+# Archive old logs
+logs-archive:
+    @echo "Archiving old logs"
+    @mkdir -p logs/archive/$(date +%Y%m%d)
+    @mv logs/*.log logs/archive/$(date +%Y%m%d)/ 2>/dev/null || echo "No logs to archive"
+    @echo "✅ Logs archived"
+
+# === HashiCorp Stack Management ===
+
+# Start HashiCorp stack (Consul, Vault, Nomad)
+hashicorp-start:
+    @echo "Starting HashiCorp stack"
+    @cd hashicorp && docker-compose up -d consul vault nomad
+
+# Stop HashiCorp stack
+hashicorp-stop:
+    @echo "Stopping HashiCorp stack"
+    @cd hashicorp && docker-compose down
+
+# Initialize Vault
+vault-init:
+    @echo "Initializing Vault"
+    @docker exec vault vault operator init -key-shares=1 -key-threshold=1
+
+# Unseal Vault
+vault-unseal key:
+    @echo "Unsealing Vault"
+    @docker exec vault vault operator unseal {{key}}
+
+# Deploy with Waypoint
+waypoint-deploy app:
+    @echo "Deploying {{app}} with Waypoint"
+    @cd hashicorp/waypoint && waypoint deploy {{app}}
+
+# Get Consul members
+consul-members:
+    @echo "Getting Consul cluster members"
+    @docker exec consul consul members
+
+# Get Nomad nodes
+nomad-nodes:
+    @echo "Getting Nomad cluster nodes"
+    @docker exec nomad nomad node status
+
+# === Canonical Stack Management ===
+
+# Setup MicroK8s
+microk8s-setup:
+    @echo "Setting up MicroK8s"
+    @bash canonical/microk8s/setup.sh
+
+# Enable MicroK8s addon
+microk8s-enable addon:
+    @echo "Enabling MicroK8s addon: {{addon}}"
+    @microk8s enable {{addon}}
+
+# Get MicroK8s status
+microk8s-status:
+    @echo "Getting MicroK8s status"
+    @microk8s status
+
+# Build snap package
+snap-build:
+    @echo "Building snap package"
+    @cd canonical/snapcraft && snapcraft
+
+# Install local snap
+snap-install:
+    @echo "Installing local snap"
+    @sudo snap install canonical/snapcraft/template-analysis_1.0_amd64.snap --dangerous
+
+# === Integrated Stack Management ===
+
+# Deploy full Canonical + HashiCorp stack
+full-stack-deploy environment:
+    @echo "Deploying full integrated stack for {{environment}}"
+    @cd terraform/canonical-hashicorp-stack && terraform init && terraform apply -auto-approve
+
+# Destroy full stack
+full-stack-destroy environment:
+    @echo "Destroying full integrated stack for {{environment}}"
+    @cd terraform/canonical-hashicorp-stack && terraform destroy -auto-approve
+
+# Get full stack status
+full-stack-status:
+    @echo "Getting full stack status"
+    @cd terraform/canonical-hashicorp-stack && terraform output
+    @echo ""
+    @echo "Service Health:"
+    @docker exec consul consul members
+    @docker exec vault vault status
+    @docker exec nomad nomad node status
+
+# === Service Discovery ===
+
+# Register service in Consul
+consul-register service port:
+    @echo "Registering {{service}} on port {{port}} in Consul"
+    @curl -X PUT http://localhost:8500/v1/agent/service/register -d '{"Name": "{{service}}", "Port": {{port}}}'
+
+# Deregister service from Consul
+consul-deregister service:
+    @echo "Deregistering {{service}} from Consul"
+    @curl -X PUT http://localhost:8500/v1/agent/service/deregister/{{service}}
+
+# === Secrets Management ===
+
+# Store secret in Vault
+vault-put path key value:
+    @echo "Storing secret in Vault"
+    @docker exec vault vault kv put {{path}} {{key}}={{value}}
+
+# Get secret from Vault
+vault-get path:
+    @echo "Getting secret from Vault"
+    @docker exec vault vault kv get {{path}}
+
+# === Workload Management ===
+
+# Run Nomad job
+nomad-run job:
+    @echo "Running Nomad job: {{job}}"
+    @docker exec nomad nomad job run {{job}}
+
+# Stop Nomad job
+nomad-stop job:
+    @echo "Stopping Nomad job: {{job}}"
+    @docker exec nomad nomad job stop {{job}}
+
+# Get Nomad job status
+nomad-status job:
+    @echo "Getting Nomad job status: {{job}}"
+    @docker exec nomad nomad job status {{job}}
+
+# === Help ===
+
+# Show help for infrastructure management
+help:
+    @echo "🏗️  Infrastructure Management Commands"
+    @echo ""
+    @echo "📋 Environment Management:"
+    @echo "  infrastructure-init <env>     - Initialize configuration"
+    @echo "  infrastructure-deploy <env>   - Deploy infrastructure"
+    @echo "  infrastructure-destroy <env>  - Destroy infrastructure"
+    @echo "  infrastructure-status <env>   - Check status"
+    @echo ""
+    @echo "⚡ HashiCorp Stack:"
+    @echo "  hashicorp-start               - Start Consul, Vault, Nomad"
+    @echo "  hashicorp-stop                - Stop HashiCorp stack"
+    @echo "  vault-init                    - Initialize Vault"
+    @echo "  vault-unseal <key>            - Unseal Vault"
+    @echo "  consul-members                - List Consul members"
+    @echo "  nomad-nodes                   - List Nomad nodes"
+    @echo ""
+    @echo "🏗️  Canonical Stack:"
+    @echo "  microk8s-setup                - Setup MicroK8s"
+    @echo "  microk8s-status               - Get MicroK8s status"
+    @echo "  snap-build                    - Build snap package"
+    @echo "  snap-install                  - Install local snap"
+    @echo ""
+    @echo "🔄 Integrated Stack:"
+    @echo "  full-stack-deploy <env>       - Deploy complete stack"
+    @echo "  full-stack-destroy <env>      - Destroy complete stack"
+    @echo "  full-stack-status             - Get stack status"
+    @echo ""
+    @echo "🔍 Service Management:"
+    @echo "  consul-register <svc> <port>  - Register service"
+    @echo "  vault-put <path> <key> <val>  - Store secret"
+    @echo "  nomad-run <job>               - Run job"
+    @echo ""
+    @echo "🛠️  Development:"
+    @echo "  dev-setup                     - Setup dev environment"
+    @echo "  dev-teardown                  - Cleanup dev environment"
+    @echo ""
+    @echo "🔒 Security:"
+    @echo "  security-scan                 - Run security scan"
+    @echo ""
+    @echo "For full list: just --list"

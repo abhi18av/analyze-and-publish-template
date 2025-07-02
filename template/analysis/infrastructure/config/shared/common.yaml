@@ -1,0 +1,70 @@
+# Shared Configuration Values
+# These values are common across all environments
+
+# Default Resource Tags
+default_tags:
+  ManagedBy: "terraform"
+  Project: "template-analysis"
+  CreatedBy: "infrastructure-team"
+  
+# Common Ports
+ports:
+  ssh: 22
+  http: 80
+  https: 443
+  jupyter: 8888
+  prometheus: 9090
+  grafana: 3000
+  minio: 9000
+  minio_console: 9001
+  nomad: 4646
+  consul: 8500
+  vault: 8200
+  
+# Container Images
+images:
+  ubuntu: "ubuntu:22.04"
+  python: "python:3.11-slim"
+  jupyter: "jupyter/datascience-notebook:latest"
+  prometheus: "prom/prometheus:latest"
+  grafana: "grafana/grafana:latest"
+  minio: "minio/minio:latest"
+  postgres: "postgres:15"
+  redis: "redis:7-alpine"
+  
+# Network Configuration
+networks:
+  default_vpc_cidr: "10.0.0.0/16"
+  default_subnet_cidr: "10.0.1.0/24"
+  dns_servers:
+    - "8.8.8.8"
+    - "1.1.1.1"
+    
+# Security Defaults
+security:
+  allowed_ssh_users:
+    - "ubuntu"
+    - "datascientist"
+  required_packages:
+    - "fail2ban"
+    - "ufw"
+    - "unattended-upgrades"
+    
+# Monitoring Defaults
+monitoring:
+  scrape_interval: "15s"
+  evaluation_interval: "15s"
+  retention: "30d"
+  
+# Backup Defaults
+backup:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  compression: true
+  encryption: true
+  
+# Feature Flags
+global_features:
+  monitoring_enabled: true
+  backup_enabled: true
+  security_hardening: true
+  auto_updates: true

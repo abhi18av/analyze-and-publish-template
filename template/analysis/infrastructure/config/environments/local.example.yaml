@@ -1,0 +1,71 @@
+# Local Development Environment Configuration
+# Copy this file to local.yaml and customize the values
+
+environment:
+  name: "local"
+  description: "Local development environment"
+  
+project:
+  name: "template-analysis"
+  owner: "development-team"
+  cost_center: "engineering"
+  
+# Multipass VM Configuration
+multipass:
+  vm_name: "dev-vm"
+  cpus: 4
+  memory: "8G"
+  disk: "50G"
+  image: "22.04"  # Ubuntu version
+  
+# Docker Configuration
+docker:
+  registry: "localhost:5000"
+  network: "dev-network"
+  
+# Database Configuration
+database:
+  type: "postgresql"
+  host: "localhost"
+  port: 5432
+  name: "template_analysis_dev"
+  
+# Storage Configuration
+storage:
+  type: "local"
+  path: "./data"
+  backup_enabled: false
+  
+# Monitoring Configuration
+monitoring:
+  enabled: true
+  prometheus:
+    port: 9090
+  grafana:
+    port: 3000
+    
+# Networking
+networking:
+  vpc_cidr: "10.0.0.0/16"
+  subnet_cidr: "10.0.1.0/24"
+  
+# Security
+security:
+  ssh_key_path: "~/.ssh/id_rsa.pub"
+  enable_firewall: false
+  allowed_ips:
+    - "127.0.0.1/32"
+    - "10.0.0.0/8"
+    
+# Feature Flags
+features:
+  jupyter_enabled: true
+  minio_enabled: true
+  nomad_enabled: false
+  kubernetes_enabled: false
+  
+# Resource Limits
+resources:
+  max_cpu: 8
+  max_memory: "16G"
+  max_storage: "100G"
