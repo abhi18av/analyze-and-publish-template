@@ -67,3 +67,8 @@ template/writeup/manuscript/pollen/compiled
 
 template/.idea
 template/template.iml
+
+docs/presentations/academic-template/output/src/template-presentation_files
+docs/presentations/academic-template/output/template-presentation_files
+template-presentation_files
+/docs/presentations/output/src/template-presentation.html

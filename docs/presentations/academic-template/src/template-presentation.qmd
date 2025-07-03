@@ -5,11 +5,11 @@ author: "Research Team"
 date: today
 format:
   revealjs:
-    theme: [default, custom.scss]
+    theme: [default, ../assets/custom.scss]
     slide-number: true
     chalkboard: true
     preview-links: auto
-    logo: assets/logo.png
+    logo: ../assets/logo.png
     footer: "Comprehensive Academic Research Template"
     transition: fade
     background-transition: fade
@@ -17,11 +17,11 @@ format:
     code-line-numbers: true
     code-overflow: wrap
   pptx:
-    reference-doc: assets/template.pptx
+    reference-doc: ../assets/template.pptx
   pdf:
     documentclass: beamer
     theme: metropolis
-bibliography: references.bib
+bibliography: ../assets/references.bib
 execute:
   echo: true
   eval: false
@@ -37,7 +37,7 @@ execute:
 ### Current Challenges
 
 - **Fragmented toolchains** across disciplines
-- **Inconsistent project structure** 
+- **Inconsistent project structure**
 - **Poor reproducibility** standards
 - **Complex dependency management**
 - **Isolated analysis environments**
@@ -196,14 +196,14 @@ notebooks/
 ```groovy
 process analyze_samples {
     conda 'bioconda::fastqc'
-    
+
     input:
     path sample_file
-    
+
     output:
     path "*.html"
     path "*.zip"
-    
+
     script:
     """
     fastqc ${sample_file} \
@@ -272,7 +272,7 @@ rule quality_control:
 
 checkpoint validate_processing:
     input:
-        expand("data/02_processed/{sample}_qc.html", 
+        expand("data/02_processed/{sample}_qc.html",
                sample=SAMPLES)
     output:
         "checkpoints/validation.txt"
@@ -558,18 +558,18 @@ analysis_envs:
 # Automated research infrastructure
 module "research_cluster" {
   source = "./modules/compute"
-  
+
   node_count = var.worker_nodes
   instance_type = "compute-optimized"
-  
+
   storage = {
     data_volume = "1TB"
     scratch_volume = "500GB"
   }
-  
+
   software = [
     "nextflow",
-    "snakemake", 
+    "snakemake",
     "jupyter",
     "rstudio-server"
   ]
@@ -715,26 +715,27 @@ just supplemental-prepare
 
 ```{r}
 #| echo: false
-#| eval: true
-library(ggplot2)
-library(dplyr)
+#| eval: false
 
-metrics <- data.frame(
-  Metric = c("Setup Time", "Reproducibility", "Publication Speed", 
-             "Collaboration Efficiency", "Code Quality", "Documentation"),
-  Before = c(40, 45, 60, 30, 35, 25),
-  After = c(10, 95, 25, 85, 90, 88),
-  Improvement = c(75, 111, 58, 183, 157, 252)
-)
-
-ggplot(metrics, aes(x = reorder(Metric, Improvement))) +
-  geom_col(aes(y = Improvement), fill = "#2563eb", alpha = 0.8) +
-  coord_flip() +
-  labs(title = "Performance Improvements with Template",
-       x = "Research Workflow Metrics",
-       y = "Percentage Improvement") +
-  theme_minimal() +
-  theme(text = element_text(size = 14))
+#library(ggplot2)
+#library(dplyr)
+#
+#metrics <- data.frame(
+#  Metric = c("Setup Time", "Reproducibility", "Publication Speed",
+#             "Collaboration Efficiency", "Code Quality", "Documentation"),
+#  Before = c(40, 45, 60, 30, 35, 25),
+#  After = c(10, 95, 25, 85, 90, 88),
+#  Improvement = c(75, 111, 58, 183, 157, 252)
+#)
+#
+#ggplot(metrics, aes(x = reorder(Metric, Improvement))) +
+#  geom_col(aes(y = Improvement), fill = "#2563eb", alpha = 0.8) +
+#  coord_flip() +
+#  labs(title = "Performance Improvements with Template",
+#       x = "Research Workflow Metrics",
+#       y = "Percentage Improvement") +
+#  theme_minimal() +
+#  theme(text = element_text(size = 14))
 ```
 
 # Getting Started {background-color="#1f2937"}
@@ -763,7 +764,7 @@ just notebook-new "exploratory-analysis"
 ### What You Get Immediately
 
 ✅ **Complete project structure**
-✅ **Working analysis environment** 
+✅ **Working analysis environment**
 ✅ **Example notebooks and scripts**
 ✅ **Automated workflows**
 ✅ **Publication templates**
@@ -968,7 +969,7 @@ graph TD
     D --> E[Publish Results]
     E --> F[Share & Collaborate]
     F --> G[Accelerate Discovery]
-    
+
     style A fill:#3b82f6
     style G fill:#10b981
 ```
@@ -1024,7 +1025,7 @@ graph TD
 
 **Typical Project Setup Times**
 - Small project (< 1GB data): 5 minutes
-- Medium project (1-10GB data): 15 minutes  
+- Medium project (1-10GB data): 15 minutes
 - Large project (10-100GB data): 45 minutes
 - Enterprise project (100GB+ data): 2 hours
 
