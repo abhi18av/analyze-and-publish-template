@@ -208,12 +208,7 @@ include_testing:
 include_packages:
   type: bool
   help: Include local package development structure
-  default: >
-    {%- if project_type == "Package Development (software/library)" -%}
-    true
-    {%- else -%}
-    false
-    {%- endif -%}
+  default: true
   when: "{{ include_analysis }}"
 
 # === SUBCOMPONENT SELECTION FOR WRITEUP ===
@@ -232,23 +227,13 @@ include_presentations:
 include_grants:
   type: bool
   help: Include grant application management
-  default: >
-    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Manuscript Only (writing and publications)"] -%}
-    true
-    {%- else -%}
-    false
-    {%- endif -%}
+  default: true
   when: "{{ include_writeup }}"
 
 include_abstracts:
   type: bool
   help: Include abstract submission management
-  default: >
-    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Manuscript Only (writing and publications)"] -%}
-    true
-    {%- else -%}
-    false
-    {%- endif -%}
+  default: true
   when: "{{ include_writeup }}"
 
 include_posters:
