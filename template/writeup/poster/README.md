@@ -1,55 +1,88 @@
-# Poster Management System
+# Academic Conference Poster System
 
-This directory provides a structured and automated system for creating, managing, and rendering academic and professional posters. It supports multiple templates and output formats, and includes a `justfile` for automating common tasks.
+Streamlined system for creating academic conference posters with automated workflows and conference-specific templates. Optimized for rapid poster development and conference submission deadlines.
 
-## Directory Structure
+## Simplified Directory Structure
 
 ```
 poster/
-├── README.md                 # This file
-├── _quarto.yml               # Global quarto configuration
-├── justfile                  # Automation tasks
-├── templates/                # Poster templates
-│   ├── academic/             # Academic research posters
-│   ├── conference/           # Conference posters
-│   └── professional/         # Professional/corporate posters
-├── posters/                  # Your posters
-│   ├── academic/             # Academic posters
-│   ├── conference/           # Conference posters
-│   └── professional/         # Professional posters
-├── styles/                   # Styling resources
-│   └── logo.png              # Institution/organization logo
-└── _output/                  # Rendered posters
-    ├── html/                 # HTML output
-    │   ├── draft/            # Draft versions
-    │   └── final/            # Final versions
-    └── pdf/                  # PDF output
-        ├── draft/            # Draft versions
-        └── final/            # Final versions
+├── README.md                 # This documentation
+├── justfile                  # Poster automation commands
+├── templates/                # Conference poster templates
+│   ├── standard/             # Standard academic poster layout
+│   ├── landscape/            # Landscape format posters
+│   └── specialized/          # Field-specific templates (bio, cs, physics, etc.)
+├── conferences/              # Conference-specific posters
+│   ├── 2025/                 # Year-based organization
+│   │   ├── neurips/          # Conference folders
+│   │   ├── icml/
+│   │   └── aaai/
+│   └── 2026/
+├── assets/                   # Shared poster assets
+│   ├── figures/              # Research figures and plots
+│   ├── logos/                # Institution and conference logos
+│   ├── data/                 # Small datasets for plots
+│   └── references/           # BibTeX files
+└── output/                   # Generated posters
+    ├── drafts/               # Work-in-progress versions
+    ├── reviews/              # Versions for internal review
+    └── final/                # Submission-ready posters
 ```
 
-## Available Templates
+## Conference-Focused Templates
 
-The poster system includes several specialized templates:
-
-1. **Academic Poster**: Research-focused with sections for methods, results, and analysis.
-2. **Conference Poster**: Professional presentation for academic conferences with emphasis on visual clarity.
-3. **Professional Poster**: Business-oriented with sections for solutions, ROI, and impact.
-
-Each template is pre-configured with appropriate styling, layout, and placeholder content.
+1. **Standard**: Traditional academic poster layout (48"×36" or A0)
+2. **Landscape**: Horizontal layout for better readability 
+3. **Specialized**: Field-specific layouts optimized for different research areas
 
 ## Automation with Just
 
 The `justfile` provides a comprehensive set of commands for managing your posters. Run from the `poster/` directory.
 
-### Creating New Posters
+## Quick Start
+
+1. **Initialize the system** (first time only):
+   ```bash
+   just init
+   ```
+
+2. **Create a conference poster**:
+   ```bash
+   just create neurips 2025 standard
+   ```
+
+3. **Edit your poster**: 
+   ```bash
+   # Edit: conferences/2025/neurips/neurips_poster.qmd
+   ```
+
+4. **Render and review**:
+   ```bash
+   just render neurips 2025        # Creates draft
+   just render-review neurips 2025  # Creates review version
+   just finalize neurips 2025      # Creates final submission
+   ```
+
+## Example Workflow
+
+Creating a poster for NeurIPS 2025:
 
 ```bash
-# Create a new academic poster
-just create-academic research-poster
+# Create poster
+just create neurips 2025 standard
 
-# Create a conference poster
-just create-conference conference-poster
+# Add your research content to:
+# conferences/2025/neurips/neurips_poster.qmd
+
+# Add figures to assets/figures/
+just add-figure "my_results.png" "/path/to/my_results.png"
+
+# Render for review
+just render-review neurips 2025
+
+# Make final submission
+just finalize neurips 2025
+```
 
 # Create a professional poster
 just create-professional business-poster
