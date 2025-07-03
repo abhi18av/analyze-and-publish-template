@@ -1,0 +1,94 @@
+# Abstract Templates
+
+This file contains reusable abstract content in different lengths for various publication formats.
+
+## 25-Word Abstract (Twitter/Social Media)
+```{.callout-note}
+**Target:** Social media, elevator pitch
+**Length:** 25 words max
+```
+
+::: {#abstract-25w}
+{{< var study.title-short >}} reveals {{< var study.key-finding >}} through {{< var study.method-brief >}}, demonstrating {{< var study.impact-brief >}} with {{< var study.significance >}}.
+:::
+
+## 50-Word Abstract (Conference Submission)
+```{.callout-note}
+**Target:** Conference abstracts, brief summaries
+**Length:** 50 words max
+```
+
+::: {#abstract-50w}
+**Background:** {{< var study.background-brief >}}
+
+**Methods:** {{< var study.methods-brief >}} 
+
+**Results:** {{< var study.results-brief >}}
+
+**Conclusions:** {{< var study.conclusions-brief >}}
+:::
+
+## 150-Word Abstract (Journal Standard)
+```{.callout-note}
+**Target:** Most journal submissions
+**Length:** 150 words max
+```
+
+::: {#abstract-150w}
+**Background:** {{< var study.background >}} {{< var study.problem-statement >}} {{< var study.research-gap >}}
+
+**Objective:** {{< var study.objective >}}
+
+**Methods:** {{< var study.design >}} {{< var study.participants >}} {{< var study.procedures >}} {{< var study.analysis >}}
+
+**Results:** {{< var study.main-findings >}} {{< var study.key-statistics >}} {{< var study.secondary-findings >}}
+
+**Conclusions:** {{< var study.implications >}} {{< var study.limitations >}} {{< var study.future-directions >}}
+
+**Keywords:** {{< var study.keywords >}}
+:::
+
+## 300-Word Abstract (Extended/Detailed)
+```{.callout-note}
+**Target:** Detailed conference abstracts, grant applications
+**Length:** 300 words max
+```
+
+::: {#abstract-300w}
+**Background and Rationale:** {{< var study.background-detailed >}} {{< var study.literature-context >}} {{< var study.theoretical-framework >}} {{< var study.research-questions >}}
+
+**Objectives:** {{< var study.primary-objective >}} {{< var study.secondary-objectives >}} {{< var study.hypotheses >}}
+
+**Methods:** {{< var study.study-design >}} {{< var study.setting >}} {{< var study.participants-detailed >}} {{< var study.inclusion-criteria >}} {{< var study.procedures-detailed >}} {{< var study.measures >}} {{< var study.statistical-analysis >}}
+
+**Results:** {{< var study.participant-characteristics >}} {{< var study.primary-outcomes >}} {{< var study.secondary-outcomes >}} {{< var study.subgroup-analyses >}} {{< var study.effect-sizes >}}
+
+**Conclusions and Implications:** {{< var study.main-conclusions >}} {{< var study.clinical-implications >}} {{< var study.policy-implications >}} {{< var study.research-implications >}} {{< var study.study-limitations >}} {{< var study.future-research >}}
+
+**Trial Registration:** {{< var study.registration >}}
+
+**Keywords:** {{< var study.keywords-extended >}}
+:::
+
+## Usage Instructions
+
+To use these abstracts in your documents:
+
+1. **Include in YAML header:**
+   ```yaml
+   includes:
+     in-header: shared-content/core-content/abstracts/_abstracts.qmd
+   ```
+
+2. **Reference in document:**
+   ```markdown
+   {{< include shared-content/core-content/abstracts/_abstracts.qmd#abstract-150w >}}
+   ```
+
+3. **Define variables in `_variables.yml`:**
+   ```yaml
+   study:
+     title-short: "Brief study title"
+     key-finding: "Main discovery"
+     method-brief: "analysis method"
+   ```

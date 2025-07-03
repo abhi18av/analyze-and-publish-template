@@ -1,0 +1,174 @@
+---
+title: "{{< var project.title >}}"
+subtitle: "{{< var project.subtitle >}}"
+author:
+  - name: "{{< var authors[0].name >}}"
+    affiliation: "{{< var authors[0].affiliation >}}"
+    email: "{{< var authors[0].email >}}"
+    orcid: "{{< var authors[0].orcid >}}"
+  - name: "{{< var authors[1].name >}}"
+    affiliation: "{{< var authors[1].affiliation >}}"
+    email: "{{< var authors[1].email >}}"
+    orcid: "{{< var authors[1].orcid >}}"
+date: today
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=1in
+    fontsize: 11pt
+    linestretch: 1.5
+    template-partials:
+      - title.tex
+    include-in-header:
+      - text: |
+          \\usepackage{lineno}
+          \\linenumbers
+  html:
+    theme: default
+    toc: true
+    toc-depth: 3
+    number-sections: true
+  docx:
+    reference-doc: ../../../templates/by-output-type/manuscripts/journal-specific/generic-manuscript.docx
+bibliography: ../../../shared-content/references.bib
+csl: ../../../templates/style-guides/citation-styles/apa.csl
+---
+
+{{< include ../../../shared-content/_variables.yml >}}
+
+# Abstract
+
+{{< include ../../../shared-content/core-content/abstracts/_abstracts.qmd#abstract-150w >}}
+
+**Keywords:** {{< var study.keywords >}}
+
+# Introduction
+
+{{< include ../../../shared-content/core-content/introductions/_introduction.qmd#academic-intro >}}
+
+## Background and Rationale
+
+{{< var study.background-detailed >}} {{< var study.literature-context >}}
+
+## Research Questions and Objectives
+
+{{< var study.research-questions >}}
+
+The primary objective of this study was {{< var study.primary-objective >}}. Secondary objectives included {{< var study.secondary-objectives >}}.
+
+## Hypotheses
+
+{{< var study.hypotheses >}}
+
+# Methods
+
+{{< include ../../../shared-content/core-content/methods/_methods.qmd#detailed-methods >}}
+
+## Study Design
+
+{{< var study.study-design >}}
+
+## Participants
+
+{{< var study.participants-detailed >}} {{< var study.inclusion-criteria >}}
+
+## Procedures
+
+{{< var study.procedures-detailed >}}
+
+## Measures
+
+{{< var study.measures >}}
+
+## Statistical Analysis
+
+{{< var study.statistical-analysis >}}
+
+# Results
+
+{{< include ../../../shared-content/core-content/results/_results.qmd#main-results >}}
+
+## Participant Characteristics
+
+{{< var study.participant-characteristics >}}
+
+## Primary Outcomes
+
+{{< var study.primary-outcomes >}}
+
+### Figure 1: Primary Results
+![Primary study findings](../../../assets/visualizations/figures/by-output-type/manuscript-figure-1.png){#fig-primary}
+
+## Secondary Outcomes
+
+{{< var study.secondary-outcomes >}}
+
+### Table 1: Statistical Results
+{{< include ../../../assets/visualizations/tables/detailed/table-1.qmd >}}
+
+## Subgroup Analyses
+
+{{< var study.subgroup-analyses >}}
+
+# Discussion
+
+{{< include ../../../shared-content/core-content/discussions/_discussion.qmd#academic-discussion >}}
+
+## Interpretation of Findings
+
+{{< var study.main-conclusions >}}
+
+## Clinical Implications
+
+{{< var study.clinical-implications >}}
+
+## Study Limitations
+
+{{< var study.study-limitations >}}
+
+## Future Research Directions
+
+{{< var study.future-research >}}
+
+# Conclusions
+
+{{< var study.main-conclusions >}}
+
+# Acknowledgments
+
+{{< var funding.acknowledgments >}}
+
+# Funding
+
+This work was supported by {{< var funding.grants[0].agency >}} (Grant No. {{< var funding.grants[0].number >}}).
+
+# Data Availability Statement
+
+Data supporting the conclusions of this article are available upon reasonable request.
+
+# Author Contributions
+
+All authors contributed to the study conception and design. [Add specific contributions]
+
+# Ethics Statement
+
+This study was conducted in accordance with the Declaration of Helsinki and approved by [Ethics Committee Name].
+
+# Competing Interests
+
+The authors declare no competing interests.
+
+# References
+
+::: {#refs}
+:::
+
+# Appendices
+
+## Appendix A: Supplementary Methods
+
+{{< include ../../../assets/supplementary/appendices/methods-appendix.qmd >}}
+
+## Appendix B: Additional Results
+
+{{< include ../../../assets/supplementary/appendices/results-appendix.qmd >}}
