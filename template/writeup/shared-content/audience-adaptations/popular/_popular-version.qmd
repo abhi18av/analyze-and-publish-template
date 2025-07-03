@@ -1,0 +1,107 @@
+# Popular Science Adaptations
+
+This file contains content adapted for general audiences, using accessible language and relatable examples.
+
+## Popular Abstract {#popular-abstract}
+
+::: {.callout-note appearance="simple"}
+**For:** Blog posts, general audience articles, press releases
+**Tone:** Accessible, engaging, jargon-free
+:::
+
+**What we discovered:** {{< var study.key-finding >}} could change how we think about {{< var study.significance >}}.
+
+**Why it matters:** {{< var study.impact-brief >}} This means that {{< var study.practical-implications >}}.
+
+**How we did it:** Our team used {{< var study.method-brief >}} to study {{< var study.participants >}}. {{< var study.procedures-simple >}}
+
+**What we found:** {{< var study.results-simple >}} The results show that {{< var study.main-findings-simple >}}.
+
+**What's next:** {{< var study.future-directions-simple >}}
+
+## Popular Introduction {#popular-intro}
+
+Have you ever wondered {{< var study.relatable-question >}}? 
+
+{{< var study.hook >}} This is exactly what our research team set out to understand.
+
+{{< var study.problem-everyday >}} While scientists have known about {{< var study.known-facts >}}, what remained unclear was {{< var study.research-gap-simple >}}.
+
+Our study aimed to answer this question: {{< var study.research-question-simple >}}
+
+## Popular Methods {#popular-methods}
+
+To answer this question, we {{< var study.design-simple >}}.
+
+**Who participated:** {{< var study.participants-simple >}}
+
+**What we did:** {{< var study.procedures-simple >}}
+
+**How we analyzed the data:** {{< var study.analysis-simple >}}
+
+Think of it like {{< var study.analogy >}} - we were looking for patterns that would tell us {{< var study.what-patterns-mean >}}.
+
+## Popular Results {#popular-results}
+
+Here's what we found:
+
+**The main discovery:** {{< var study.main-finding-simple >}}
+
+**What the numbers tell us:** {{< var study.statistics-simple >}}
+
+**Why this is important:** {{< var study.significance-simple >}}
+
+To put this in perspective: {{< var study.real-world-example >}}
+
+## Popular Discussion {#popular-discussion}
+
+**What this means for you:** {{< var study.personal-relevance >}}
+
+**The bigger picture:** {{< var study.broader-implications >}}
+
+**Limitations to keep in mind:** {{< var study.limitations-simple >}}
+
+**What researchers will do next:** {{< var study.future-research-simple >}}
+
+## Social Media Versions
+
+### Twitter Thread Starter
+🧵 THREAD: New research reveals {{< var study.key-finding >}}
+
+Here's what you need to know about {{< var study.topic-hashtag >}} 👇
+
+### LinkedIn Post
+New research findings: {{< var study.key-finding >}}
+
+Our latest study shows {{< var study.professional-relevance >}}
+
+Key takeaways for professionals:
+• {{< var study.takeaway-1 >}}
+• {{< var study.takeaway-2 >}}
+• {{< var study.takeaway-3 >}}
+
+### Instagram Caption
+🔬 Science made simple: {{< var study.key-finding >}}
+
+{{< var study.visual-description >}}
+
+Swipe to see how we figured this out ➡️
+
+#science #research #{{< var study.topic-hashtag >}}
+
+## FAQ Section
+
+**Q: What exactly did you study?**
+A: {{< var study.study-explanation >}}
+
+**Q: How many people were involved?**
+A: {{< var study.sample-size-context >}}
+
+**Q: How reliable are these results?**
+A: {{< var study.reliability-explanation >}}
+
+**Q: When will this be available/implemented?**
+A: {{< var study.timeline-expectations >}}
+
+**Q: What should I do with this information?**
+A: {{< var study.actionable-advice >}}
