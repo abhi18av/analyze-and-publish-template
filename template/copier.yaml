@@ -1,0 +1,130 @@
+# Copier Template Configuration
+# Template Analysis and Writeup Platform
+
+_templates_suffix: .jinja
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+  comment_start_string: "{#"
+  comment_end_string: "#}"
+
+_metadata:
+  version: "1.0.0"
+  description: "Comprehensive template for research analysis and academic writing"
+  author: "Template Authors"
+
+_min_copier_version: "8.0.0"
+
+# Template Questions
+project_name:
+  type: str
+  help: "What is your project name?"
+  placeholder: "My Research Project"
+  validator: "{% if not project_name %}Required field{% endif %}"
+
+short_name:
+  type: str
+  help: "What is a short name for your project (used in URLs, filenames)?"
+  placeholder: "my-research"
+  default: "{{ project_name | lower | replace(' ', '-') | replace('_', '-') }}"
+
+author_name:
+  type: str
+  help: "What is your full name?"
+  placeholder: "Dr. Jane Smith"
+
+author_email:
+  type: str
+  help: "What is your email address?"
+  placeholder: "jane.smith@university.edu"
+  validator: "{% if '@' not in author_email %}Please enter a valid email address{% endif %}"
+
+institution:
+  type: str
+  help: "What is your institution/organization?"
+  placeholder: "University of Example"
+
+programming_language:
+  type: str
+  help: "Which programming language will you primarily use?"
+  choices:
+    - "Python"
+    - "R"
+    - "Julia"
+    - "Both Python and R"
+    - "Multiple languages"
+  default: "Python"
+
+use_analysis:
+  type: bool
+  help: "Include analysis tools and pipelines?"
+  default: true
+
+use_writeup:
+  type: bool
+  help: "Include writeup and publication tools?"
+  default: true
+
+use_infrastructure:
+  type: bool
+  help: "Include infrastructure and deployment tools?"
+  default: false
+
+use_multipass:
+  type: bool
+  help: "Include Multipass VM configuration?"
+  default: false
+  when: "{{ use_infrastructure }}"
+
+use_docker:
+  type: bool
+  help: "Include Docker containerization?"
+  default: true
+  when: "{{ use_infrastructure }}"
+
+github_actions:
+  type: bool
+  help: "Include GitHub Actions workflows?"
+  default: true
+
+include_examples:
+  type: bool
+  help: "Include example data and notebooks?"
+  default: true
+
+license:
+  type: str
+  help: "What license do you want to use?"
+  choices:
+    - "MIT"
+    - "Apache-2.0"
+    - "GPL-3.0"
+    - "BSD-3-Clause"
+    - "CC-BY-4.0"
+    - "Proprietary"
+  default: "MIT"
+
+# Post-generation tasks
+_tasks:
+  - command: "git init"
+    when: "{{ _copier_conf.vcs_ref is undefined }}"
+  - command: "git add ."
+    when: "{{ _copier_conf.vcs_ref is undefined }}"
+  - command: "git commit -m 'Initial commit from template'"
+    when: "{{ _copier_conf.vcs_ref is undefined }}"
+
+# Files and directories to skip during template generation
+_skip_if_exists:
+  - ".git/"
+  - "*.pyc"
+  - "__pycache__/"
+  - ".DS_Store"
+
+# Conditional directory inclusion
+_subdirectory: "."
+
+# Jinja extensions
+_jinja_extensions:
+  - jinja2_time.TimeExtension
