@@ -201,14 +201,23 @@ Research posters for academic conferences and public engagement events.
 ### Digital Content
 Blog posts, social media content, and interactive materials optimized for online consumption.
 
+### Technical Protocols
+Structured protocols for technical audiences including:
+- **Experimental Protocols**: Step-by-step laboratory and research procedures
+- **API Documentation**: Comprehensive endpoint specifications and examples
+- **System Architecture**: Technical specifications and deployment guides
+- **Configuration Management**: Environment setup and maintenance procedures
+- **Testing Protocols**: Unit, integration, and load testing frameworks
+- **Troubleshooting Guides**: Diagnostic procedures and emergency contacts
+
 ## 🎯 Audience Adaptations
 
 Content can be adapted for different audiences:
 
 - **Academic**: Formal scientific language, detailed methodology, comprehensive citations
-- **Popular**: Accessible language, engaging examples, minimal jargon
+- **Popular**: Accessible language, engaging examples, minimal jargon  
 - **Policy**: Action-oriented, clear recommendations, executive summaries
-- **Technical**: Detailed implementation, code examples, technical specifications
+- **Technical**: Detailed implementation, code examples, technical specifications, protocols, and operational procedures
 
 ## 🔄 Workflow Integration
 
