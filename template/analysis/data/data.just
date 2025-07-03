@@ -47,26 +47,26 @@ download-external url name:
     import yaml
     from datetime import datetime
     from pathlib import Path
-    
+
     url = "{{url}}"
     name = "{{name}}"
     timestamp = "{{DATE}}"
-    
+
     # Create target directory
     target_dir = Path("01_raw/011_external")
     target_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Download file
     filename = f"{name}_{timestamp}.csv"
     filepath = target_dir / filename
-    
+
     print(f"📥 Downloading {url} to {filepath}")
     urllib.request.urlretrieve(url, filepath)
-    
+
     # Calculate checksum
     with open(filepath, 'rb') as f:
         checksum = hashlib.sha256(f.read()).hexdigest()
-    
+
     # Create metadata
     metadata = {
         'name': name,
@@ -76,12 +76,12 @@ download-external url name:
         'checksum': checksum,
         'size_bytes': filepath.stat().st_size
     }
-    
+
     # Save metadata
     metadata_file = target_dir / f"{filename}.metadata.yaml"
     with open(metadata_file, 'w') as f:
         yaml.dump(metadata, f, default_flow_style=False)
-    
+
     print(f"✅ Downloaded and cataloged: {filepath}")
     print(f"📄 Metadata saved: {metadata_file}")
 
@@ -92,31 +92,31 @@ register-internal path name description:
     import yaml
     from datetime import datetime
     from pathlib import Path
-    
+
     source_path = Path("{{path}}")
     name = "{{name}}"
     description = "{{description}}"
     timestamp = "{{DATE}}"
-    
+
     if not source_path.exists():
         print(f"❌ Source file not found: {source_path}")
         exit(1)
-    
+
     # Create target directory
     target_dir = Path("01_raw/012_internal")
     target_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Copy to internal directory
     filename = f"{name}_{timestamp}{source_path.suffix}"
     target_path = target_dir / filename
-    
+
     import shutil
     shutil.copy2(source_path, target_path)
-    
+
     # Calculate checksum
     with open(target_path, 'rb') as f:
         checksum = hashlib.sha256(f.read()).hexdigest()
-    
+
     # Create metadata
     metadata = {
         'name': name,
@@ -127,12 +127,12 @@ register-internal path name description:
         'checksum': checksum,
         'size_bytes': target_path.stat().st_size
     }
-    
+
     # Save metadata
     metadata_file = target_dir / f"{filename}.metadata.yaml"
     with open(metadata_file, 'w') as f:
         yaml.dump(metadata, f, default_flow_style=False)
-    
+
     print(f"✅ Registered internal dataset: {target_path}")
     print(f"📄 Metadata saved: {metadata_file}")
 
@@ -143,16 +143,16 @@ generate-synthetic name type size:
     import yaml
     from datetime import datetime
     from pathlib import Path
-    
+
     name = "{{name}}"
     data_type = "{{type}}"
     size = int("{{size}}")
     timestamp = "{{DATE}}"
-    
+
     # Create target directory
     target_dir = Path("01_raw/013_synthetic")
     target_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Generate synthetic data based on type
     if data_type == "tabular":
         df = pd.DataFrame({
@@ -171,12 +171,12 @@ generate-synthetic name type size:
     else:
         print(f"❌ Unsupported data type: {data_type}")
         exit(1)
-    
+
     # Save dataset
     filename = f"{name}_{data_type}_{timestamp}.csv"
     filepath = target_dir / filename
     df.to_csv(filepath, index=False)
-    
+
     # Create metadata
     metadata = {
         'name': name,
@@ -187,12 +187,12 @@ generate-synthetic name type size:
         'columns': list(df.columns),
         'shape': list(df.shape)
     }
-    
+
     # Save metadata
     metadata_file = target_dir / f"{filename}.metadata.yaml"
     with open(metadata_file, 'w') as f:
         yaml.dump(metadata, f, default_flow_style=False)
-    
+
     print(f"✅ Generated synthetic {data_type} dataset: {filepath}")
     print(f"📊 Shape: {df.shape}")
     print(f"📄 Metadata saved: {metadata_file}")
@@ -205,15 +205,15 @@ validate-dataset path:
     import yaml
     from pathlib import Path
     from datetime import datetime
-    
+
     filepath = Path("{{path}}")
-    
+
     if not filepath.exists():
         print(f"❌ File not found: {filepath}")
         exit(1)
-    
+
     print(f"🔍 Validating dataset: {filepath}")
-    
+
     # Load data
     try:
         if filepath.suffix.lower() == '.csv':
@@ -226,7 +226,7 @@ validate-dataset path:
     except Exception as e:
         print(f"❌ Error loading file: {e}")
         exit(1)
-    
+
     # Validation checks
     validation_results = {
         'filepath': str(filepath),
@@ -239,18 +239,18 @@ validate-dataset path:
         'quality_metrics': {},
         'issues': []
     }
-    
+
     # Completeness score
     total_cells = df.shape[0] * df.shape[1]
     missing_cells = df.isnull().sum().sum()
     completeness = ((total_cells - missing_cells) / total_cells) * 100 if total_cells > 0 else 0
     validation_results['quality_metrics']['completeness'] = round(completeness, 2)
-    
+
     # Uniqueness score (for rows)
     duplicate_rows = df.duplicated().sum()
     uniqueness = ((df.shape[0] - duplicate_rows) / df.shape[0]) * 100 if df.shape[0] > 0 else 0
     validation_results['quality_metrics']['uniqueness'] = round(uniqueness, 2)
-    
+
     # Data type consistency
     consistency_issues = 0
     for col in df.columns:
@@ -263,21 +263,21 @@ validate-dataset path:
                 if mixed_types:
                     consistency_issues += 1
                     validation_results['issues'].append(f"Mixed data types in column '{col}'")
-    
+
     consistency = ((len(df.columns) - consistency_issues) / len(df.columns)) * 100 if len(df.columns) > 0 else 0
     validation_results['quality_metrics']['consistency'] = round(consistency, 2)
-    
+
     # Overall quality score
     overall_score = (completeness + uniqueness + consistency) / 3
     validation_results['quality_metrics']['overall_score'] = round(overall_score, 2)
-    
+
     # Check for common issues
     if missing_cells > 0:
         validation_results['issues'].append(f"Missing values: {missing_cells} cells ({missing_cells/total_cells*100:.1f}%)")
-    
+
     if duplicate_rows > 0:
         validation_results['issues'].append(f"Duplicate rows: {duplicate_rows}")
-    
+
     # Check for outliers in numeric columns
     numeric_cols = df.select_dtypes(include=[np.number]).columns
     for col in numeric_cols:
@@ -287,15 +287,15 @@ validate-dataset path:
         outliers = df[(df[col] < Q1 - 1.5 * IQR) | (df[col] > Q3 + 1.5 * IQR)][col].count()
         if outliers > 0:
             validation_results['issues'].append(f"Outliers in '{col}': {outliers} values")
-    
+
     # Save validation report
     report_dir = Path("02_intermediate/021_validated")
     report_dir.mkdir(parents=True, exist_ok=True)
     report_file = report_dir / f"{filepath.stem}_validation_report.yaml"
-    
+
     with open(report_file, 'w') as f:
         yaml.dump(validation_results, f, default_flow_style=False)
-    
+
     # Print summary
     print(f"\n📊 Validation Results:")
     print(f"   Shape: {df.shape}")
@@ -303,14 +303,14 @@ validate-dataset path:
     print(f"   Uniqueness: {validation_results['quality_metrics']['uniqueness']:.1f}%")
     print(f"   Consistency: {validation_results['quality_metrics']['consistency']:.1f}%")
     print(f"   Overall Score: {validation_results['quality_metrics']['overall_score']:.1f}/100")
-    
+
     if validation_results['issues']:
         print(f"\n⚠️  Issues Found:")
         for issue in validation_results['issues']:
             print(f"   - {issue}")
     else:
         print(f"\n✅ No issues found!")
-    
+
     print(f"\n📄 Report saved: {report_file}")
 
 profile-dataset path:
@@ -320,15 +320,15 @@ profile-dataset path:
     import yaml
     from pathlib import Path
     from datetime import datetime
-    
+
     filepath = Path("{{path}}")
-    
+
     if not filepath.exists():
         print(f"❌ File not found: {filepath}")
         exit(1)
-    
+
     print(f"📈 Profiling dataset: {filepath}")
-    
+
     # Load data
     try:
         if filepath.suffix.lower() == '.csv':
@@ -341,7 +341,7 @@ profile-dataset path:
     except Exception as e:
         print(f"❌ Error loading file: {e}")
         exit(1)
-    
+
     # Generate profile
     profile = {
         'filepath': str(filepath),
@@ -353,7 +353,7 @@ profile-dataset path:
         },
         'column_profiles': {}
     }
-    
+
     # Profile each column
     for col in df.columns:
         col_profile = {
@@ -363,7 +363,7 @@ profile-dataset path:
             'unique_count': int(df[col].nunique()),
             'unique_percentage': round(df[col].nunique() / len(df) * 100, 2)
         }
-        
+
         if df[col].dtype in ['int64', 'float64', 'int32', 'float32']:
             # Numeric column statistics
             col_profile.update({
@@ -384,27 +384,27 @@ profile-dataset path:
                 'top_values': {str(k): int(v) for k, v in value_counts.items()},
                 'avg_length': round(df[col].astype(str).str.len().mean(), 2) if len(df[col].dropna()) > 0 else 0
             })
-        
+
         profile['column_profiles'][col] = col_profile
-    
+
     # Save profile
     profile_dir = Path("02_intermediate/022_profiled")
     profile_dir.mkdir(parents=True, exist_ok=True)
     profile_file = profile_dir / f"{filepath.stem}_profile.yaml"
-    
+
     with open(profile_file, 'w') as f:
         yaml.dump(profile, f, default_flow_style=False)
-    
+
     # Print summary
     print(f"\n📊 Dataset Profile:")
     print(f"   Shape: {df.shape}")
     print(f"   Memory: {profile['dataset_info']['memory_usage_mb']} MB")
     print(f"   Columns: {len(df.columns)}")
-    
+
     print(f"\n📋 Column Summary:")
     for col, col_prof in profile['column_profiles'].items():
         print(f"   {col}: {col_prof['dtype']} ({col_prof['null_percentage']:.1f}% null, {col_prof['unique_count']} unique)")
-    
+
     print(f"\n📄 Profile saved: {profile_file}")
 
 quality-report path:
@@ -413,36 +413,36 @@ quality-report path:
     import yaml
     from pathlib import Path
     from datetime import datetime
-    
+
     filepath = Path("{{path}}")
-    
+
     if not filepath.exists():
         print(f"❌ File not found: {filepath}")
         exit(1)
-    
+
     print(f"📋 Generating quality report: {filepath}")
-    
+
     # Load validation and profile reports if they exist
     validation_file = Path("02_intermediate/021_validated") / f"{filepath.stem}_validation_report.yaml"
     profile_file = Path("02_intermediate/022_profiled") / f"{filepath.stem}_profile.yaml"
-    
+
     report = {
         'filepath': str(filepath),
         'generated_at': datetime.now().isoformat(),
         'summary': {},
         'recommendations': []
     }
-    
+
     if validation_file.exists():
         with open(validation_file, 'r') as f:
             validation_data = yaml.safe_load(f)
             report['validation'] = validation_data
-    
+
     if profile_file.exists():
         with open(profile_file, 'r') as f:
             profile_data = yaml.safe_load(f)
             report['profile'] = profile_data
-    
+
     # Generate recommendations based on findings
     if 'validation' in report:
         score = report['validation']['quality_metrics']['overall_score']
@@ -454,7 +454,7 @@ quality-report path:
             report['recommendations'].append("Duplicate records detected. Consider deduplication.")
         if report['validation']['issues']:
             report['recommendations'].append("Address data quality issues before proceeding to analysis.")
-    
+
     # Generate HTML report
     html_content = f"""
     <!DOCTYPE html>
@@ -477,7 +477,7 @@ quality-report path:
             <p><strong>Generated:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
         </div>
     """
-    
+
     if 'validation' in report:
         metrics = report['validation']['quality_metrics']
         html_content += f"""
@@ -501,7 +501,7 @@ quality-report path:
             </div>
         </div>
         """
-        
+
         if report['validation']['issues']:
             html_content += """
             <div class="section">
@@ -511,7 +511,7 @@ quality-report path:
             for issue in report['validation']['issues']:
                 html_content += f'<li class="issue">{issue}</li>'
             html_content += "</ul></div>"
-    
+
     if report['recommendations']:
         html_content += """
         <div class="section">
@@ -521,22 +521,22 @@ quality-report path:
         for rec in report['recommendations']:
             html_content += f'<li class="recommendation">{rec}</li>'
         html_content += "</ul></div>"
-    
+
     html_content += "</body></html>"
-    
+
     # Save reports
     report_dir = Path("08_reporting")
     report_dir.mkdir(parents=True, exist_ok=True)
-    
+
     yaml_report_file = report_dir / f"{filepath.stem}_quality_report.yaml"
     html_report_file = report_dir / f"{filepath.stem}_quality_report.html"
-    
+
     with open(yaml_report_file, 'w') as f:
         yaml.dump(report, f, default_flow_style=False)
-    
+
     with open(html_report_file, 'w') as f:
         f.write(html_content)
-    
+
     print(f"✅ Quality report generated")
     print(f"📄 YAML report: {yaml_report_file}")
     print(f"🌐 HTML report: {html_report_file}")
@@ -549,17 +549,17 @@ clean-dataset source target:
     import yaml
     from pathlib import Path
     from datetime import datetime
-    
+
     source_path = Path("{{source}}")
     target_name = "{{target}}"
     timestamp = "{{DATE}}"
-    
+
     if not source_path.exists():
         print(f"❌ Source file not found: {source_path}")
         exit(1)
-    
+
     print(f"🧹 Cleaning dataset: {source_path}")
-    
+
     # Load data
     try:
         if source_path.suffix.lower() == '.csv':
@@ -572,37 +572,37 @@ clean-dataset source target:
     except Exception as e:
         print(f"❌ Error loading file: {e}")
         exit(1)
-    
+
     original_shape = df.shape
     cleaning_log = []
-    
+
     # Remove duplicate rows
     duplicates_before = df.duplicated().sum()
     df = df.drop_duplicates()
     if duplicates_before > 0:
         cleaning_log.append(f"Removed {duplicates_before} duplicate rows")
-    
+
     # Handle missing values (basic strategy)
     missing_before = df.isnull().sum().sum()
     numeric_cols = df.select_dtypes(include=[np.number]).columns
     categorical_cols = df.select_dtypes(include=['object']).columns
-    
+
     # Fill numeric columns with median
     for col in numeric_cols:
         if df[col].isnull().any():
             median_val = df[col].median()
             df[col].fillna(median_val, inplace=True)
             cleaning_log.append(f"Filled missing values in '{col}' with median ({median_val})")
-    
+
     # Fill categorical columns with mode
     for col in categorical_cols:
         if df[col].isnull().any():
             mode_val = df[col].mode().iloc[0] if not df[col].mode().empty else 'Unknown'
             df[col].fillna(mode_val, inplace=True)
             cleaning_log.append(f"Filled missing values in '{col}' with mode ('{mode_val}')")
-    
+
     missing_after = df.isnull().sum().sum()
-    
+
     # Remove outliers using IQR method for numeric columns
     outliers_removed = 0
     for col in numeric_cols:
@@ -615,13 +615,13 @@ clean-dataset source target:
             df = df[~outlier_mask]
             outliers_removed += outliers_in_col
             cleaning_log.append(f"Removed {outliers_in_col} outliers from '{col}'")
-    
+
     # Save cleaned dataset
     target_dir = Path("02_intermediate/023_cleaned")
     target_dir.mkdir(parents=True, exist_ok=True)
     target_file = target_dir / f"{target_name}_cleaned_{timestamp}.csv"
     df.to_csv(target_file, index=False)
-    
+
     # Create cleaning metadata
     metadata = {
         'source_file': str(source_path),
@@ -638,22 +638,22 @@ clean-dataset source target:
             'outliers_removed': outliers_removed
         }
     }
-    
+
     metadata_file = target_dir / f"{target_name}_cleaned_{timestamp}.metadata.yaml"
     with open(metadata_file, 'w') as f:
         yaml.dump(metadata, f, default_flow_style=False)
-    
+
     print(f"\n✅ Dataset cleaned successfully!")
     print(f"   Original shape: {original_shape}")
     print(f"   Cleaned shape: {df.shape}")
     print(f"   Rows removed: {original_shape[0] - df.shape[0]}")
     print(f"   Operations performed: {len(cleaning_log)}")
-    
+
     if cleaning_log:
         print(f"\n🔧 Cleaning operations:")
         for operation in cleaning_log:
             print(f"   - {operation}")
-    
+
     print(f"\n📄 Cleaned dataset: {target_file}")
     print(f"📄 Metadata: {metadata_file}")
 
@@ -665,51 +665,51 @@ split-dataset source target:
     from pathlib import Path
     from datetime import datetime
     from sklearn.model_selection import train_test_split
-    
+
     source_path = Path("{{source}}")
     target_name = "{{target}}"
     timestamp = "{{DATE}}"
-    
+
     if not source_path.exists():
         print(f"❌ Source file not found: {source_path}")
         exit(1)
-    
+
     print(f"🔄 Splitting dataset: {source_path}")
-    
+
     # Load data
     try:
         df = pd.read_csv(source_path)
     except Exception as e:
         print(f"❌ Error loading file: {e}")
         exit(1)
-    
+
     # Split ratios
     test_size = 0.2
     val_size = 0.2  # 20% of the remaining 80%
-    
+
     # First split: separate test set
     train_val, test = train_test_split(df, test_size=test_size, random_state=42)
-    
+
     # Second split: separate train and validation
     train, val = train_test_split(train_val, test_size=val_size, random_state=42)
-    
+
     # Create output directories
     train_dir = Path("05_model_input/051_train")
     val_dir = Path("05_model_input/052_validation")
     test_dir = Path("05_model_input/053_test")
-    
+
     for dir_path in [train_dir, val_dir, test_dir]:
         dir_path.mkdir(parents=True, exist_ok=True)
-    
+
     # Save splits
     train_file = train_dir / f"{target_name}_train_{timestamp}.csv"
     val_file = val_dir / f"{target_name}_val_{timestamp}.csv"
     test_file = test_dir / f"{target_name}_test_{timestamp}.csv"
-    
+
     train.to_csv(train_file, index=False)
     val.to_csv(val_file, index=False)
     test.to_csv(test_file, index=False)
-    
+
     # Create split metadata
     metadata = {
         'source_file': str(source_path),
@@ -738,19 +738,19 @@ split-dataset source target:
             }
         }
     }
-    
+
     # Save metadata in all directories
     for dir_path in [train_dir, val_dir, test_dir]:
         metadata_file = dir_path / f"{target_name}_split_{timestamp}.metadata.yaml"
         with open(metadata_file, 'w') as f:
             yaml.dump(metadata, f, default_flow_style=False)
-    
+
     print(f"\n✅ Dataset split successfully!")
     print(f"   Original: {df.shape[0]} rows")
     print(f"   Train: {train.shape[0]} rows ({metadata['splits']['train']['percentage']}%)")
     print(f"   Validation: {val.shape[0]} rows ({metadata['splits']['validation']['percentage']}%)")
     print(f"   Test: {test.shape[0]} rows ({metadata['splits']['test']['percentage']}%)")
-    
+
     print(f"\n📄 Split files:")
     print(f"   Train: {train_file}")
     print(f"   Validation: {val_file}")
@@ -762,20 +762,20 @@ register-dataset name path type:
     import yaml
     from pathlib import Path
     from datetime import datetime
-    
+
     name = "{{name}}"
     path = "{{path}}"
     dataset_type = "{{type}}"
-    
+
     registry_file = Path("{{DATA_REGISTRY}}")
-    
+
     # Load existing registry or create new
     if registry_file.exists():
         with open(registry_file, 'r') as f:
             registry = yaml.safe_load(f) or {'datasets': {}}
     else:
         registry = {'datasets': {}}
-    
+
     # Add dataset entry
     registry['datasets'][name] = {
         'path': path,
@@ -783,15 +783,15 @@ register-dataset name path type:
         'registered_at': datetime.now().isoformat(),
         'status': 'active'
     }
-    
+
     # Update registry metadata
     registry['updated_at'] = datetime.now().isoformat()
     registry['total_datasets'] = len(registry['datasets'])
-    
+
     # Save registry
     with open(registry_file, 'w') as f:
         yaml.dump(registry, f, default_flow_style=False)
-    
+
     print(f"✅ Registered dataset '{name}' in registry")
     print(f"📄 Registry: {registry_file}")
 
@@ -799,24 +799,24 @@ list-datasets:
     #!/usr/bin/env python3
     import yaml
     from pathlib import Path
-    
+
     registry_file = Path("{{DATA_REGISTRY}}")
-    
+
     if not registry_file.exists():
         print("📝 No datasets registered yet. Use 'just data::register-dataset' to add datasets.")
         return
-    
+
     with open(registry_file, 'r') as f:
         registry = yaml.safe_load(f)
-    
+
     if not registry.get('datasets'):
         print("📝 No datasets in registry.")
         return
-    
+
     print(f"📊 Registered Datasets ({len(registry['datasets'])} total)")
     print(f"📅 Last updated: {registry.get('updated_at', 'Unknown')}")
     print("")
-    
+
     for name, info in registry['datasets'].items():
         print(f"🔹 {name}")
         print(f"   Type: {info['type']}")
@@ -833,29 +833,29 @@ backup-dataset path name:
     import yaml
     from pathlib import Path
     from datetime import datetime
-    
+
     source_path = Path("{{path}}")
     backup_name = "{{name}}"
     timestamp = "{{TIMESTAMP}}"
-    
+
     if not source_path.exists():
         print(f"❌ Source file not found: {source_path}")
         exit(1)
-    
+
     # Create backup directory
     backup_dir = Path("10_backups/timestamped")
     backup_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Create backup filename
     backup_file = backup_dir / f"{backup_name}_{timestamp}{source_path.suffix}"
-    
+
     # Copy file
     shutil.copy2(source_path, backup_file)
-    
+
     # Calculate checksum
     with open(backup_file, 'rb') as f:
         checksum = hashlib.sha256(f.read()).hexdigest()
-    
+
     # Create backup metadata
     metadata = {
         'backup_name': backup_name,
@@ -865,12 +865,12 @@ backup-dataset path name:
         'checksum': checksum,
         'size_bytes': backup_file.stat().st_size
     }
-    
+
     # Save metadata
     metadata_file = backup_dir / f"{backup_name}_{timestamp}.metadata.yaml"
     with open(metadata_file, 'w') as f:
         yaml.dump(metadata, f, default_flow_style=False)
-    
+
     print(f"💾 Created backup: {backup_file}")
     print(f"📄 Metadata: {metadata_file}")
     print(f"🔒 Checksum: {checksum}")
@@ -882,26 +882,26 @@ prepare-publication dataset paper_name:
     import yaml
     from pathlib import Path
     from datetime import datetime
-    
+
     source_path = Path("{{dataset}}")
     paper_name = "{{paper_name}}"
-    
+
     if not source_path.exists():
         print(f"❌ Source dataset not found: {source_path}")
         exit(1)
-    
+
     # Create publication directory structure
     pub_dir = Path("12_publications") / paper_name
     datasets_dir = pub_dir / "datasets"
     metadata_dir = pub_dir / "metadata"
-    
+
     for dir_path in [datasets_dir, metadata_dir]:
         dir_path.mkdir(parents=True, exist_ok=True)
-    
+
     # Copy dataset
     target_file = datasets_dir / source_path.name
     shutil.copy2(source_path, target_file)
-    
+
     # Create publication metadata
     pub_metadata = {
         'paper_name': paper_name,
@@ -922,12 +922,12 @@ prepare-publication dataset paper_name:
             'backup_location': "institutional_repository"
         }
     }
-    
+
     # Save publication metadata
     metadata_file = metadata_dir / "publication_metadata.yaml"
     with open(metadata_file, 'w') as f:
         yaml.dump(pub_metadata, f, default_flow_style=False)
-    
+
     # Create README
     readme_content = f"""# {paper_name} - Dataset
 
@@ -949,11 +949,11 @@ This dataset is released under CC-BY-4.0 license.
 ## Preparation Date
 {datetime.now().strftime('%Y-%m-%d')}
 """
-    
+
     readme_file = pub_dir / "README.md"
     with open(readme_file, 'w') as f:
         f.write(readme_content)
-    
+
     print(f"📚 Publication dataset prepared: {pub_dir}")
     print(f"📄 Dataset: {target_file}")
     print(f"📄 Metadata: {metadata_file}")
@@ -969,22 +969,22 @@ add-benchmark name path:
     import yaml
     from pathlib import Path
     from datetime import datetime
-    
+
     benchmark_name = "{{name}}"
     source_path = Path("{{path}}")
-    
+
     if not source_path.exists():
         print(f"❌ Source file not found: {source_path}")
         exit(1)
-    
+
     # Create benchmark directory
     benchmark_dir = Path("11_benchmarks/standard")
     benchmark_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Copy benchmark dataset
     target_file = benchmark_dir / f"{benchmark_name}{source_path.suffix}"
     shutil.copy2(source_path, target_file)
-    
+
     # Create benchmark metadata
     metadata = {
         'name': benchmark_name,
@@ -995,12 +995,12 @@ add-benchmark name path:
         'usage': "Use for academic comparisons and reproducible research",
         'baseline_results': "TBD - run initial experiments"
     }
-    
+
     # Save metadata
     metadata_file = benchmark_dir / f"{benchmark_name}.metadata.yaml"
     with open(metadata_file, 'w') as f:
         yaml.dump(metadata, f, default_flow_style=False)
-    
+
     print(f"🎯 Added benchmark dataset: {target_file}")
     print(f"📄 Metadata: {metadata_file}")
     print(f"\n💡 Next steps:")
@@ -1013,18 +1013,18 @@ setup-collaboration project_name:
     import yaml
     from pathlib import Path
     from datetime import datetime
-    
+
     project_name = "{{project_name}}"
-    
+
     # Create collaboration directory structure
     collab_dir = Path("14_collaboration") / project_name
     shared_dir = collab_dir / "shared"
     agreements_dir = collab_dir / "agreements"
     federated_dir = collab_dir / "federated"
-    
+
     for dir_path in [shared_dir, agreements_dir, federated_dir]:
         dir_path.mkdir(parents=True, exist_ok=True)
-    
+
     # Create collaboration metadata
     collab_metadata = {
         'project_name': project_name,
@@ -1041,12 +1041,12 @@ setup-collaboration project_name:
             'audit_trail': "enabled"
         }
     }
-    
+
     # Save metadata
     metadata_file = collab_dir / "collaboration_metadata.yaml"
     with open(metadata_file, 'w') as f:
         yaml.dump(collab_metadata, f, default_flow_style=False)
-    
+
     # Create README
     readme_content = f"""# {project_name} - Collaboration Setup
 
@@ -1069,11 +1069,11 @@ setup-collaboration project_name:
 ## Created
 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 """
-    
+
     readme_file = collab_dir / "README.md"
     with open(readme_file, 'w') as f:
         f.write(readme_content)
-    
+
     print(f"🤝 Collaboration setup created: {collab_dir}")
     print(f"📄 Metadata: {metadata_file}")
     print(f"📄 README: {readme_file}")

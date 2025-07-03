@@ -38,16 +38,16 @@ create-conference venue year month template="academic":
     #!/usr/bin/env zsh
     presentation_dir="presentations/conferences/{{year}}-{{month}}-{{venue}}"
     mkdir -p "$presentation_dir"
-    
+
     # Select template
     template_file="templates/{{template}}/{{template}}_template.qmd"
     if [[ ! -f "$template_file" ]]; then
         template_file="templates/academic/academic_template.qmd"
     fi
-    
+
     # Copy template and customize
     cp "$template_file" "$presentation_dir/{{venue}}_presentation.qmd"
-    
+
     echo "✅ Created conference presentation for {{venue}} ({{year}}-{{month}})"
     echo "📝 Edit: $presentation_dir/{{venue}}_presentation.qmd"
 
@@ -56,14 +56,14 @@ create-workshop event year month template="workshop":
     #!/usr/bin/env zsh
     presentation_dir="presentations/workshops/{{year}}-{{month}}-{{event}}"
     mkdir -p "$presentation_dir"
-    
+
     template_file="templates/{{template}}/{{template}}_template.qmd"
     if [[ ! -f "$template_file" ]]; then
         template_file="templates/workshop/workshop_template.qmd"
     fi
-    
+
     cp "$template_file" "$presentation_dir/{{event}}_presentation.qmd"
-    
+
     echo "✅ Created workshop presentation for {{event}} ({{year}}-{{month}})"
     echo "📝 Edit: $presentation_dir/{{event}}_presentation.qmd"
 
@@ -72,14 +72,14 @@ create-meeting topic year month template="meeting":
     #!/usr/bin/env zsh
     presentation_dir="presentations/meetings/{{year}}-{{month}}-{{topic}}"
     mkdir -p "$presentation_dir"
-    
+
     template_file="templates/{{template}}/meeting-progress-summary.qmd"
     if [[ ! -f "$template_file" ]]; then
         template_file="templates/academic/academic_template.qmd"
     fi
-    
+
     cp "$template_file" "$presentation_dir/{{topic}}_presentation.qmd"
-    
+
     echo "✅ Created meeting presentation for {{topic}} ({{year}}-{{month}})"
     echo "📝 Edit: $presentation_dir/{{topic}}_presentation.qmd"
 
@@ -88,14 +88,14 @@ create-seminar venue year month template="academic":
     #!/usr/bin/env zsh
     presentation_dir="presentations/seminars/{{year}}-{{month}}-{{venue}}"
     mkdir -p "$presentation_dir"
-    
+
     template_file="templates/{{template}}/{{template}}_template.qmd"
     if [[ ! -f "$template_file" ]]; then
         template_file="templates/academic/academic_template.qmd"
     fi
-    
+
     cp "$template_file" "$presentation_dir/{{venue}}_presentation.qmd"
-    
+
     echo "✅ Created seminar presentation for {{venue}} ({{year}}-{{month}})"
     echo "📝 Edit: $presentation_dir/{{venue}}_presentation.qmd"
 
@@ -106,14 +106,14 @@ create-auto-conference venue template="academic":
     current_month=$(date +"%m")
     presentation_dir="presentations/conferences/${current_year}-${current_month}-{{venue}}"
     mkdir -p "$presentation_dir"
-    
+
     template_file="templates/{{template}}/{{template}}_template.qmd"
     if [[ ! -f "$template_file" ]]; then
         template_file="templates/academic/academic_template.qmd"
     fi
-    
+
     cp "$template_file" "$presentation_dir/{{venue}}_presentation.qmd"
-    
+
     echo "✅ Created conference presentation for {{venue}} (${current_year}-${current_month})"
     echo "📝 Edit: $presentation_dir/{{venue}}_presentation.qmd"
 
@@ -124,14 +124,14 @@ create-auto-workshop event template="workshop":
     current_month=$(date +"%m")
     presentation_dir="presentations/workshops/${current_year}-${current_month}-{{event}}"
     mkdir -p "$presentation_dir"
-    
+
     template_file="templates/{{template}}/{{template}}_template.qmd"
     if [[ ! -f "$template_file" ]]; then
         template_file="templates/workshop/workshop_template.qmd"
     fi
-    
+
     cp "$template_file" "$presentation_dir/{{event}}_presentation.qmd"
-    
+
     echo "✅ Created workshop presentation for {{event}} (${current_year}-${current_month})"
     echo "📝 Edit: $presentation_dir/{{event}}_presentation.qmd"
 
