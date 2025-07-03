@@ -10,9 +10,39 @@ module_name := "{{module_name}}"
 default:
     @just --list
 
-# update pre-commit file
-pc-update:
-  uvx pre-commit-update
+# === BAZEL INTEGRATION ===
+
+# Build all targets with Bazel
+build:
+    @echo "Building all targets with Bazel..."
+    bazel build //...
+
+# Test all targets with Bazel
+test:
+    @echo "Running all tests with Bazel..."
+    bazel test //...
+
+# Build specific target
+build-target target:
+    @echo "Building target: {{target}}"
+    bazel build {{target}}
+
+# Run specific target
+run-target target:
+    @echo "Running target: {{target}}"
+    bazel run {{target}}
+
+# Build Docker containers
+build-containers:
+    @echo "Building Docker containers..."
+    bazel build //containers/...
+
+# Build Python packages
+build-python:
+    @echo "Building Python packages..."
+    bazel build //analysis/packages/...
+
+# === DATA PIPELINE ===
 
 # Run full pipeline with DVC
 pipeline:
@@ -22,12 +52,80 @@ pipeline:
 pipeline-dag:
     dvc dag
 
+# === DEVELOPMENT ===
+
+# update pre-commit file
+pc-update:
+    uvx pre-commit-update
+
 # Clean intermediate files
 clean:
     rm -rf data/processed/*
     rm -rf outputs/*
+    bazel clean
 
-project-fish:
+# Clean everything including Bazel cache
+clean-all:
+    rm -rf data/processed/*
+    rm -rf outputs/*
+    bazel clean --expunge
+
+# === TESTING ===
+
+# Run unit tests
+test-unit:
+    bazel test //analysis/tests/unit/...
+
+# Run integration tests  
+test-integration:
+    bazel test //analysis/tests/integration/...
+
+# Run property-based tests (if FsCheck integration exists)
+test-properties:
+    {% if programming_language == "Python" or programming_language == "Both" %}
+    bazel test //analysis/tests/properties/...
+    {% endif %}
+
+# === NOTEBOOKS ===
+
+# Build Jupyter notebook targets
+build-notebooks:
+    bazel build //analysis/notebooks/...
+
+# Execute specific notebook
+run-notebook name:
+    bazel run //analysis/notebooks:{{name}}
+
+# === DEPLOYMENT ===
+
+# Package for deployment
+package:
+    bazel build //deployment/...
+
+# Build and push Docker images
+deploy-images:
+    just build-containers
+    bazel run //containers:push-all
+
+# === INFRASTRUCTURE ===
+
+{% if use_multipass %}
+# Multipass VM management
+vm-setup:
+    @bash infrastructure/multipass/setup.sh
+
+vm-shell:
+    @multipass shell {{ project_name|lower|replace(" ", "-") }}
+{% endif %}
+
+{% if use_lxd %}
+# LXD container management  
+lxd-setup:
+    @bash infrastructure/lxd/setup.sh
+
+lxd-shell:
+    @lxc exec {{ project_name|lower|replace(" ", "-") }} -- bash
+{% endif %}
     ./.fish/run_fish.sh
 
 # === Version Control Management ===

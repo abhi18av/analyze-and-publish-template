@@ -1,0 +1,41 @@
+# Infrastructure automation BUILD file
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+
+package(default_visibility = ["//visibility:public"])
+
+# PowerShell scripts
+filegroup(
+    name = "pwsh_scripts",
+    srcs = glob(["automations/pwsh-oci/*.ps1"]),
+)
+
+# OCI configuration files
+filegroup(
+    name = "oci_config",
+    srcs = glob(["config/*.yaml", "config/*.json"]),
+)
+
+# Infrastructure as Code
+filegroup(
+    name = "terraform_files",
+    srcs = glob(["terraform/**/*.tf", "terraform/**/*.tfvars"]),
+)
+
+# Package all infrastructure tools
+pkg_tar(
+    name = "infrastructure_package",
+    srcs = [
+        ":pwsh_scripts",
+        ":oci_config", 
+        ":terraform_files",
+    ],
+    package_dir = "infrastructure",
+)
+
+# Container for infrastructure tools
+genrule(
+    name = "infrastructure_container",
+    srcs = [":infrastructure_package"],
+    outs = ["infrastructure.tar"],
+    cmd = "tar -czf $@ $<",
+)

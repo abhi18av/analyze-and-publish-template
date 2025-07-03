@@ -1,0 +1,31 @@
+# Root BUILD file for {{ project_name }}
+# This file enables Bazel to recognize this as the workspace root
+
+load("@rules_python//python:defs.bzl", "py_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# Main project library
+py_library(
+    name = "{{ short_name }}_lib",
+    srcs = [],
+    deps = [
+        "//analysis:analysis_lib",
+        {% if include_writeup %}"//writeup:writeup_lib",{% endif %}
+    ],
+)
+
+# Global test suite
+test_suite(
+    name = "all_tests",
+    tests = [
+        "//analysis/tests:all_tests",
+        {% if include_writeup %}"//writeup/tests:all_tests",{% endif %}
+    ],
+)
+
+# Docker containers
+filegroup(
+    name = "docker_files",
+    srcs = glob(["*.dockerfile", "docker/**/*"]),
+)

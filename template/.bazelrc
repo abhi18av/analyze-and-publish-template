@@ -1,0 +1,44 @@
+# Bazel configuration for {{ project_name }}
+
+# Basic settings
+build --enable_bzlmod
+build --incompatible_enable_cc_toolchain_resolution
+
+# Performance optimizations
+build --jobs=auto
+build --local_ram_resources=HOST_RAM*0.8
+
+# Python configuration
+build --python_top=@python_3_11//:python
+
+# Test configuration
+test --test_output=errors
+test --test_summary=detailed
+test --test_verbose_timeout_warnings
+
+# Remote caching (optional - configure with your preferred cache)
+# build --remote_cache=https://your-cache-endpoint
+
+# Data science specific flags
+build --define=with_gpu=false  # Set to true if using GPU
+build --define=tensorflow_version=2.15.0
+
+# Docker builds
+build --host_force_python=PY3
+
+# Development mode
+build:dev --compilation_mode=dbg
+build:dev --strip=never
+
+# Production mode  
+build:prod --compilation_mode=opt
+build:prod --stamp
+
+# Testing mode
+build:test --test_env=PYTHONPATH
+build:test --test_env=TF_CPP_MIN_LOG_LEVEL=2
+
+# CI/CD mode
+build:ci --noshow_progress
+build:ci --noshow_loading_progress
+build:ci --keep_going

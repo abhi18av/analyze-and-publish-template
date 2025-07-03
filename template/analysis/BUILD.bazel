@@ -1,0 +1,42 @@
+# Analysis module BUILD file
+load("@rules_python//python:defs.bzl", "py_library", "py_binary", "py_test")
+load("@rules_docker//python3:image.bzl", "py3_image")
+
+package(default_visibility = ["//visibility:public"])
+
+# Main analysis library
+py_library(
+    name = "analysis_lib",
+    srcs = glob(["**/*.py"], exclude=["tests/**", "notebooks/**"]),
+    deps = [
+        "//analysis/packages:data_processing",
+        "//analysis/packages:modeling",
+        "//analysis/packages:visualization",
+    ],
+    data = glob(["config/**/*", "data/**/*"]),
+)
+
+# Executables
+py_binary(
+    name = "run_analysis",
+    srcs = ["scripts/run_analysis.py"],
+    deps = [":analysis_lib"],
+    main = "scripts/run_analysis.py",
+)
+
+# Docker image for analysis
+py3_image(
+    name = "analysis_image",
+    srcs = [":analysis_lib"],
+    main = "scripts/run_analysis.py",
+    deps = [":analysis_lib"],
+)
+
+# Test suite
+test_suite(
+    name = "all_tests",
+    tests = [
+        "//analysis/tests/unit:all_unit_tests",
+        "//analysis/tests/integration:all_integration_tests",
+    ],
+)

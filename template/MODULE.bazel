@@ -4,3 +4,26 @@
 #
 # For more details, please check https://github.com/bazelbuild/bazel/issues/18958
 ###############################################################################
+
+module(
+    name = "{{ short_name }}",
+    version = "0.1.0",
+)
+
+# Python rules for data science
+bazel_dep(name = "rules_python", version = "0.35.0")
+bazel_dep(name = "rules_docker", version = "0.25.0")
+bazel_dep(name = "rules_pkg", version = "1.0.1")
+
+# For R support if needed
+{% if programming_language == "R" or programming_language == "Both" %}
+bazel_dep(name = "rules_r", version = "0.4.0")
+{% endif %}
+
+# For container builds
+bazel_dep(name = "container_structure_test", version = "1.16.0")
+
+# Python interpreter configuration
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(python_version = "3.11")
+use_repo(python, "python_3_11")
