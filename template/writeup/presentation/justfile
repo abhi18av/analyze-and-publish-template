@@ -1,56 +1,139 @@
-# === Default Task ===
-default:
-    @just --list
+# Academic Presentation System
+# Streamlined automation for academic presentation creation and management
 
-# Presentation Management Tasks
+# Set shell
+set shell := ["zsh", "-c"]
+
+# Variables
+presentation_dir := justfile_directory()
+templates_dir := presentation_dir + "/templates"
+presentations_dir := presentation_dir + "/presentations"
+assets_dir := presentation_dir + "/assets"
+output_dir := presentation_dir + "/_output"
+
+# Default recipe - show available commands
+default:
+    @echo "Academic Presentation System"
+    @echo "============================"
+    @just --list
 
 # === Setup and Initialization ===
 
+# Initialize complete presentation system
+init: create-dirs
+    @echo "✅ Presentation system initialized successfully!"
 
-# NOTE:
-# HTML quarto use template grantmcdermott/quarto-revealjs-clean
-# TYPST quarto use template kazuyanagimoto/quarto-clean-typst
+# Create directory structure
+create-dirs:
+    #!/usr/bin/env zsh
+    mkdir -p presentations/{conferences,workshops,meetings,seminars}
+    mkdir -p assets/{figures,tables,graphics}
+    mkdir -p _output/{html,pdf,pptx}/{draft,final}
+    echo "📁 Directory structure created"
 
-presentation-init: # Initialize presentation project structure
-    mkdir -p src assets/{figures,tables,graphics} _output/{pdf,html,pptx}/{draft,final} presentations templates
-    touch _quarto.yml
+# === Presentation Creation ===
 
-# === Rendering and Preview ===
+# Create new conference presentation with YYYY-MM-VENUE format
+create-conference venue year month template="academic":
+    #!/usr/bin/env zsh
+    presentation_dir="presentations/conferences/{{year}}-{{month}}-{{venue}}"
+    mkdir -p "$presentation_dir"
+    
+    # Select template
+    template_file="templates/{{template}}/{{template}}_template.qmd"
+    if [[ ! -f "$template_file" ]]; then
+        template_file="templates/academic/academic_template.qmd"
+    fi
+    
+    # Copy template and customize
+    cp "$template_file" "$presentation_dir/{{venue}}_presentation.qmd"
+    
+    echo "✅ Created conference presentation for {{venue}} ({{year}}-{{month}})"
+    echo "📝 Edit: $presentation_dir/{{venue}}_presentation.qmd"
 
-presentation-render format="pdf" version="draft": # Render presentation
-    quarto render src/index.qmd --to {{format}} --output-dir _output/{{format}}/{{version}}
+# Create workshop presentation
+create-workshop event year month template="workshop":
+    #!/usr/bin/env zsh
+    presentation_dir="presentations/workshops/{{year}}-{{month}}-{{event}}"
+    mkdir -p "$presentation_dir"
+    
+    template_file="templates/{{template}}/{{template}}_template.qmd"
+    if [[ ! -f "$template_file" ]]; then
+        template_file="templates/workshop/workshop_template.qmd"
+    fi
+    
+    cp "$template_file" "$presentation_dir/{{event}}_presentation.qmd"
+    
+    echo "✅ Created workshop presentation for {{event}} ({{year}}-{{month}})"
+    echo "📝 Edit: $presentation_dir/{{event}}_presentation.qmd"
 
-presentation-preview: # Preview presentation with live reload
-    quarto preview src/index.qmd
+# Create meeting presentation
+create-meeting topic year month template="meeting":
+    #!/usr/bin/env zsh
+    presentation_dir="presentations/meetings/{{year}}-{{month}}-{{topic}}"
+    mkdir -p "$presentation_dir"
+    
+    template_file="templates/{{template}}/meeting-progress-summary.qmd"
+    if [[ ! -f "$template_file" ]]; then
+        template_file="templates/academic/academic_template.qmd"
+    fi
+    
+    cp "$template_file" "$presentation_dir/{{topic}}_presentation.qmd"
+    
+    echo "✅ Created meeting presentation for {{topic}} ({{year}}-{{month}})"
+    echo "📝 Edit: $presentation_dir/{{topic}}_presentation.qmd"
 
-presentation-clean: # Clean generated files
-    rm -rf _output/*
+# Create seminar presentation
+create-seminar venue year month template="academic":
+    #!/usr/bin/env zsh
+    presentation_dir="presentations/seminars/{{year}}-{{month}}-{{venue}}"
+    mkdir -p "$presentation_dir"
+    
+    template_file="templates/{{template}}/{{template}}_template.qmd"
+    if [[ ! -f "$template_file" ]]; then
+        template_file="templates/academic/academic_template.qmd"
+    fi
+    
+    cp "$template_file" "$presentation_dir/{{venue}}_presentation.qmd"
+    
+    echo "✅ Created seminar presentation for {{venue}} ({{year}}-{{month}})"
+    echo "📝 Edit: $presentation_dir/{{venue}}_presentation.qmd"
 
-# === Template-based Creation ===
+# Create with automatic date detection
+create-auto-conference venue template="academic":
+    #!/usr/bin/env zsh
+    current_year=$(date +"%Y")
+    current_month=$(date +"%m")
+    presentation_dir="presentations/conferences/${current_year}-${current_month}-{{venue}}"
+    mkdir -p "$presentation_dir"
+    
+    template_file="templates/{{template}}/{{template}}_template.qmd"
+    if [[ ! -f "$template_file" ]]; then
+        template_file="templates/academic/academic_template.qmd"
+    fi
+    
+    cp "$template_file" "$presentation_dir/{{venue}}_presentation.qmd"
+    
+    echo "✅ Created conference presentation for {{venue}} (${current_year}-${current_month})"
+    echo "📝 Edit: $presentation_dir/{{venue}}_presentation.qmd"
 
-create-academic name: # Create academic presentation
-    #!/usr/bin/env bash
-    mkdir -p "presentations/{{name}}"
-    cp templates/academic/academic_template.qmd "presentations/{{name}}/{{name}}.qmd"
-    echo "Created academic presentation in presentations/{{name}}/"
-
-create-corporate name: # Create corporate presentation
-    #!/usr/bin/env bash
-    mkdir -p "presentations/{{name}}"
-    cp templates/corporate/corporate_template.qmd "presentations/{{name}}/{{name}}.qmd"
-    echo "Created corporate presentation in presentations/{{name}}/"
-
-create-workshop name: # Create workshop presentation
-    #!/usr/bin/env bash
-    mkdir -p "presentations/{{name}}"
-    cp templates/workshop/workshop_template.qmd "presentations/{{name}}/{{name}}.qmd"
-    echo "Created workshop presentation in presentations/{{name}}/"
-
-create-poster name: # Create academic poster
-    #!/usr/bin/env bash
-    mkdir -p "presentations/posters/{{name}}"
-    cp templates/poster/poster_template.qmd "presentations/posters/{{name}}/{{name}}.qmd"
-    echo "Created academic poster in presentations/posters/{{name}}/"
+# Create auto workshop
+create-auto-workshop event template="workshop":
+    #!/usr/bin/env zsh
+    current_year=$(date +"%Y")
+    current_month=$(date +"%m")
+    presentation_dir="presentations/workshops/${current_year}-${current_month}-{{event}}"
+    mkdir -p "$presentation_dir"
+    
+    template_file="templates/{{template}}/{{template}}_template.qmd"
+    if [[ ! -f "$template_file" ]]; then
+        template_file="templates/workshop/workshop_template.qmd"
+    fi
+    
+    cp "$template_file" "$presentation_dir/{{event}}_presentation.qmd"
+    
+    echo "✅ Created workshop presentation for {{event}} (${current_year}-${current_month})"
+    echo "📝 Edit: $presentation_dir/{{event}}_presentation.qmd"
 
 # === Rendering Presentations ===
 
