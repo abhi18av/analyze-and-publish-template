@@ -70,12 +70,12 @@ use_writeup:
 use_infrastructure:
   type: bool
   help: "Include infrastructure and deployment tools?"
-  default: false
+  default: true
 
 use_multipass:
   type: bool
   help: "Include Multipass VM configuration?"
-  default: false
+  default: true
   when: "{{ use_infrastructure }}"
 
 use_docker:
