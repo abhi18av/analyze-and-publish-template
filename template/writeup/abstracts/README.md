@@ -1,85 +1,133 @@
-# Study Abstracts Directory
+# Academic Abstract Submission System
 
-This directory contains templates and organizational structure for managing study abstracts for conferences, journals, and symposiums.
-
-**Location:** `/writeup/abstracts/` - Standalone abstracts management system within the writeup project structure.
+Streamlined system for creating and managing academic abstracts with automated workflows and chronological organization. Optimized for rapid abstract development and submission deadlines.
 
 ## Directory Structure
 
 ```
 abstracts/
-├── templates/          # Abstract templates for different venues
-│   ├── conference/     # Conference abstract templates
-│   ├── journal/        # Journal abstract templates
-│   └── symposium/      # Symposium and workshop templates
-├── conference/         # Conference abstracts by status
-│   ├── submitted/      # Submitted conference abstracts
-│   ├── accepted/       # Accepted conference abstracts
-│   └── presented/      # Abstracts that have been presented
-├── journal/           # Journal abstracts by status
-│   ├── submitted/      # Submitted journal abstracts
-│   ├── accepted/       # Accepted journal abstracts
-│   └── presented/      # Published abstracts (conferences within journals)
-├── symposium/         # Symposium and workshop abstracts
-│   ├── submitted/      # Submitted symposium abstracts
-│   ├── accepted/       # Accepted symposium abstracts
-│   └── presented/      # Abstracts that have been presented
-└── tracking/          # Abstract tracking and management
-    ├── deadlines.md   # Deadline tracking
-    ├── reviews.md     # Review feedback and responses
-    └── metrics.md     # Presentation metrics and outcomes
+├── README.md                 # This documentation
+├── abstracts.just           # Abstract automation commands
+├── templates/               # Abstract templates
+│   ├── conference_abstract.qmd    # Conference abstract template
+│   ├── journal_abstract.qmd       # Journal abstract template
+│   └── symposium_abstract.qmd     # Symposium/workshop template
+├── submissions/             # Chronologically organized submissions
+│   ├── conference/          # Conference submissions (YYYY-MM-VENUE format)
+│   │   ├── 2025-05-neurips/      # NeurIPS May 2025
+│   │   ├── 2025-07-icml/         # ICML July 2025
+│   │   └── 2025-12-aaai/         # AAAI December 2025
+│   ├── journal/             # Journal submissions
+│   │   ├── 2025-06-nature/       # Nature June 2025
+│   │   └── 2025-08-science/      # Science August 2025
+│   └── symposium/           # Symposium/workshop submissions
+│       ├── 2025-04-workshop/     # ML Workshop April 2025
+│       └── 2025-09-symposium/    # AI Symposium September 2025
+└── versions/                # Version control and tracking
+    ├── drafts/              # Draft versions
+    ├── reviews/             # Review feedback
+    └── final/               # Final submitted versions
 ```
 
-## Abstract Types Supported
+## Chronological Organization
 
-- **Conference Abstracts**: Academic conferences, professional meetings
-- **Journal Abstracts**: Journal submission abstracts, special issues
-- **Symposium Abstracts**: Workshops, symposiums, invited talks
+Submissions are organized using the **YYYY-MM-VENUE** format:
+- `2025-05-neurips` - NeurIPS 2025 (May submission deadline)
+- `2025-06-nature` - Nature submission (June deadline)
+- `2025-07-icml` - ICML 2025 (July submission deadline)
 
-## Usage
+This provides chronological sorting while maintaining venue context.
+## Abstract Templates
 
-1. Start with the appropriate template from `templates/`
-2. Copy to the relevant category folder (`conference/`, `journal/`, `symposium/`)
-3. Place in `submitted/` during initial submission
-4. Move to `accepted/` upon acceptance
-5. Move to `presented/` after presentation/publication
-6. Track progress in `tracking/`
-
-## Templates Include
-
-- Standard conference abstract formats
-- Journal abstract templates
-- Symposium presentation abstracts
-- Poster session formats
-- Lightning talk templates
-- Workshop abstracts
+1. **Conference**: Standard academic conference abstracts (150-300 words)
+2. **Journal**: Journal submission abstracts with structured format
+3. **Symposium**: Workshop and symposium abstracts (100-250 words)
 
 ## Automation with Just
 
-The `justfile` provides automation for common tasks. Run from the `abstracts/` directory:
+The `abstracts.just` file provides comprehensive commands for managing abstracts. Run from the `abstracts/` directory.
+
+## Quick Start
+
+1. **Initialize the system** (first time only):
+   ```bash
+   just init
+   ```
+
+2. **Create a conference abstract** (specify year, month, venue):
+   ```bash
+   just create-conference neurips 2025 05
+   ```
+
+3. **Create with automatic date** (uses current year/month):
+   ```bash
+   just create-auto-conference neurips
+   ```
+
+4. **Create journal submission**:
+   ```bash
+   just create-journal nature 2025 06
+   ```
+
+5. **Edit your abstract**: 
+   ```bash
+   # Edit: submissions/conference/2025-05-neurips/neurips_abstract.qmd
+   ```
+
+6. **Render and track**:
+   ```bash
+   just render neurips          # Creates draft version
+   just finalize neurips        # Creates final submission
+   just status neurips          # Shows submission status
+   ```
+
+## Example Workflow
+
+Creating an abstract for NeurIPS 2025 (May deadline):
 
 ```bash
-# Create new abstracts
-just new-conference "study-name" "Conference-Name-2024"
-just new-journal "manuscript-abstract" "Journal-Name"
-just new-symposium "workshop-talk" "Symposium-Name"
+# Create abstract with specific date
+just create-conference neurips 2025 05
 
-# Manage workflow
-just list-submitted              # See all pending abstracts
-just accept conference study-name # Move to accepted
-just present conference study-name # Move to presented
+# Or create with automatic date detection
+just create-auto-conference neurips
 
-# Generate outputs
-just compile conference study-name   # Render to PDF
-just wordcount conference study-name # Check word limits
-just stats                          # View statistics
-just deadlines                     # Check upcoming deadlines
+# Edit your abstract:
+# submissions/conference/2025-05-neurips/neurips_abstract.qmd
+
+# Render for review
+just render neurips
+
+# Finalize for submission
+just finalize neurips
+
+# Track status
+just status neurips
 ```
 
-## Integration with Grant Applications
+## Available Commands
 
-Abstracts in this directory can be:
+### Creating Abstracts
+- `just create-conference <venue> <year> <month>` - Create conference abstract
+- `just create-journal <venue> <year> <month>` - Create journal abstract  
+- `just create-symposium <venue> <year> <month>` - Create symposium abstract
+- `just create-auto-conference <venue>` - Create with current date
+- `just create-auto-journal <venue>` - Create with current date
+- `just create-auto-symposium <venue>` - Create with current date
+
+### Management
+- `just list` - List all abstracts
+- `just list-conference` - List conference abstracts
+- `just list-journal` - List journal abstracts
+- `just list-upcoming` - List upcoming deadlines
+- `just status <venue>` - Show abstract status
+- `just render <venue>` - Render draft version
+- `just finalize <venue>` - Create final version
+
+## Integration with Research Workflow
+
+Abstracts in this system can be:
+- Linked to poster and presentation development
 - Referenced in grant applications as preliminary results
 - Used to demonstrate research dissemination
-- Linked to ongoing projects in the main grants system
 - Tracked for impact metrics and citations
