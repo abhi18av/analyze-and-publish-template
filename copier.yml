@@ -64,13 +64,13 @@ include_writeup:
 include_infrastructure:
   type: bool
   help: Include infrastructure folder (Docker, cloud deployment, CI/CD)
-  default: false
+  default: true
   when: "{{ project_type == 'Custom (choose components manually)' }}"
 
 include_misc:
   type: bool
   help: Include misc folder (utilities, legacy code, experimental features)
-  default: false
+  default: true
   when: "{{ project_type == 'Custom (choose components manually)' }}"
 
 # Project Configuration
@@ -208,12 +208,7 @@ include_testing:
 include_packages:
   type: bool
   help: Include local package development structure
-  default: >
-    {%- if project_type == "Package Development (software/library)" -%}
-    true
-    {%- else -%}
-    false
-    {%- endif -%}
+
   when: "{{ include_analysis }}"
 
 # === SUBCOMPONENT SELECTION FOR WRITEUP ===
@@ -232,23 +227,13 @@ include_presentations:
 include_grants:
   type: bool
   help: Include grant application management
-  default: >
-    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Manuscript Only (writing and publications)"] -%}
-    true
-    {%- else -%}
-    false
-    {%- endif -%}
+
   when: "{{ include_writeup }}"
 
 include_abstracts:
   type: bool
   help: Include abstract submission management
-  default: >
-    {%- if project_type in ["Full Academic Project (analysis + writeup)", "Manuscript Only (writing and publications)"] -%}
-    true
-    {%- else -%}
-    false
-    {%- endif -%}
+
   when: "{{ include_writeup }}"
 
 include_posters:
@@ -266,7 +251,7 @@ include_reports:
 include_blog:
   type: bool
   help: Include blog post templates for informal writing
-  default: false
+
   when: "{{ include_writeup }}"
 
 # === INFRASTRUCTURE SUBCOMPONENTS ===
@@ -279,13 +264,13 @@ include_docker:
 include_cloud_deployment:
   type: bool
   help: Include cloud deployment templates (AWS, GCP, Azure)
-  default: false
+
   when: "{{ include_infrastructure }}"
 
 include_virtualization:
   type: bool
   help: Include VM and container orchestration
-  default: false
+
   when: "{{ include_infrastructure }}"
 
 include_automation:
@@ -298,15 +283,15 @@ include_automation:
 include_jujutsu:
   type: bool
   help: Include Jujutsu (jj) version control with Git backend for enhanced academic workflows
-  default: false
+
 
 include_fossil:
   type: bool
   help: Include Fossil SCM for self-contained archives and manuscript versioning
-  default: false
+
 
 use_hybrid_vcs:
   type: bool
   help: Use hybrid version control (Jujutsu + Fossil) for comprehensive research management
-  default: false
+
   when: "{{ include_jujutsu and include_fossil }}"
