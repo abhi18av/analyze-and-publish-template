@@ -1,0 +1,18 @@
+{
+    "run_id": "inference_20250704_202042",
+    "project_name": "test_shell",
+    "workflow_type": "inference",
+    "start_time": "2025-07-04T20:20:43+02:00",
+    "run_date": "2025-07-04",
+    "run_time": "202042",
+    "status": "running",
+    "created_by": "abhi",
+    "hostname": "macbookpro19.local",
+    "working_directory": "/Users/abhi/projects/template-analysis-and-writeup/template/analysis/pipelines",
+    "git_commit": "e683602d59fbc83ce7e1ea5d50c2cdb4400e6306",
+    "git_branch": "dev",
+    "nextflow_version": "",
+    "parameters": {},
+    "results_path": "/Users/abhi/projects/template-analysis-and-writeup/template/analysis/pipelines/results/2025-07-04/inference/202042",
+    "compute_environment": "local"
+}

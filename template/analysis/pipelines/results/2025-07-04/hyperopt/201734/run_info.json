@@ -1,0 +1,19 @@
+{
+  "run_id": "hyperopt_20250704_201734",
+  "project_name": "test_project",
+  "workflow_type": "hyperopt",
+  "start_time": "2025-07-04T20:17:34.024447",
+  "run_date": "2025-07-04",
+  "run_time": "201734",
+  "status": "completed",
+  "created_by": "abhi",
+  "hostname": "macbookpro19.local",
+  "working_directory": "/Users/abhi/projects/template-analysis-and-writeup/template/analysis/pipelines",
+  "git_commit": "e683602d59fbc83ce7e1ea5d50c2cdb4400e6306",
+  "git_branch": "dev",
+  "nextflow_version": "",
+  "parameters": {},
+  "results_path": "results/2025-07-04/hyperopt/201734",
+  "compute_environment": "local",
+  "end_time": "2025-07-04T20:22:18.500232"
+}

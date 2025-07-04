@@ -1,0 +1,18 @@
+{
+  "run_id": "training_20250704_202016",
+  "project_name": "my_analysis",
+  "workflow_type": "training",
+  "start_time": "2025-07-04T20:20:16.905083",
+  "run_date": "2025-07-04",
+  "run_time": "202016",
+  "status": "running",
+  "created_by": "abhi",
+  "hostname": "macbookpro19.local",
+  "working_directory": "/Users/abhi/projects/template-analysis-and-writeup/template/analysis/pipelines",
+  "git_commit": "e683602d59fbc83ce7e1ea5d50c2cdb4400e6306",
+  "git_branch": "dev",
+  "nextflow_version": "",
+  "parameters": {},
+  "results_path": "results/2025-07-04/training/202016",
+  "compute_environment": "local"
+}
