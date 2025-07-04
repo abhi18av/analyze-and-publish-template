@@ -1,6 +1,24 @@
 # Enhanced Data Directory .gitignore
 # Supports academic research workflows with automated data management
 
+# === DIRECTORIES ===
+01_raw/
+02_intermediate/
+03_primary/
+04_feature/
+05_model_input/
+06_models/
+07_model_output/
+08_reporting/
+09_logs/
+10_backups/
+11_benchmarks/
+12_publications/
+13_external_validation/
+14_collaboration/
+15_pipelines/
+15_nextflow/
+
 # === GENERAL DATA FILES ===
 # Ignore all data files by default for security and size management
 *.csv
@@ -199,3 +217,41 @@ __pycache__/
 # Files larger than 100MB should use Git LFS
 # Consider using DVC for data version control
 # Encrypt sensitive data before committing
+
+# === PIPELINE FILES ===
+# Directory is now included
+15_pipelines/
+
+# Work directories (can be large and regenerated)
+15_pipelines/*/experiments/*/work/
+15_pipelines/*/workflows/*/work/
+
+# Large intermediate files
+15_pipelines/**/*.bam
+15_pipelines/**/*.sam
+15_pipelines/**/*.fastq
+15_pipelines/**/*.fq
+15_pipelines/**/*.vcf
+
+# Pipeline cache and temporary files
+.nextflow/
+.nextflow.log*
+.snakemake/
+work/
+
+# === PRESERVE PIPELINE IMPORTANT FILES ===
+# Keep pipeline definitions
+!15_pipelines/151_nextflow/pipelines/*/workflow/*.nf
+!15_pipelines/152_snakemake/workflows/*/*.smk
+!15_pipelines/*/shared/configs/*.config
+
+# Keep experiment metadata and small results
+!15_pipelines/*/experiments/*/*/run_metadata.yaml
+!15_pipelines/*/experiments/*/*/logs/*.html
+!15_pipelines/*/experiments/*/*/results/*.txt
+!15_pipelines/*/experiments/*/*/results/*.yaml
+!15_pipelines/*/experiments/*/*/results/*.json
+
+# Keep pipeline configuration
+!15_pipelines/151_nextflow/.pipeline_name
+!15_pipelines/152_snakemake/.workflow_name

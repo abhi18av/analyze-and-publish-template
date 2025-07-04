@@ -30,8 +30,19 @@ default:
     @echo ""
     @echo "🎓 Academic Workflows:"
     @echo "  just data::prepare-publication <dataset> <paper_name> - Prepare for publication"
-    @echo "  just data::add-benchmark <name> <path>        - Add benchmark dataset"
+    @echo "  just data::add-benchmark <n> <path>        - Add benchmark dataset"
     @echo "  just data::setup-collaboration <project_name> - Setup collaboration structure"
+    @echo ""
+    @echo "🧬 Nextflow Pipeline Management:"
+    @echo "  just data::nextflow-set-pipeline <name>              - Set current pipeline"
+    @echo "  just data::nextflow-get-pipeline                     - Show current pipeline"
+    @echo "  just data::nextflow-run-experiment <analysis> <dataset> - Run current pipeline"
+    @echo "  just data::nextflow-run-with-pipeline <pipeline> <analysis> <dataset> - Run specific pipeline"
+    @echo "  just data::nextflow-list-analyses                    - List all analyses"
+    @echo "  just data::nextflow-analysis-results <analysis>      - View analysis results"
+    @echo "  just data::nextflow-publish-analysis <analysis> <run_id> <dest> - Publish results"
+    @echo "  just data::nextflow-clean-work <analysis> [days=7]   - Clean work directories"
+    @echo "  just data::nextflow-create-pipeline <name>           - Create new pipeline"
 
 # Variables
 TIMESTAMP := `date +%Y%m%d_%H%M%S`
@@ -41,12 +52,7 @@ DATA_REGISTRY := "data_registry.yaml"
 # Data Ingestion & Registration
 download-external url name:
     #!/usr/bin/env python3
-    import os
-    import urllib.request
-    import hashlib
-    import yaml
-    from datetime import datetime
-    from pathlib import Path
+    python3 .justscripts/download-external.py
 
     url = "{{url}}"
     name = "{{name}}"
@@ -138,11 +144,7 @@ register-internal path name description:
 
 generate-synthetic name type size:
     #!/usr/bin/env python3
-    import pandas as pd
-    import numpy as np
-    import yaml
-    from datetime import datetime
-    from pathlib import Path
+    python3 .justscripts/generate-synthetic.py
 
     name = "{{name}}"
     data_type = "{{type}}"
@@ -315,11 +317,7 @@ validate-dataset path:
 
 profile-dataset path:
     #!/usr/bin/env python3
-    import pandas as pd
-    import numpy as np
-    import yaml
-    from pathlib import Path
-    from datetime import datetime
+    python3 .justscripts/profile-dataset.py
 
     filepath = Path("{{path}}")
 
@@ -462,12 +460,19 @@ quality-report path:
     <head>
         <title>Data Quality Report - {filepath.name}</title>
         <style>
-            body {{ font-family: Arial, sans-serif; margin: 40px; }}
-            .header {{ background: #f0f8ff; padding: 20px; border-radius: 5px; }}
-            .section {{ margin: 20px 0; }}
-            .metric {{ display: inline-block; margin: 10px; padding: 15px; background: #f9f9f9; border-radius: 5px; }}
-            .issue {{ color: #d32f2f; }}
-            .recommendation {{ color: #1976d2; }}
+            body {{ font-family: Arial, sans-serif }}
+            body {{ margin: 40px }}
+            .header {{ background: #f0f8ff }}
+            .header {{ padding: 20px }}
+            .header {{ border-radius: 5px }}
+            .section {{ margin: 20px 0 }}
+            .metric {{ display: inline-block }}
+            .metric {{ margin: 10px }}
+            .metric {{ padding: 15px }}
+            .metric {{ background: #f9f9f9 }}
+            .metric {{ border-radius: 5px }}
+            .issue {{ color: #d32f2f }}
+            .recommendation {{ color: #1976d2 }}
         </style>
     </head>
     <body>
@@ -1082,3 +1087,447 @@ setup-collaboration project_name:
     print(f"   - Upload data sharing agreements")
     print(f"   - Configure access controls")
     print(f"   - Set up federated learning if needed")
+
+# === NEXTFLOW PIPELINE MANAGEMENT ===
+# Single project-focused pipeline management with analysis organization
+
+# Set pipeline name (stores in .pipeline_name file)
+nextflow-set-pipeline name:
+    #!/usr/bin/env python3
+    from pathlib import Path
+    
+    name = "{{name}}"
+    
+    # Store pipeline name
+    config_file = Path("15_pipelines/151_nextflow/.pipeline_name")
+    config_file.parent.mkdir(parents=True, exist_ok=True)
+    config_file.write_text(name.strip())
+    
+    print(f"✅ Pipeline name set to: {name}")
+    print(f"📁 Stored in: {config_file}")
+
+# Get current pipeline name
+nextflow-get-pipeline:
+    #!/usr/bin/env python3
+    from pathlib import Path
+    
+    config_file = Path("15_pipelines/151_nextflow/.pipeline_name")
+    
+    if config_file.exists():
+        name = config_file.read_text().strip()
+        print(f"📋 Current pipeline: {name}")
+    else:
+        print("❌ No pipeline name set. Use: just data::nextflow-set-pipeline <name>")
+
+# Run experiment with current pipeline
+nextflow-run-experiment experiment dataset:
+    #!/usr/bin/env python3
+    import subprocess
+    import yaml
+    import json
+    from pathlib import Path
+    from datetime import datetime
+    
+    # Get current pipeline name
+    config_file = Path("15_pipelines/151_nextflow/.pipeline_name")
+    if not config_file.exists():
+        print("❌ No pipeline name set. Use: just data::nextflow-set-pipeline <name>")
+        exit(1)
+    
+    pipeline = config_file.read_text().strip()
+    experiment = "{{experiment}}"
+    dataset = "{{dataset}}"
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # Create experiment directory - organized by analysis type
+    exp_dir = Path(f"15_pipelines/151_nextflow/experiments/by_analysis/{experiment}")
+    exp_dir.mkdir(parents=True, exist_ok=True)
+    
+    run_dir = exp_dir / f"{dataset}_{timestamp}"
+    run_dir.mkdir(parents=True, exist_ok=True)
+    
+    work_dir = run_dir / "work"
+    results_dir = run_dir / "results"
+    logs_dir = run_dir / "logs"
+    
+    for d in [work_dir, results_dir, logs_dir]:
+        d.mkdir(parents=True, exist_ok=True)
+    
+    # Check if pipeline exists
+    pipeline_file = Path(f"15_pipelines/151_nextflow/pipelines/{pipeline}/workflow/main.nf")
+    
+    if not pipeline_file.exists():
+        print(f"❌ Pipeline not found: {pipeline_file}")
+        print(f"Available pipelines:")
+        pipelines_dir = Path("15_pipelines/151_nextflow/pipelines")
+        if pipelines_dir.exists():
+            for p in pipelines_dir.glob("*/workflow/main.nf"):
+                print(f"  - {p.parent.parent.name}")
+        exit(1)
+    
+    # Nextflow command
+    cmd = [
+        "nextflow", "run", str(pipeline_file),
+        "-work-dir", str(work_dir),
+        "--outdir", str(results_dir),
+        "--dataset", dataset,
+        "--experiment", experiment,
+        "-with-report", str(logs_dir / "report.html"),
+        "-with-trace", str(logs_dir / "trace.txt"),
+        "-with-timeline", str(logs_dir / "timeline.html"),
+        "-with-dag", str(logs_dir / "dag.html")
+    ]
+    
+    print(f"🚀 Running pipeline: {pipeline}")
+    print(f"🔬 Analysis: {experiment}")
+    print(f"📊 Dataset: {dataset}")
+    print(f"📁 Results: {results_dir}")
+    
+    # Run pipeline
+    try:
+        result = subprocess.run(cmd, cwd=".", check=True)
+        status = "SUCCESS"
+        print(f"✅ Pipeline completed successfully!")
+    except subprocess.CalledProcessError as e:
+        status = "FAILED"
+        print(f"❌ Pipeline failed: {e}")
+    
+    # Create experiment metadata
+    metadata = {
+        'pipeline': pipeline,
+        'experiment': experiment,
+        'dataset': dataset,
+        'timestamp': timestamp,
+        'status': status,
+        'run_directory': str(run_dir),
+        'results_directory': str(results_dir),
+        'work_directory': str(work_dir),
+        'command': ' '.join(cmd)
+    }
+    
+    # Save metadata
+    metadata_file = run_dir / "run_metadata.yaml"
+    with open(metadata_file, 'w') as f:
+        yaml.dump(metadata, f, default_flow_style=False)
+    
+    print(f"📄 Metadata saved: {metadata_file}")
+
+# Run with specific pipeline (override current setting)
+nextflow-run-with-pipeline pipeline experiment dataset:
+    #!/usr/bin/env python3
+    import subprocess
+    import yaml
+    from pathlib import Path
+    from datetime import datetime
+    
+    pipeline = "{{pipeline}}"
+    experiment = "{{experiment}}"
+    dataset = "{{dataset}}"
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # Create experiment directory
+    exp_dir = Path(f"15_pipelines/151_nextflow/experiments/by_analysis/{experiment}")
+    exp_dir.mkdir(parents=True, exist_ok=True)
+    
+    run_dir = exp_dir / f"{pipeline}_{dataset}_{timestamp}"
+    run_dir.mkdir(parents=True, exist_ok=True)
+    
+    work_dir = run_dir / "work"
+    results_dir = run_dir / "results"
+    logs_dir = run_dir / "logs"
+    
+    for d in [work_dir, results_dir, logs_dir]:
+        d.mkdir(parents=True, exist_ok=True)
+    
+    # Check if pipeline exists
+    pipeline_file = Path(f"15_pipelines/151_nextflow/pipelines/{pipeline}/workflow/main.nf")
+    
+    if not pipeline_file.exists():
+        print(f"❌ Pipeline not found: {pipeline_file}")
+        exit(1)
+    
+    # Run with specific pipeline
+    cmd = [
+        "nextflow", "run", str(pipeline_file),
+        "-work-dir", str(work_dir),
+        "--outdir", str(results_dir),
+        "--dataset", dataset,
+        "--experiment", experiment,
+        "-with-report", str(logs_dir / "report.html"),
+        "-with-trace", str(logs_dir / "trace.txt"),
+        "-with-timeline", str(logs_dir / "timeline.html"),
+        "-with-dag", str(logs_dir / "dag.html")
+    ]
+    
+    print(f"🚀 Running pipeline: {pipeline}")
+    print(f"🔬 Analysis: {experiment}")
+    print(f"📊 Dataset: {dataset}")
+    
+    try:
+        subprocess.run(cmd, cwd=".", check=True)
+        print(f"✅ Pipeline completed successfully!")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Pipeline failed: {e}")
+
+# List all analyses (what used to be experiments)
+nextflow-list-analyses:
+    #!/usr/bin/env python3
+    from pathlib import Path
+    import yaml
+    
+    analyses_dir = Path("15_pipelines/151_nextflow/experiments/by_analysis")
+    
+    if not analyses_dir.exists():
+        print("📝 No analyses found.")
+        return
+    
+    print("🔬 Nextflow Analyses")
+    print("=" * 40)
+    
+    for analysis_dir in analyses_dir.iterdir():
+        if analysis_dir.is_dir():
+            print(f"\n📁 {analysis_dir.name}")
+            
+            # Find all runs in this analysis
+            runs = []
+            for run_dir in analysis_dir.iterdir():
+                if run_dir.is_dir():
+                    metadata_file = run_dir / "run_metadata.yaml"
+                    if metadata_file.exists():
+                        with open(metadata_file, 'r') as f:
+                            metadata = yaml.safe_load(f)
+                            runs.append(metadata)
+            
+            # Sort by timestamp
+            runs.sort(key=lambda x: x['timestamp'], reverse=True)
+            
+            for run in runs:
+                status_icon = "✅" if run['status'] == "SUCCESS" else "❌"
+                pipeline_name = run.get('pipeline', 'unknown')
+                print(f"   {status_icon} {pipeline_name} - {run['dataset']} ({run['timestamp']})")
+
+# List results for a specific analysis
+nextflow-analysis-results analysis:
+    #!/usr/bin/env python3
+    from pathlib import Path
+    import yaml
+    
+    analysis = "{{analysis}}"
+    analysis_dir = Path(f"15_pipelines/151_nextflow/experiments/by_analysis/{analysis}")
+    
+    if not analysis_dir.exists():
+        print(f"❌ Analysis not found: {analysis}")
+        exit(1)
+    
+    print(f"📊 Results for analysis: {analysis}")
+    print("=" * 50)
+    
+    for run_dir in analysis_dir.iterdir():
+        if run_dir.is_dir():
+            metadata_file = run_dir / "run_metadata.yaml"
+            results_dir = run_dir / "results"
+            
+            if metadata_file.exists():
+                with open(metadata_file, 'r') as f:
+                    metadata = yaml.safe_load(f)
+                
+                pipeline = metadata.get('pipeline', 'unknown')
+                print(f"\n🔬 {pipeline} - {metadata['dataset']}")
+                print(f"   Time: {metadata['timestamp']}")
+                print(f"   Status: {metadata['status']}")
+                print(f"   Results: {results_dir}")
+                
+                # List result files
+                if results_dir.exists():
+                    result_files = list(results_dir.rglob("*"))
+                    if result_files:
+                        print(f"   Files: {len(result_files)} total")
+                        for f in sorted(result_files)[:5]:  # Show first 5
+                            if f.is_file():
+                                size = f.stat().st_size
+                                print(f"     - {f.name} ({size} bytes)")
+                        if len(result_files) > 5:
+                            print(f"     ... and {len(result_files) - 5} more files")
+
+# Publish analysis results
+nextflow-publish-analysis analysis run_id destination:
+    #!/usr/bin/env python3
+    import shutil
+    import yaml
+    from pathlib import Path
+    from datetime import datetime
+    
+    analysis = "{{analysis}}"
+    run_id = "{{run_id}}"  # timestamp or partial match
+    destination = "{{destination}}"
+    
+    # Find the analysis run
+    analysis_dir = Path(f"15_pipelines/151_nextflow/experiments/by_analysis/{analysis}")
+    
+    if not analysis_dir.exists():
+        print(f"❌ Analysis not found: {analysis}")
+        exit(1)
+    
+    # Find matching run
+    matching_runs = []
+    for run_dir in analysis_dir.iterdir():
+        if run_id in run_dir.name:
+            matching_runs.append(run_dir)
+    
+    if not matching_runs:
+        print(f"❌ No runs found matching: {run_id}")
+        print(f"Available runs in {analysis}:")
+        for run_dir in analysis_dir.iterdir():
+            print(f"  - {run_dir.name}")
+        exit(1)
+    
+    if len(matching_runs) > 1:
+        print(f"⚠️  Multiple runs found matching '{run_id}':")
+        for i, run_dir in enumerate(matching_runs):
+            print(f"   {i+1}. {run_dir.name}")
+        choice = input("Enter choice (1-{}): ".format(len(matching_runs)))
+        source_run = matching_runs[int(choice)-1]
+    else:
+        source_run = matching_runs[0]
+    
+    results_dir = source_run / "results"
+    
+    if not results_dir.exists():
+        print(f"❌ No results found in: {results_dir}")
+        exit(1)
+    
+    # Determine destination
+    if destination == "primary":
+        dest_dir = Path("03_primary/033_versioned") / f"nextflow_{analysis}_{run_id}"
+    elif destination == "reporting":
+        dest_dir = Path("08_reporting") / f"nextflow_{analysis}_{run_id}"
+    elif destination == "publication":
+        dest_dir = Path("12_publications/datasets") / f"nextflow_{analysis}_{run_id}"
+    else:
+        dest_dir = Path(destination) / f"nextflow_{analysis}_{run_id}"
+    
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Copy results
+    print(f"📦 Publishing results from {analysis} analysis")
+    print(f"   Source: {results_dir}")
+    print(f"   Destination: {dest_dir}")
+    
+    for item in results_dir.rglob("*"):
+        if item.is_file():
+            rel_path = item.relative_to(results_dir)
+            dest_file = dest_dir / rel_path
+            dest_file.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(item, dest_file)
+    
+    # Copy metadata
+    metadata_file = source_run / "run_metadata.yaml"
+    if metadata_file.exists():
+        shutil.copy2(metadata_file, dest_dir / "source_metadata.yaml")
+    
+    print(f"✅ Results published to: {dest_dir}")
+
+# Clean old analysis work directories
+nextflow-clean-work analysis days=7:
+    #!/usr/bin/env python3
+    import shutil
+    from pathlib import Path
+    import time
+    
+    analysis = "{{analysis}}"
+    days = int("{{days}}")
+    
+    analysis_dir = Path(f"15_pipelines/151_nextflow/experiments/by_analysis/{analysis}")
+    
+    if not analysis_dir.exists():
+        print(f"❌ Analysis not found: {analysis}")
+        exit(1)
+    
+    cutoff_time = time.time() - (days * 24 * 3600)
+    cleaned = 0
+    
+    for run_dir in analysis_dir.iterdir():
+        if run_dir.is_dir():
+            work_dir = run_dir / "work"
+            if work_dir.exists() and work_dir.stat().st_mtime < cutoff_time:
+                print(f"🧹 Cleaning work directory: {work_dir}")
+                shutil.rmtree(work_dir)
+                cleaned += 1
+    
+    print(f"✅ Cleaned {cleaned} work directories older than {days} days")
+
+# Create a new pipeline template with current project focus
+nextflow-create-pipeline pipeline_name:
+    #!/usr/bin/env python3
+    from pathlib import Path
+    from datetime import datetime
+    
+    pipeline_name = "{{pipeline_name}}"
+    pipeline_dir = Path(f"15_pipelines/151_nextflow/pipelines/{pipeline_name}")
+    
+    if pipeline_dir.exists():
+        print(f"❌ Pipeline already exists: {pipeline_name}")
+        exit(1)
+    
+    # Create pipeline structure
+    workflow_dir = pipeline_dir / "workflow"
+    workflow_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Create basic workflow template
+    main_nf = workflow_dir / "main.nf"
+    main_nf.write_text(f'''#!/usr/bin/env nextflow
+
+/*
+ * {pipeline_name.title()} Pipeline
+ * Created: {datetime.now().strftime("%Y-%m-%d")}
+ * Project: Single Research Project Template
+ */
+
+nextflow.enable.dsl = 2
+
+// Parameters
+params.dataset = "example_dataset"
+params.experiment = "analysis_name" 
+params.outdir = "results"
+
+// Input
+input_ch = Channel.fromPath(params.dataset)
+
+// Process
+process MAIN_PROCESS {{
+    publishDir "${{params.outdir}}", mode: 'copy'
+    
+    input:
+    path input_file
+    
+    output:
+    path "output.txt"
+    
+    script:
+    """
+    echo "Processing ${{input_file}} for analysis ${{params.experiment}}" > output.txt
+    date >> output.txt
+    """
+}}
+
+// Workflow
+workflow {{
+    MAIN_PROCESS(input_ch)
+}}
+
+workflow.onComplete {{
+    println "Pipeline: {pipeline_name}"
+    println "Analysis: ${{params.experiment}}"
+    println "Dataset: ${{params.dataset}}" 
+    println "Status: ${{workflow.success ? 'SUCCESS' : 'FAILED'}}"
+    println "Duration: ${{workflow.duration}}"
+}}
+''')
+    
+    print(f"✅ Created pipeline: {pipeline_name}")
+    print(f"📁 Location: {pipeline_dir}")
+    print(f"📄 Edit workflow: {main_nf}")
+    print(f"\nTo set as current pipeline:")
+    print(f"just data::nextflow-set-pipeline {pipeline_name}")
+    print(f"\nTo run:")
+    print(f"just data::nextflow-run-experiment my_analysis my_dataset")
