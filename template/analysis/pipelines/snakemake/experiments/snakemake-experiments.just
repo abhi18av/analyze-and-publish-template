@@ -350,14 +350,7 @@ smk-stats experiment_id:
     # Show stats from JSON file if available
     if [ -f "$log_dir/stats.json" ]; then
         echo "📈 Runtime Statistics:"
-        python3 -c "
-import json
-with open('$log_dir/stats.json') as f:
-    stats = json.load(f)
-    print(f'Total jobs: {stats.get(\"total_jobs\", \"N/A\")}')
-    print(f'Rules: {len(stats.get(\"rules\", {}))}')
-    print(f'Runtime: {stats.get(\"total_runtime\", \"N/A\")} seconds')
-"
+        python3 .justscripts/show_stats.py "$log_dir"
     fi
     
     # Show file counts
@@ -621,20 +614,7 @@ smk-validate-experiment experiment_id:
     # Check sample file format
     if [ -f "samples.tsv" ]; then
         echo "📊 Checking sample file format..."
-        python3 -c "
-import pandas as pd
-try:
-    df = pd.read_csv('samples.tsv', sep='\t')
-    print(f'✅ Sample file valid: {len(df)} samples')
-    required_cols = ['sample_id']
-    missing = [col for col in required_cols if col not in df.columns]
-    if missing:
-        print(f'⚠️  Missing columns: {missing}')
-    else:
-        print('✅ Required columns present')
-except Exception as e:
-    print(f'❌ Sample file error: {e}')
-"
+        python3 .justscripts/check_samples.py samples.tsv
     fi
 
 # Show experiment statistics

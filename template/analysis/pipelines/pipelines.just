@@ -175,13 +175,7 @@ run-training-pipeline pipeline:
 # Run evaluation pipeline
 run-evaluation-pipeline model_path test_data:
     @echo "📊 Running evaluation pipeline"
-    @python -c "\
-import joblib; \
-import pandas as pd; \
-from sklearn.metrics import classification_report; \
-model = joblib.load('{{model_path}}'); \
-test_df = pd.read_csv('{{test_data}}'); \
-print('Model evaluation completed')"
+    @python .justscripts/run-evaluation-pipeline.py {{model_path}} {{test_data}}
 
 # === Nextflow Workflows ===
 
