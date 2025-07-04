@@ -1,0 +1,3 @@
+# Collaborative Research
+# Multi-institutional data sharing and federated learning support
+# Use `just data::setup-collaboration <project_name>` to create collaboration structure
