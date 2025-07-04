@@ -1,6 +1,22 @@
 # Enhanced Data Directory .gitignore
 # Supports academic research workflows with automated data management
 
+# === DIRECTORIES ===
+01_raw/
+02_intermediate/
+03_primary/
+04_feature/
+05_model_input/
+06_models/
+07_model_output/
+08_reporting/
+09_logs/
+10_backups/
+11_benchmarks/
+12_publications/
+13_external_validation/
+14_collaboration/
+
 # === GENERAL DATA FILES ===
 # Ignore all data files by default for security and size management
 *.csv

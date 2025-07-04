@@ -166,20 +166,6 @@ module_name:
   default: "{{ short_name|lower|replace(' ', '_')|replace('-', '_') }}"
   when: false  # Auto-generated, not user input
 
-# === SPECIALIZED DOMAIN SUPPORT ===
-specialized_domain:
-  type: str
-  help: Include specialized domain-specific tools
-  choices:
-    - None
-    - Bioinformatics
-    - Epidemiology
-    - Geospatial
-    - Time Series
-    - Other
-  default: None
-  when: "{{ include_analysis }}"
-
 # === SUBCOMPONENT SELECTION FOR ANALYSIS ===
 include_notebooks:
   type: bool
@@ -208,6 +194,7 @@ include_testing:
 include_packages:
   type: bool
   help: Include local package development structure
+  default: true
 
   when: "{{ include_analysis }}"
 
@@ -227,12 +214,14 @@ include_presentations:
 include_grants:
   type: bool
   help: Include grant application management
+  default: true
 
   when: "{{ include_writeup }}"
 
 include_abstracts:
   type: bool
   help: Include abstract submission management
+  default: true
 
   when: "{{ include_writeup }}"
 
@@ -251,6 +240,7 @@ include_reports:
 include_blog:
   type: bool
   help: Include blog post templates for informal writing
+  default: true
 
   when: "{{ include_writeup }}"
 
@@ -264,12 +254,14 @@ include_docker:
 include_cloud_deployment:
   type: bool
   help: Include cloud deployment templates (AWS, GCP, Azure)
+  default: true
 
   when: "{{ include_infrastructure }}"
 
 include_virtualization:
   type: bool
   help: Include VM and container orchestration
+  default: true
 
   when: "{{ include_infrastructure }}"
 
@@ -283,15 +275,17 @@ include_automation:
 include_jujutsu:
   type: bool
   help: Include Jujutsu (jj) version control with Git backend for enhanced academic workflows
+  default: true
 
 
 include_fossil:
   type: bool
   help: Include Fossil SCM for self-contained archives and manuscript versioning
+  default: true
 
 
 use_hybrid_vcs:
   type: bool
   help: Use hybrid version control (Jujutsu + Fossil) for comprehensive research management
-
+  default: true
   when: "{{ include_jujutsu and include_fossil }}"
