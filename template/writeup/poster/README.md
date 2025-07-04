@@ -1,55 +1,122 @@
-# Poster Management System
+# Academic Conference Poster System
 
-This directory provides a structured and automated system for creating, managing, and rendering academic and professional posters. It supports multiple templates and output formats, and includes a `justfile` for automating common tasks.
+Streamlined system for creating academic conference posters with automated workflows and chronological organization. Optimized for rapid poster development and submission deadlines.
 
 ## Directory Structure
 
 ```
 poster/
-├── README.md                 # This file
-├── _quarto.yml               # Global quarto configuration
-├── justfile                  # Automation tasks
+├── README.md                 # This documentation
+├── justfile                  # Poster automation commands
 ├── templates/                # Poster templates
-│   ├── academic/             # Academic research posters
-│   ├── conference/           # Conference posters
-│   └── professional/         # Professional/corporate posters
-├── posters/                  # Your posters
-│   ├── academic/             # Academic posters
-│   ├── conference/           # Conference posters
-│   └── professional/         # Professional posters
-├── styles/                   # Styling resources
-│   └── logo.png              # Institution/organization logo
-└── _output/                  # Rendered posters
-    ├── html/                 # HTML output
-    │   ├── draft/            # Draft versions
-    │   └── final/            # Final versions
-    └── pdf/                  # PDF output
-        ├── draft/            # Draft versions
-        └── final/            # Final versions
+│   ├── standard/             # Standard academic poster layout
+│   ├── landscape/            # Landscape format posters
+│   └── specialized/          # Field-specific templates (bio, cs, physics, etc.)
+├── conferences/              # Conference submissions (YYYY-MM-VENUE format)
+│   ├── 2025-05-neurips/      # NeurIPS May 2025
+│   ├── 2025-07-icml/         # ICML July 2025
+│   ├── 2025-12-aaai/         # AAAI December 2025
+│   └── archived/             # Archived completed posters
+├── assets/                   # Shared poster assets
+│   ├── figures/              # Research figures and plots
+│   ├── logos/                # Institution and venue logos
+│   ├── data/                 # Small datasets for plots
+│   └── references/           # BibTeX files
+└── _output/                  # Generated posters
+    ├── drafts/               # Work-in-progress versions
+    ├── reviews/              # Versions for internal review
+    └── final/                # Submission-ready posters
 ```
 
-## Available Templates
+## Chronological Organization
 
-The poster system includes several specialized templates:
+Conferences are organized using the **YYYY-MM-VENUE** format:
+- `2025-05-neurips` - NeurIPS 2025 (May submission deadline)
+- `2025-07-icml` - ICML 2025 (July submission deadline)
+- `2025-12-aaai` - AAAI 2025 (December submission deadline)
 
-1. **Academic Poster**: Research-focused with sections for methods, results, and analysis.
-2. **Conference Poster**: Professional presentation for academic conferences with emphasis on visual clarity.
-3. **Professional Poster**: Business-oriented with sections for solutions, ROI, and impact.
-
-Each template is pre-configured with appropriate styling, layout, and placeholder content.
+This provides chronological sorting while maintaining venue context.
 
 ## Automation with Just
 
 The `justfile` provides a comprehensive set of commands for managing your posters. Run from the `poster/` directory.
 
-### Creating New Posters
+## Quick Start
+
+1. **Initialize the system** (first time only):
+   ```bash
+   just init
+   ```
+
+2. **Create a conference poster** (specify year, month, venue):
+   ```bash
+   just create neurips 2025 05 standard
+   ```
+
+3. **Create with automatic date** (uses current year/month):
+   ```bash
+   just create-auto neurips standard
+   ```
+
+4. **Create for current year** (specify month):
+   ```bash
+   just create-now neurips standard  # Uses current year, July
+   ```
+
+5. **Edit your poster**: 
+   ```bash
+   # Edit: conferences/2025-05-neurips/neurips_poster.qmd
+   ```
+
+6. **Render and review**:
+   ```bash
+   just render neurips        # Creates draft
+   just render-review neurips  # Creates review version
+   just finalize neurips      # Creates final submission
+   ```
+
+## Example Workflow
+
+Creating a poster for NeurIPS 2025 (May deadline):
 
 ```bash
-# Create a new academic poster
-just create-academic research-poster
+# Create poster with specific date
+just create neurips 2025 05 standard
 
-# Create a conference poster
-just create-conference conference-poster
+# Or create with automatic date detection
+just create-auto neurips standard
+
+# Add your research content to:
+# conferences/2025-05-neurips/neurips_poster.qmd
+
+# Add figures to assets/figures/
+just add-figure "my_results.png" "/path/to/my_results.png"
+
+# Render for review
+just render-review neurips
+
+# Make final submission
+just finalize neurips
+```
+
+## Available Commands
+
+### Creating Posters
+- `just create <venue> <year> <month> [template]` - Create poster with specific date
+- `just create-auto <venue> [template]` - Create with current date
+- `just create-now <venue> [template]` - Create with current year, July
+
+### Rendering
+- `just render <venue>` - Render draft version
+- `just render-review <venue>` - Render review version  
+- `just finalize <venue>` - Create final submission version
+
+### Management
+- `just list` - List all posters
+- `just list-year <year>` - List posters for specific year
+- `just list-upcoming` - List upcoming posters (current year+)
+- `just info <venue>` - Show poster information
+- `just archive <venue>` - Archive completed poster
 
 # Create a professional poster
 just create-professional business-poster

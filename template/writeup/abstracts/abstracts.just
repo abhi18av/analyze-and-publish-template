@@ -1,103 +1,217 @@
-# Abstract Management Automation
-# Use with just (https://github.com/casey/just)
-# Run from the writeup/abstracts directory
+# Academic Abstract Submission System
+# Streamlined automation for academic abstract creation and management
 
-# Set default shell
-set shell := ["bash", "-c"]
+# Set shell
+set shell := ["zsh", "-c"]
 
 # Variables
 abstracts_dir := justfile_directory()
 templates_dir := abstracts_dir + "/templates"
-conference_dir := abstracts_dir + "/conference"
-journal_dir := abstracts_dir + "/journal"
-symposium_dir := abstracts_dir + "/symposium"
-tracking_dir := abstracts_dir + "/tracking"
+submissions_dir := abstracts_dir + "/submissions"
+versions_dir := abstracts_dir + "/versions"
 
-# Default recipe
+# Default recipe - show available commands
 default:
-    @echo "Available abstract management commands:"
+    @echo "Academic Abstract Submission System"
+    @echo "==================================="
     @just --list
 
-# Create new conference abstract
-new-conference abstract_name conference_name:
-    #!/usr/bin/env bash
-    mkdir -p "{{conference_dir}}/submitted/{{abstract_name}}"
-    cp "{{templates_dir}}/conference_abstract.qmd" "{{conference_dir}}/submitted/{{abstract_name}}/{{abstract_name}}.qmd"
-    echo "Created new conference abstract: {{abstract_name}}"
-    echo "Location: {{conference_dir}}/submitted/{{abstract_name}}"
-    echo "Conference: {{conference_name}}"
+# === Setup and Initialization ===
 
-# Create new journal abstract
-new-journal abstract_name journal_name:
-    #!/usr/bin/env bash
-    mkdir -p "{{journal_dir}}/submitted/{{abstract_name}}"
-    cp "{{templates_dir}}/journal_abstract.qmd" "{{journal_dir}}/submitted/{{abstract_name}}/{{abstract_name}}.qmd"
-    echo "Created new journal abstract: {{abstract_name}}"
-    echo "Location: {{journal_dir}}/submitted/{{abstract_name}}"
-    echo "Journal: {{journal_name}}"
+# Initialize complete abstract system
+init: create-dirs
+    @echo "✅ Abstract system initialized successfully!"
 
-# Create new symposium abstract
-new-symposium abstract_name event_name:
-    #!/usr/bin/env bash
-    mkdir -p "{{symposium_dir}}/submitted/{{abstract_name}}"
-    cp "{{templates_dir}}/symposium_abstract.qmd" "{{symposium_dir}}/submitted/{{abstract_name}}/{{abstract_name}}.qmd"
-    echo "Created new symposium abstract: {{abstract_name}}"
-    echo "Location: {{symposium_dir}}/submitted/{{abstract_name}}"
-    echo "Event: {{event_name}}"
+# Create directory structure
+create-dirs:
+    #!/usr/bin/env zsh
+    mkdir -p submissions/{conference,journal,symposium}
+    mkdir -p versions/{drafts,reviews,final}
+    echo "📁 Directory structure created"
 
-# List all submitted abstracts
-list-submitted:
-    @echo "Submitted abstracts:"
-    @echo "==================="
-    @echo "Conferences:"
-    @find "{{conference_dir}}/submitted" -maxdepth 1 -type d -not -path "*/submitted" -exec basename {} \; 2>/dev/null || echo "  No conference abstracts"
-    @echo ""
-    @echo "Journals:"
-    @find "{{journal_dir}}/submitted" -maxdepth 1 -type d -not -path "*/submitted" -exec basename {} \; 2>/dev/null || echo "  No journal abstracts"
-    @echo ""
-    @echo "Symposiums:"
-    @find "{{symposium_dir}}/submitted" -maxdepth 1 -type d -not -path "*/submitted" -exec basename {} \; 2>/dev/null || echo "  No symposium abstracts"
+# === Abstract Creation ===
 
-# List all accepted abstracts
-list-accepted:
-    @echo "Accepted abstracts:"
-    @echo "=================="
-    @echo "Conferences:"
-    @find "{{conference_dir}}/accepted" -maxdepth 1 -type d -not -path "*/accepted" -exec basename {} \; 2>/dev/null || echo "  No accepted conference abstracts"
-    @echo ""
-    @echo "Journals:"
-    @find "{{journal_dir}}/accepted" -maxdepth 1 -type d -not -path "*/accepted" -exec basename {} \; 2>/dev/null || echo "  No accepted journal abstracts"
-    @echo ""
-    @echo "Symposiums:"
-    @find "{{symposium_dir}}/accepted" -maxdepth 1 -type d -not -path "*/accepted" -exec basename {} \; 2>/dev/null || echo "  No accepted symposium abstracts"
+# Create new conference abstract with YYYY-MM-VENUE format
+create-conference venue year month:
+    #!/usr/bin/env zsh
+    submission_dir="submissions/conference/{{year}}-{{month}}-{{venue}}"
+    mkdir -p "$submission_dir"
+    
+    # Copy template and customize
+    cp "templates/conference_abstract.qmd" "$submission_dir/{{venue}}_abstract.qmd"
+    
+    echo "✅ Created conference abstract for {{venue}} ({{year}}-{{month}})"
+    echo "📝 Edit: $submission_dir/{{venue}}_abstract.qmd"
 
-# List all presented abstracts
-list-presented:
-    @echo "Presented abstracts:"
-    @echo "==================="
-    @echo "Conferences:"
-    @find "{{conference_dir}}/presented" -maxdepth 1 -type d -not -path "*/presented" -exec basename {} \; 2>/dev/null || echo "  No presented conference abstracts"
-    @echo ""
-    @echo "Journals:"
-    @find "{{journal_dir}}/presented" -maxdepth 1 -type d -not -path "*/presented" -exec basename {} \; 2>/dev/null || echo "  No presented journal abstracts"
-    @echo ""
-    @echo "Symposiums:"
-    @find "{{symposium_dir}}/presented" -maxdepth 1 -type d -not -path "*/presented" -exec basename {} \; 2>/dev/null || echo "  No presented symposium abstracts"
+# Create journal abstract
+create-journal venue year month:
+    #!/usr/bin/env zsh
+    submission_dir="submissions/journal/{{year}}-{{month}}-{{venue}}"
+    mkdir -p "$submission_dir"
+    
+    # Copy template and customize
+    cp "templates/journal_abstract.qmd" "$submission_dir/{{venue}}_abstract.qmd"
+    
+    echo "✅ Created journal abstract for {{venue}} ({{year}}-{{month}})"
+    echo "📝 Edit: $submission_dir/{{venue}}_abstract.qmd"
 
-# Move abstract to accepted status
-accept abstract_type abstract_name:
-    #!/usr/bin/env bash
-    case "{{abstract_type}}" in
-        "conference")
-            source_dir="{{conference_dir}}/submitted/{{abstract_name}}"
-            dest_dir="{{conference_dir}}/accepted/"
-            ;;
-        "journal")
-            source_dir="{{journal_dir}}/submitted/{{abstract_name}}"
-            dest_dir="{{journal_dir}}/accepted/"
-            ;;
-        "symposium")
-            source_dir="{{symposium_dir}}/submitted/{{abstract_name}}"
+# Create symposium abstract
+create-symposium venue year month:
+    #!/usr/bin/env zsh
+    submission_dir="submissions/symposium/{{year}}-{{month}}-{{venue}}"
+    mkdir -p "$submission_dir"
+    
+    # Copy template and customize
+    cp "templates/symposium_abstract.qmd" "$submission_dir/{{venue}}_abstract.qmd"
+    
+    echo "✅ Created symposium abstract for {{venue}} ({{year}}-{{month}})"
+    echo "📝 Edit: $submission_dir/{{venue}}_abstract.qmd"
+
+# Create with automatic date detection
+create-auto-conference venue:
+    #!/usr/bin/env zsh
+    current_year=$(date +"%Y")
+    current_month=$(date +"%m")
+    submission_dir="submissions/conference/${current_year}-${current_month}-{{venue}}"
+    mkdir -p "$submission_dir"
+    
+    cp "templates/conference_abstract.qmd" "$submission_dir/{{venue}}_abstract.qmd"
+    
+    echo "✅ Created conference abstract for {{venue}} (${current_year}-${current_month})"
+    echo "📝 Edit: $submission_dir/{{venue}}_abstract.qmd"
+
+# Create auto journal
+create-auto-journal venue:
+    #!/usr/bin/env zsh
+    current_year=$(date +"%Y")
+    current_month=$(date +"%m")
+    submission_dir="submissions/journal/${current_year}-${current_month}-{{venue}}"
+    mkdir -p "$submission_dir"
+    
+    cp "templates/journal_abstract.qmd" "$submission_dir/{{venue}}_abstract.qmd"
+    
+    echo "✅ Created journal abstract for {{venue}} (${current_year}-${current_month})"
+    echo "📝 Edit: $submission_dir/{{venue}}_abstract.qmd"
+
+# Create auto symposium
+create-auto-symposium venue:
+    #!/usr/bin/env zsh
+    current_year=$(date +"%Y")
+    current_month=$(date +"%m")
+    submission_dir="submissions/symposium/${current_year}-${current_month}-{{venue}}"
+    mkdir -p "$submission_dir"
+    
+    cp "templates/symposium_abstract.qmd" "$submission_dir/{{venue}}_abstract.qmd"
+    
+    echo "✅ Created symposium abstract for {{venue}} (${current_year}-${current_month})"
+    echo "📝 Edit: $submission_dir/{{venue}}_abstract.qmd"
+
+# === Rendering and Output ===
+
+# Render abstract to draft (finds by venue name)
+render venue format="pdf":
+    #!/usr/bin/env zsh
+    # Find abstract file by venue name in submissions
+    abstract_file=$(find submissions -name "{{venue}}_abstract.qmd" | head -1)
+    if [[ -f "$abstract_file" ]]; then
+        venue_dir=$(basename $(dirname "$abstract_file"))
+        mkdir -p "versions/drafts/$venue_dir"
+        quarto render "$abstract_file" --to {{format}} --output-dir "versions/drafts/$venue_dir"
+        echo "✅ Rendered {{venue}} abstract to versions/drafts/$venue_dir/"
+    else
+        echo "❌ Abstract file not found for venue: {{venue}}"
+        echo "Available abstracts:"
+        find submissions -name "*_abstract.qmd" | sed 's|.*/||' | sed 's|_abstract.qmd||'
+    fi
+
+# Create final submission version
+finalize venue format="pdf":
+    #!/usr/bin/env zsh
+    abstract_file=$(find submissions -name "{{venue}}_abstract.qmd" | head -1)
+    if [[ -f "$abstract_file" ]]; then
+        venue_dir=$(basename $(dirname "$abstract_file"))
+        timestamp=$(date +"%Y%m%d_%H%M%S")
+        mkdir -p "versions/final/$venue_dir"
+        quarto render "$abstract_file" --to {{format}} --output-dir "versions/final/$venue_dir"
+        
+        # Create timestamped copy
+        cp "versions/final/$venue_dir/{{venue}}_abstract.{{format}}" \
+           "versions/final/$venue_dir/{{venue}}_final_${timestamp}.{{format}}"
+        
+        echo "✅ Final version created: versions/final/$venue_dir/"
+    else
+        echo "❌ Abstract file not found for venue: {{venue}}"
+    fi
+
+# === Listing and Information ===
+
+# List all abstracts
+list:
+    #!/usr/bin/env zsh
+    echo "Abstract Submissions:"
+    echo "===================="
+    find submissions -name "*_abstract.qmd" -exec echo "📄 {}" \; | sort
+
+# List by submission type
+list-conference:
+    #!/usr/bin/env zsh
+    echo "Conference Abstracts:"
+    echo "===================="
+    find submissions/conference -name "*_abstract.qmd" -exec echo "📄 {}" \; | sort
+
+list-journal:
+    #!/usr/bin/env zsh
+    echo "Journal Abstracts:"
+    echo "=================="
+    find submissions/journal -name "*_abstract.qmd" -exec echo "📄 {}" \; | sort
+
+list-symposium:
+    #!/usr/bin/env zsh
+    echo "Symposium Abstracts:"
+    echo "==================="
+    find submissions/symposium -name "*_abstract.qmd" -exec echo "📄 {}" \; | sort
+
+# List by year
+list-year year:
+    #!/usr/bin/env zsh
+    echo "Abstracts for {{year}}:"
+    echo "======================"
+    find submissions -name "{{year}}-*" -type d | sort
+
+# List upcoming (current year and later)
+list-upcoming:
+    #!/usr/bin/env zsh
+    current_year=$(date +"%Y")
+    echo "Upcoming Abstracts (${current_year}+):"
+    echo "======================================"
+    find submissions -name "${current_year}-*" -o -name "$((current_year + 1))-*" | sort
+
+# Show abstract status and info
+status venue:
+    #!/usr/bin/env zsh
+    abstract_file=$(find submissions -name "{{venue}}_abstract.qmd" | head -1)
+    if [[ -f "$abstract_file" ]]; then
+        venue_dir=$(basename $(dirname "$abstract_file"))
+        submission_type=$(basename $(dirname $(dirname "$abstract_file")))
+        
+        echo "Abstract: {{venue}}"
+        echo "Type: $submission_type"
+        echo "Submission: $venue_dir"
+        echo "File: $abstract_file"
+        echo "Size: $(wc -l < "$abstract_file") lines"
+        echo "Word count: $(wc -w < "$abstract_file") words"
+        echo "Modified: $(stat -f %Sm "$abstract_file")"
+        
+        # Check for rendered versions
+        if [[ -d "versions/drafts/$venue_dir" ]]; then
+            echo "Draft: ✅ Available in versions/drafts/$venue_dir/"
+        fi
+        if [[ -d "versions/final/$venue_dir" ]]; then
+            echo "Final: ✅ Available in versions/final/$venue_dir/"
+        fi
+    else
+        echo "❌ Abstract not found: {{venue}}"
+    fi
             dest_dir="{{symposium_dir}}/accepted/"
             ;;
         *)
@@ -276,3 +390,76 @@ init:
     echo "Use 'just new-conference <name> <conference>' to create your first conference abstract"
     echo "Use 'just new-journal <name> <journal>' to create your first journal abstract"
     echo "Use 'just new-symposium <name> <event>' to create your first symposium abstract"
+
+# === Word Count and Analysis ===
+
+# Check word count for an abstract
+wordcount venue:
+    #!/usr/bin/env zsh
+    abstract_file=$(find submissions -name "{{venue}}_abstract.qmd" | head -1)
+    if [[ -f "$abstract_file" ]]; then
+        word_count=$(wc -w < "$abstract_file")
+        echo "Word count for {{venue}}: $word_count words"
+        
+        # Provide guidance based on submission type
+        submission_type=$(basename $(dirname $(dirname "$abstract_file")))
+        case "$submission_type" in
+            "conference")
+                echo "Conference abstracts typically: 150-300 words"
+                ;;
+            "journal")
+                echo "Journal abstracts typically: 200-350 words"
+                ;;
+            "symposium")
+                echo "Symposium abstracts typically: 100-250 words"
+                ;;
+        esac
+    else
+        echo "❌ Abstract file not found for venue: {{venue}}"
+    fi
+
+# === Archive Management ===
+
+# Archive completed abstract
+archive venue:
+    #!/usr/bin/env zsh
+    timestamp=$(date +"%Y%m%d")
+    abstract_file=$(find submissions -name "{{venue}}_abstract.qmd" | head -1)
+    if [[ -f "$abstract_file" ]]; then
+        abstract_dir=$(dirname "$abstract_file")
+        venue_dir=$(basename "$abstract_dir")
+        submission_type=$(basename $(dirname "$abstract_dir"))
+        mkdir -p "submissions/archived"
+        tar -czf "submissions/archived/${submission_type}_${venue_dir}_${timestamp}.tar.gz" "$abstract_dir"
+        echo "📦 Archived: submissions/archived/${submission_type}_${venue_dir}_${timestamp}.tar.gz"
+    else
+        echo "❌ Abstract not found: {{venue}}"
+    fi
+
+# === Cleanup ===
+
+# Clean draft versions
+clean-drafts:
+    rm -rf versions/drafts/*
+    echo "🧹 Cleaned draft versions"
+
+# Clean all versions
+clean-all:
+    rm -rf versions/{drafts,reviews,final}/*
+    echo "🧹 Cleaned all versions"
+
+# === Quick Commands ===
+
+# Quick render of current working abstract (assumes you're in a submission folder)
+quick-render:
+    #!/usr/bin/env zsh
+    if [[ -f *_abstract.qmd ]]; then
+        abstract_file=$(ls *_abstract.qmd | head -1)
+        venue_name=$(basename "$abstract_file" _abstract.qmd)
+        venue_dir=$(basename "$PWD")
+        mkdir -p "../../../versions/drafts/quick"
+        quarto render "$abstract_file" --to pdf --output-dir "../../../versions/drafts/quick"
+        echo "✅ Quick render complete: versions/drafts/quick/"
+    else
+        echo "❌ No abstract file found in current directory"
+    fi
